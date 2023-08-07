@@ -9,7 +9,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Описание операции
     /// </summary>
-    public class OperationDescription
+    public class OperationDescription : ModelElementBase
     {
         /// <summary>
         /// Наименование

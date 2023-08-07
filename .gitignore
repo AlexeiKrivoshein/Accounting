@@ -1,0 +1,39 @@
+# Accounting build results
+Accounting/[Dd]ebug/
+Accounting/[Dd]ebugPublic/
+Accounting/[Rr]elease/
+Accounting/[Rr]eleases/
+Accounting/x64/
+Accounting/x86/
+Accounting/[Ww][Ii][Nn]32/
+Accounting/[Aa][Rr][Mm]/
+Accounting/[Aa][Rr][Mm]64/
+Accounting/bld/
+Accounting/[Bb]in/
+Accounting/[Oo]bj/
+Accounting/[Ll]og/
+Accounting/[Ll]ogs/
+Accounting/[Oo]bj/
+
+# AccountingDAL build results
+AccountingDAL/[Dd]ebug/
+AccountingDAL/[Dd]ebugPublic/
+AccountingDAL/[Rr]elease/
+AccountingDAL/[Rr]eleases/
+AccountingDAL/x64/
+AccountingDAL/x86/
+AccountingDAL/[Ww][Ii][Nn]32/
+AccountingDAL/[Aa][Rr][Mm]/
+AccountingDAL/[Aa][Rr][Mm]64/
+AccountingDAL/bld/
+AccountingDAL/[Bb]in/
+AccountingDAL/[Oo]bj/
+AccountingDAL/[Ll]og/
+AccountingDAL/[Ll]ogs/
+AccountingDAL/[Oo]bj/
+
+# Visual Studio 2015/2017 cache/options directory
+Accounting/.vs/
+
+# wwwroot static files
+Accounting/wwwroot/

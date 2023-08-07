@@ -9,7 +9,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Счет
     /// </summary>
-    public class Account
+    public class Account : ModelElementBase
     {
         /// <summary>
         /// Наименование

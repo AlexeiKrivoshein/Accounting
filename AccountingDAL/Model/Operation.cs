@@ -10,7 +10,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Операция
     /// </summary>
-    public class Operation
+    public class Operation : ModelElementBase
     {
         /// <summary>
         /// Дата операции
@@ -23,32 +23,14 @@ namespace AccountingDAL.Model
         public float Sum { get; set; } = 0F;
 
         /// <summary>
-        /// Идентификатор счета дебета
-        /// </summary>
-        [ForeignKey(nameof(DebitAccount))]
-        public string DebitAccountID { get; set; } = string.Empty;
-
-        /// <summary>
         /// Счет дебет
         /// </summary>
         public Account? DebitAccount { get; set; }
 
         /// <summary>
-        /// Идентификатор счета кредита
-        /// </summary>
-        [ForeignKey(nameof(CreditAccount))]
-        public string CreditAccountID { get; set; } = string.Empty;
-
-        /// <summary>
         /// Счет кредит
         /// </summary>
         public Account? CreditAccount { get; set; }
-
-        /// <summary>
-        /// Идентификатор группы операции
-        /// </summary>
-        [ForeignKey(nameof(OperationGroup))]
-        public string OperationGroupID { get; set; } = string.Empty;
 
         /// <summary>
         /// Группа операции

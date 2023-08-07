@@ -12,16 +12,13 @@ namespace AccountingDAL.Model
     {
         public DbSet<Account> Accounts => Set<Account>();
 
-        public DbSet<Card> Cards => Set<Card>();
-
         public DbSet<OperationGroup> OperationGroups => Set<OperationGroup>();
 
         public DbSet<OperationDescription> OperationDescriptions => Set<OperationDescription>();
 
         public DbSet<Operation> Operations => Set<Operation>();
 
-        public AccountingContext(DbContextOptions<AccountingContext> options)
-            : base(options)
+        public AccountingContext()
         {
             Database.EnsureCreated();
         }

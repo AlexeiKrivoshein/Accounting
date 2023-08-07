@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingDAL.Model
+namespace AccountingDAL.Exceptions
 {
-    /// <summary>
-    /// Карта
-    /// </summary>
-    public class Card: Account
+    public class RecordNotFoundException : Exception
     {
     }
 }
