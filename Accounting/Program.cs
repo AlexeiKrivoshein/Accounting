@@ -4,6 +4,9 @@ using AccountingDAL.Managers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<OperationGroupManager>();
+builder.Services.AddSingleton<AccountManager>();
+builder.Services.AddSingleton<OperationDescriptionManager>();
+builder.Services.AddSingleton<OperationManager>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MapperProfile));

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AccountingDAL.Model
+namespace AccountingDAL.Model.DTO
 {
     /// <summary>
     /// Счет
     /// </summary>
-    public class Account : ModelElementBase
+    public class AccountDTO: ModelElementBaseDTO
     {
         /// <summary>
         /// Наименование

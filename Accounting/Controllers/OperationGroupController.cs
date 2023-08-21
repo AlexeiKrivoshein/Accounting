@@ -25,12 +25,16 @@ namespace Accounting.Controllers
             if (id is not null && id != Guid.Empty)
             {
                 OperationGroup operationGroup = await _operationGroupManager.GetAsync(id.Value);
-                return Ok(new List<OperationGroup> { operationGroup });
+                OperationGroupDTO dto = _mapper.Map<OperationGroupDTO>(operationGroup);
+
+                return Ok(new List<OperationGroupDTO> { dto });
             }
             else
             {
                 IReadOnlyCollection<OperationGroup> result = await _operationGroupManager.GetAllAsync();
-                return Ok(result);
+                List<OperationGroupDTO> dto = _mapper.Map<List<OperationGroupDTO>>(result);
+
+                return Ok(dto);
             }
         }
 
@@ -39,13 +43,14 @@ namespace Accounting.Controllers
         {
             if(dto is null)
             {
-                throw new ArgumentNullException("Не корректная сущность 'операция'");
+                throw new ArgumentNullException("Не корректная сущность 'группа операций'");
             }
 
             OperationGroup operationGroup = _mapper.Map<OperationGroup>(dto);
             operationGroup = await _operationGroupManager.SetAsync(operationGroup);
+            dto = _mapper.Map<OperationGroupDTO>(operationGroup);
 
-            return Ok(operationGroup);
+            return Ok(dto);
         }
 
         [HttpDelete("remove")]
@@ -57,8 +62,9 @@ namespace Accounting.Controllers
             }
 
             OperationGroup removed = await _operationGroupManager.RemoveAsync(id);
+            OperationGroupDTO dto = _mapper.Map<OperationGroupDTO>(removed);
 
-            return Ok(removed);
+            return Ok(dto);
         }
     }
 }

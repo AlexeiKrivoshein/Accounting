@@ -11,6 +11,9 @@ namespace Accounting.Mapper
             AllowNullCollections = true;
 
             CreateMap<OperationGroupDTO, OperationGroup>().ReverseMap();
+            CreateMap<AccountDTO, Account>().ReverseMap();
+            CreateMap<OperationDescriptionDTO, OperationDescription>().ReverseMap();
+            CreateMap<OperationDTO, Operation>().ReverseMap();
         }
     }
 }

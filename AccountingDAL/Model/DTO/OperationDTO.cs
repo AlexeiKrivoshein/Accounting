@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingDAL.Model
+namespace AccountingDAL.Model.DTO
 {
     /// <summary>
     /// Операция
     /// </summary>
-    public class Operation : ModelElementBase
+    public class OperationDTO: ModelElementBaseDTO
     {
         /// <summary>
         /// Дата операции
@@ -23,36 +23,33 @@ namespace AccountingDAL.Model
         public float Sum { get; set; } = 0F;
 
         /// <summary>
-        /// Идентификатор счета списания
+        /// Идентификатор счета кредита
         /// </summary>
-        [ForeignKey(nameof(Account))]
         public Guid AccountID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Счет кредит
         /// </summary>
-        public Account Account { get; set; }
+        public AccountDTO Account { get; set; }
 
         /// <summary>
         /// Идентификатор группы операции
         /// </summary>
-        [ForeignKey(nameof(OperationGroup))]
         public Guid OperationGroupID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Группа операции
         /// </summary>
-        public OperationGroup OperationGroup { get; set; }
+        public OperationGroupDTO OperationGroup { get; set; }
 
         /// <summary>
         /// Идентификатор описания операции
         /// </summary>
-        [ForeignKey(nameof(OperationDescription))]
         public Guid OperationDescriptionID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Описание операции
         /// </summary>
-        public OperationDescription OperationDescription { get; set; }
+        public OperationDescriptionDTO OperationDescription { get; set; }
     }
 }

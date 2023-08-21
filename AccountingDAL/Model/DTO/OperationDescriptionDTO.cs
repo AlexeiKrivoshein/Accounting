@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingDAL.Model
+namespace AccountingDAL.Model.DTO
 {
     /// <summary>
     /// Описание операции
     /// </summary>
-    public class OperationDescription: ModelElementBase
+    public class OperationDescriptionDTO: ModelElementBaseDTO
     {
         /// <summary>
         /// Наименование
@@ -20,7 +20,6 @@ namespace AccountingDAL.Model
         /// <summary>
         /// Идентификатор группы операции по умолчанию
         /// </summary>
-        [ForeignKey(nameof(DefaultOperationGroup))]
         public Guid DefaultOperationGrouptID { get; set; } = Guid.Empty;
 
         /// <summary>
@@ -28,6 +27,6 @@ namespace AccountingDAL.Model
         /// используется для заполнения Operation.OperationGroup
         /// значение которого может быть изменено пользователем
         /// </summary>
-        public OperationGroup? DefaultOperationGroup { get; set; }
+        public OperationGroupDTO? DefaultOperationGroup { get; set; }
     }
 }

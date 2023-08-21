@@ -15,5 +15,15 @@ namespace AccountingDAL.Model
         /// Наименование
         /// </summary>
         public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Коллекция операций находящихся в данной группе
+        /// </summary>
+        public ICollection<Operation> Operations { get; set; }
+
+        /// <summary>
+        /// Коллекция описаний операций находящихся в данной группе
+        /// </summary>
+        public ICollection<OperationDescription> OperationDescriptions { get; set; }
     }
 }
