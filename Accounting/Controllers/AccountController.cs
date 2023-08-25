@@ -19,7 +19,7 @@ namespace Accounting.Controllers
         }
 
 
-        [HttpGet("get")]
+        [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Guid? id)
         {
             if (id.HasValue && id != Guid.Empty)
@@ -38,7 +38,7 @@ namespace Accounting.Controllers
             }
         }
 
-        [HttpPost("set")]
+        [HttpPost]
         public async Task<IActionResult> Set([FromBody] AccountDTO dto)
         {
             if (dto is null)
@@ -53,7 +53,7 @@ namespace Accounting.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete("remove")]
+        [HttpDelete]
         public async Task<IActionResult> Remove([FromQuery] Guid id)
         {
             if (id == Guid.Empty)

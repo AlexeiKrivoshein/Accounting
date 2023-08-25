@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model
 {
     /// <summary>
-    /// Группа операций
+    /// Категория
     /// </summary>
-    public class OperationGroup : ModelElementBase
+    public class Сategory : ModelElementBase
     {
         /// <summary>
         /// Наименование
@@ -17,13 +17,13 @@ namespace AccountingDAL.Model
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Коллекция операций находящихся в данной группе
+        /// Коллекция операций находящихся в данной категории
         /// </summary>
         public ICollection<Operation> Operations { get; set; }
 
         /// <summary>
-        /// Коллекция описаний операций находящихся в данной группе
+        /// Коллекция шаблонов находящихся в данной категории
         /// </summary>
-        public ICollection<OperationDescription> OperationDescriptions { get; set; }
+        public ICollection<Template> Templates { get; set; }
     }
 }

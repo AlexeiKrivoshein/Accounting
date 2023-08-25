@@ -3,9 +3,9 @@ using AccountingDAL.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<OperationGroupManager>();
+builder.Services.AddSingleton<CategoryManager>();
 builder.Services.AddSingleton<AccountManager>();
-builder.Services.AddSingleton<OperationDescriptionManager>();
+builder.Services.AddSingleton<TemplateManager>();
 builder.Services.AddSingleton<OperationManager>();
 
 builder.Services.AddControllers();

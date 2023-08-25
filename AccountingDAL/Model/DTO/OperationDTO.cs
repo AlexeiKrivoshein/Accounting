@@ -33,23 +33,23 @@ namespace AccountingDAL.Model.DTO
         public AccountDTO Account { get; set; }
 
         /// <summary>
-        /// Идентификатор группы операции
+        /// Идентификатор категории
         /// </summary>
-        public Guid OperationGroupID { get; set; } = Guid.Empty;
+        public Guid CategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Группа операции
+        /// Категория
         /// </summary>
-        public OperationGroupDTO OperationGroup { get; set; }
+        public CategoryDTO Category { get; set; }
 
         /// <summary>
-        /// Идентификатор описания операции
+        /// Идентификатор шаблона
         /// </summary>
-        public Guid OperationDescriptionID { get; set; } = Guid.Empty;
+        public Guid TemplateID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Описание операции
+        /// Шаблон
         /// </summary>
-        public OperationDescriptionDTO OperationDescription { get; set; }
+        public TemplateDTO Template { get; set; }
     }
 }

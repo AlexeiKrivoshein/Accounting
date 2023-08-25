@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model.DTO
 {
     /// <summary>
-    /// Описание операции
+    /// Шаблон
     /// </summary>
-    public class OperationDescriptionDTO: ModelElementBaseDTO
+    public class TemplateDTO: ModelElementBaseDTO
     {
         /// <summary>
         /// Наименование
@@ -18,15 +18,15 @@ namespace AccountingDAL.Model.DTO
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Идентификатор группы операции по умолчанию
+        /// Идентификатор категории по умолчанию
         /// </summary>
-        public Guid DefaultOperationGrouptID { get; set; } = Guid.Empty;
+        public Guid DefaultCategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Группа операции по умолчанию для данного описания
-        /// используется для заполнения Operation.OperationGroup
+        /// Категория по умолчанию для данного шаблона
+        /// используется для заполнения Operation.Category
         /// значение которого может быть изменено пользователем
         /// </summary>
-        public OperationGroupDTO? DefaultOperationGroup { get; set; }
+        public CategoryDTO? DefaultCategory { get; set; }
     }
 }

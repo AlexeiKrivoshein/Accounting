@@ -10,9 +10,9 @@ namespace Accounting.Mapper
         {
             AllowNullCollections = true;
 
-            CreateMap<OperationGroupDTO, OperationGroup>().ReverseMap();
+            CreateMap<CategoryDTO, Сategory>().ReverseMap();
             CreateMap<AccountDTO, Account>().ReverseMap();
-            CreateMap<OperationDescriptionDTO, OperationDescription>().ReverseMap();
+            CreateMap<TemplateDTO, Template>().ReverseMap();
             CreateMap<OperationDTO, Operation>().ReverseMap();
         }
     }

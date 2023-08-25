@@ -34,25 +34,25 @@ namespace AccountingDAL.Model
         public Account Account { get; set; }
 
         /// <summary>
-        /// Идентификатор группы операции
+        /// Идентификатор категории
         /// </summary>
-        [ForeignKey(nameof(OperationGroup))]
-        public Guid OperationGroupID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(Category))]
+        public Guid CategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Группа операции
+        /// Категория
         /// </summary>
-        public OperationGroup OperationGroup { get; set; }
+        public Сategory Category { get; set; }
 
         /// <summary>
-        /// Идентификатор описания операции
+        /// Идентификатор шаблона
         /// </summary>
-        [ForeignKey(nameof(OperationDescription))]
-        public Guid OperationDescriptionID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(Template))]
+        public Guid TemplateID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Описание операции
+        /// Шаблон
         /// </summary>
-        public OperationDescription OperationDescription { get; set; }
+        public Template Template { get; set; }
     }
 }

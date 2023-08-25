@@ -13,9 +13,9 @@ namespace AccountingDAL.Model
     {
         public DbSet<Account> Accounts => Set<Account>();
 
-        public DbSet<OperationGroup> OperationGroups => Set<OperationGroup>();
+        public DbSet<Сategory> Categories => Set<Сategory>();
 
-        public DbSet<OperationDescription> OperationDescriptions => Set<OperationDescription>();
+        public DbSet<Template> Templates => Set<Template>();
 
         public DbSet<Operation> Operations => Set<Operation>();
 
@@ -32,15 +32,15 @@ namespace AccountingDAL.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Operation>()
-                        .HasOne(m => m.OperationGroup)
+                        .HasOne(m => m.Category)
                         .WithMany(t => t.Operations)
-                        .HasForeignKey(m => m.OperationGroupID)
+                        .HasForeignKey(m => m.CategoryID)
                         .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<OperationDescription>()
-                        .HasOne(m => m.DefaultOperationGroup)
-                        .WithMany(t => t.OperationDescriptions)
-                        .HasForeignKey(m => m.DefaultOperationGrouptID)
+            modelBuilder.Entity<Template>()
+                        .HasOne(m => m.DefaultCategory)
+                        .WithMany(t => t.Templates)
+                        .HasForeignKey(m => m.DefaultCategoryID)
                         .OnDelete(DeleteBehavior.Restrict);
         }
     }

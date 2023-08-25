@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model
 {
     /// <summary>
-    /// Описание операции
+    /// Шаблон
     /// </summary>
-    public class OperationDescription: ModelElementBase
+    public class Template: ModelElementBase
     {
         /// <summary>
         /// Наименование
@@ -18,16 +18,16 @@ namespace AccountingDAL.Model
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Идентификатор группы операции по умолчанию
+        /// Идентификатор категории по умолчанию
         /// </summary>
-        [ForeignKey(nameof(DefaultOperationGroup))]
-        public Guid DefaultOperationGrouptID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DefaultCategory))]
+        public Guid DefaultCategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Группа операции по умолчанию для данного описания
-        /// используется для заполнения Operation.OperationGroup
+        /// Категория по умолчанию для данного шаблона
+        /// используется для заполнения Operation.Category
         /// значение которого может быть изменено пользователем
         /// </summary>
-        public OperationGroup? DefaultOperationGroup { get; set; }
+        public Сategory? DefaultCategory { get; set; }
     }
 }

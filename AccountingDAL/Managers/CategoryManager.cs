@@ -4,24 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AccountingDAL.Managers
 {
-    public class OperationGroupManager
+    public class CategoryManager
     {
-        public OperationGroupManager()
+        public CategoryManager()
         {
         }
 
-        public async Task<IReadOnlyCollection<OperationGroup>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Сategory>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<OperationGroup> result = await context.OperationGroups.ToListAsync();
+            List<Сategory> result = await context.Categories.ToListAsync();
 
             return result;
         }
 
-        public async Task<OperationGroup> GetAsync(Guid id)
+        public async Task<Сategory> GetAsync(Guid id)
         {
             using var context = new AccountingContext();
-            OperationGroup? stored = await context.OperationGroups.FirstOrDefaultAsync(item => item.Id == id);
+            Сategory? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
             {
@@ -33,44 +33,44 @@ namespace AccountingDAL.Managers
             }
         }
 
-        public async Task<OperationGroup> SetAsync(OperationGroup group)
+        public async Task<Сategory> SetAsync(Сategory category)
         {
-            if (group is null)
+            if (category is null)
             {
-                throw new ArgumentNullException(nameof(group));
+                throw new ArgumentNullException(nameof(category));
             }
 
             using var context = new AccountingContext();
 
-            if (group.Id != Guid.Empty && await context.OperationGroups.AnyAsync(item => item.Id == group.Id))
+            if (category.Id != Guid.Empty && await context.Categories.AnyAsync(item => item.Id == category.Id))
             {
-                OperationGroup stored = await context.OperationGroups.FirstAsync(item => item.Id == group.Id);
+                Сategory stored = await context.Categories.FirstAsync(item => item.Id == category.Id);
 
                 //обновление записи
-                context.Entry(stored).CurrentValues.SetValues(group);
+                context.Entry(stored).CurrentValues.SetValues(category);
                 context.SaveChanges();
 
                 return stored;
             }
             else
             {
-                if (group.Id == Guid.Empty)
+                if (category.Id == Guid.Empty)
                 {
-                    group.Id = Guid.NewGuid();
+                    category.Id = Guid.NewGuid();
                 }
 
                 //создание записи
-                OperationGroup stored = (await context.AddAsync(group)).Entity;
+                Сategory stored = (await context.AddAsync(category)).Entity;
                 context.SaveChanges();
 
                 return stored;
             }
         }
 
-        public async Task<OperationGroup> RemoveAsync(Guid id)
+        public async Task<Сategory> RemoveAsync(Guid id)
         {
             using var context = new AccountingContext();
-            OperationGroup? stored = await context.OperationGroups.FirstOrDefaultAsync(item => item.Id == id);
+            Сategory? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
             {
@@ -78,7 +78,7 @@ namespace AccountingDAL.Managers
             }
             else
             {
-                context.OperationGroups.Remove(stored);
+                context.Categories.Remove(stored);
                 context.SaveChanges();
             }
 

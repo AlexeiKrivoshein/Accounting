@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model.DTO
 {
     /// <summary>
-    /// Группа операций
+    /// Категория
     /// </summary>
-    public class OperationGroupDTO: ModelElementBaseDTO
+    public class CategoryDTO: ModelElementBaseDTO
     {
         /// <summary>
         /// Наименование
