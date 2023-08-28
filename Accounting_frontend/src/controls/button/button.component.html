@@ -1,0 +1,11 @@
+<button
+  class="acc-button"
+  type="button" 
+  mat-button 
+  [style.width]="width"
+  [style.height]="height"
+  [ngClass]="{'disabled': !enabled}"
+  (click)="buttonClick.emit()"
+>
+  <span class="acc-header-3">{{ text }}</span>
+</button>

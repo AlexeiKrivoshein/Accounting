@@ -1,3 +1,20 @@
+<div class="button-container">
+  <app-button
+    text="Добавить"
+    (buttonClick)="onAddClick()"
+  ></app-button>
+
+  <app-button
+    text="Изменить"
+    [enabled]="false"
+  ></app-button>
+
+  <app-button
+    text="Удалить"
+    [enabled]="false"
+  ></app-button>
+</div>
+
 <app-table
   [columns]="columns"
   [dataSource]="dataSource"

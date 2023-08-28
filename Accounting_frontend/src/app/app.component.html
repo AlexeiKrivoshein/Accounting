@@ -1,11 +1,44 @@
-<mat-drawer-container class="h-100 w-100">
+<app-header class="w-100 flex-0"></app-header>
+
+<mat-drawer-container class="h-100 w-100 flex-1">
   <mat-drawer mode="side" opened>
-    <a>Счета</a>
-    <a>Категории</a>
-    <a>Шаблоны</a>
-    <a>Операции</a>
+    <div class="menu">
+      <div class="menu-item">
+        <span 
+          class="acc-header-2" 
+          [ngClass]="{'menu-item-selected': isActive('accounts')}"
+          [routerLink]="['accounts']"
+        >Счета</span>
+      </div>
+      
+      <div class="menu-item">
+        <span 
+          class="acc-header-2"
+          [ngClass]="{'menu-item-selected': isActive('categories')}"
+          [routerLink]="['categories']"
+        >Категории</span>
+      </div>
+
+      <div class="menu-item">
+        <span 
+          class="acc-header-2"
+          [ngClass]="{'menu-item-selected': isActive('templates')}"
+          [routerLink]="['templates']"
+        >Шаблоны</span>
+      </div>
+      
+      <div class="menu-item">
+        <span 
+          class="acc-header-2"
+          [ngClass]="{'menu-item-selected': isActive('operations')}"
+          [routerLink]="['operations']"
+        >Операции</span>
+      </div>      
+    </div>
   </mat-drawer>
   <mat-drawer-content>
-    <router-outlet></router-outlet>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>

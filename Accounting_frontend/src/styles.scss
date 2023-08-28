@@ -1,4 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./colors.scss";
+@import "./drawer.scss";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+//32 px
+.acc-header-1 {
+  font-size: 2rem;
+}
+
+//22 px
+.acc-header-2 {
+  font-size: 1.375rem;
+}
+
+//18 px
+.acc-header-3 {
+  font-size: 1.125rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+}

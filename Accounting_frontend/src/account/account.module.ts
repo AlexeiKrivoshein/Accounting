@@ -4,8 +4,6 @@ import { AccountListComponent } from './account-list/account-list.component';
 import { AccountEditorComponent } from './account-editor/account-editor.component';
 import { ControlsModule } from 'src/controls/controls.module';
 
-
-
 @NgModule({
   declarations: [
     AccountListComponent,

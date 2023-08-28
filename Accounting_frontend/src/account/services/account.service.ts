@@ -24,6 +24,6 @@ export class AccountService {
 
   public remove(id: string) {
     const params = new HttpParams().append("id", id);
-    return this.client.delete<Account>(URL);
+    return this.client.delete<Account>(URL, { params });
   }
 }

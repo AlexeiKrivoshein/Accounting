@@ -1,6 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Column } from 'src/controls/table/model/column';
 import { Account } from '../model/account';
 import { AccountService } from '../services/account.service';
@@ -22,10 +22,14 @@ export class AccountListComponent {
 
   public dataSource: DataSource<Account>;
 
-  constructor(accoutnService: AccountService){
+  constructor(accoutnService: AccountService, private route: Router){
     this.dataSource = {
       connect: () => accoutnService.get(),
       disconnect: () => {}
     }
+  }
+
+  public onAddClick() {
+    this.route.navigate(['accounts', 'create']);
   }
 }
