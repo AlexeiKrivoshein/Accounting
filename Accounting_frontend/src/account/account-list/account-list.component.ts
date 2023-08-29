@@ -1,8 +1,9 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Column } from 'src/controls/table/model/column';
-import { Account } from '../model/account';
+import { AccountEditorComponent } from '../account-editor/account-editor.component';
+import { Account, ACCOUNT_DEFAULT } from '../model/account';
 import { AccountService } from '../services/account.service';
 
 const ACCOUNT_COLUMNS: Column[] = [
@@ -22,7 +23,7 @@ export class AccountListComponent {
 
   public dataSource: DataSource<Account>;
 
-  constructor(accoutnService: AccountService, private route: Router){
+  constructor(accoutnService: AccountService, public dialog: MatDialog){
     this.dataSource = {
       connect: () => accoutnService.get(),
       disconnect: () => {}
@@ -30,6 +31,12 @@ export class AccountListComponent {
   }
 
   public onAddClick() {
-    this.route.navigate(['accounts', 'create']);
+    const dialog = this.dialog.open(AccountEditorComponent, {
+      width: '64em',
+      maxWidth: '100%',
+      height: 'auto',
+      maxHeight: '100%',
+      data: ACCOUNT_DEFAULT,
+    });
   }
 }

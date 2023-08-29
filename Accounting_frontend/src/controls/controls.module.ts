@@ -4,21 +4,26 @@ import { TableComponent } from './table/table.component';
 import { MatTableModule } from '@angular/material/table';
 import { LabelComponent } from './label/label.component';
 import { ButtonComponent } from './button/button.component';
+import { InputComponent } from './input/input.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     TableComponent,
     LabelComponent,
-    ButtonComponent
+    ButtonComponent,
+    InputComponent
   ],
   imports: [
     CommonModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule
   ], 
   exports: [
     TableComponent,
     LabelComponent,
-    ButtonComponent
+    ButtonComponent,
+    InputComponent
   ]
 })
 export class ControlsModule { }
