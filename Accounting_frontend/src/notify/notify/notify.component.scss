@@ -1,0 +1,17 @@
+::ng-deep {
+  .mdc-snackbar__surface {
+    background-color: transparent !important;
+  }
+
+  .notify-success {
+    background-color: lightgreen;
+  }
+
+  .notify-error {
+    background-color: red;
+  }
+
+  .notify-info {
+    background-color: lightgray;
+  }
+}

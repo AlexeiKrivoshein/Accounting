@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { EMPTY_GUID } from "src/const";
 
 export interface Account {
@@ -16,6 +16,6 @@ export function accountDefault(): Account {
 export function accountFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
-    name: new FormControl<string>('')
+    name: new FormControl<string>('', [Validators.required])
   })
 }

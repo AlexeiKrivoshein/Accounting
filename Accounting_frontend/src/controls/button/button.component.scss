@@ -1,6 +1,8 @@
 .acc-button {
+  border: solid 2px gray;
   border-radius: 4px;
   background-color: white;
+  color: black !important;
 
   &.disabled {
     opacity: 0.5;

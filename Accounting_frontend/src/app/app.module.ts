@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ControlsModule } from 'src/controls/controls.module';
 import { AccountModule } from 'src/account/account.module';
+import { NotifyModule } from 'src/notify/notify.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AccountModule } from 'src/account/account.module';
     MatSidenavModule,
     HttpClientModule,
     ControlsModule,
-    AccountModule
+    AccountModule,
+    NotifyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

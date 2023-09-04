@@ -9,10 +9,31 @@ $table-radius: 4px;
   border-bottom-left-radius: $table-radius;
   border-bottom-right-radius: $table-radius;
 
-  .header {
+  &__header-cell {
     color: black;
-    background-color: lightgray;
+    background-color: lightgray !important;
     border-top-left-radius: $table-radius;
     border-top-right-radius: $table-radius;
+  }
+
+  &__data-cell {
+    color: black;
+
+    &:hover {
+      // background-color: inherit !important;
+      font-weight: 500;
+    }
+  }
+
+  &__row {
+    cursor: pointer;
+  }
+
+  &__row-selected {
+    background-color: antiquewhite;
+
+    &:hover {
+      background-color: antiquewhite !important;
+    }
   }
 }

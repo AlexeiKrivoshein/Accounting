@@ -1,42 +1,97 @@
-import { DataSource } from '@angular/cdk/collections';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { switchMap } from 'rxjs/operators';
 import { Column } from 'src/controls/table/model/column';
+import { NotifyService } from 'src/notify/service/notify-service';
 import { AccountEditorComponent } from '../account-editor/account-editor.component';
-import { Account, ACCOUNT_DEFAULT } from '../model/account';
+import { Account, accountDefault } from '../model/account';
 import { AccountService } from '../services/account.service';
 
 const ACCOUNT_COLUMNS: Column[] = [
   {
-    path: 'Name',
-    header: 'Наименование'
-  }
-]
+    path: 'name',
+    header: 'Наименование',
+  },
+];
 
 @Component({
   selector: 'app-account-list',
   templateUrl: './account-list.component.html',
-  styleUrls: ['./account-list.component.scss']
+  styleUrls: ['./account-list.component.scss'],
 })
-export class AccountListComponent {
+export class AccountListComponent implements OnInit {
+  public selected: Account | null = null;
+
   public columns = ACCOUNT_COLUMNS;
 
-  public dataSource: DataSource<Account>;
+  public dataSource: MatTableDataSource<Account> =
+    new MatTableDataSource<Account>([]);
 
-  constructor(accoutnService: AccountService, public dialog: MatDialog){
-    this.dataSource = {
-      connect: () => accoutnService.get(),
-      disconnect: () => {}
+  constructor(
+    private accoutnService: AccountService,
+    public dialog: MatDialog,
+    private notifyService: NotifyService
+  ) {}
+
+  public ngOnInit(): void {
+    this.accoutnService
+      .get()
+      .subscribe((data) => (this.dataSource.data = data));
+  }
+
+  public onAdd() {
+    this.moodify(accountDefault());
+  }
+
+  public onModify() {
+    if (!!this.selected) {
+      this.moodify(this.selected);
     }
   }
 
-  public onAddClick() {
+  private moodify(account: Account) {
+    if (!this.selected) {
+      return;
+    }
+
     const dialog = this.dialog.open(AccountEditorComponent, {
-      width: '64em',
-      maxWidth: '100%',
+      width: '40em',
       height: 'auto',
-      maxHeight: '100%',
-      data: ACCOUNT_DEFAULT,
+      data: account,
     });
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.accoutnService
+          .get()
+          .subscribe((data) => (this.dataSource.data = data));
+      }
+    });
+  }
+
+  public onDelete() {
+    if (!this.selected) {
+      return;
+    }
+
+    this.accoutnService
+      .remove(this.selected.id)
+      .pipe(switchMap(() => this.accoutnService.get()))
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.notifyService.notify('Запись удалена.', 'success');
+        },
+        error: (err) => {
+          console.log(err);
+          this.notifyService.notify('Не удалось удалить запись.', 'error');
+        },
+      });
+  }
+
+  public onDoubleClick(event: any) {
+    console.log(event);
+    this.moodify(event);
   }
 }

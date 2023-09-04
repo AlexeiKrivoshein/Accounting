@@ -1,0 +1,24 @@
+<div class="dialog">
+  <span
+    class="acc-header-1 title"
+    mat-dialog-title
+  >
+    {{title}}
+  </span>
+
+  <div 
+    class="body"
+    mat-dialog-content
+  >
+    <ng-content *ngTemplateOutlet="body"> </ng-content>
+  </div>
+
+  <div
+    class="buttons"
+    mat-dialog-actions
+  >
+    <ng-content *ngTemplateOutlet="buttons"> </ng-content>
+  </div>
+
+  <mat-icon class="close-icon" (click)="close.emit()">close</mat-icon>
+</div>

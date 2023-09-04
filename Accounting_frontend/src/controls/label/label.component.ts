@@ -8,4 +8,10 @@ import { Component, Input } from '@angular/core';
 export class LabelComponent {
   @Input()
   public text = "";
+
+  @Input()
+  public width = "auto";
+
+  @Input()
+  public height = "auto";
 }

@@ -1,19 +1,33 @@
-<h1 mat-dialog-title>Счет</h1>
+<app-dialog
+  title="Счет"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
 
-<div mat-dialog-content>
-  <mat-form-field>
-    <app-label
-      text="Наименование"
-    ></app-label>
+<ng-template #body>
+  <app-label
+    class="acc-header-3 mb-1"
+    text="Наименование"
+    width="100%"
+  ></app-label>
 
-    <app-input
-      placeholder="Наименование"
-      [control]="getControl('name')"
-    ></app-input>
-  </mat-form-field>
-</div>
+  <app-input
+    placeholder="Наименование"
+    [control]="getControl('name')"
+    width="100%"
+  ></app-input>
+</ng-template>
 
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Отмена</button>
-  <button mat-button mat-dialog-close cdkFocusInitial>Сохранить</button>
-</div>
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    text="Сохранить"
+    [enabled]="formGroup.valid"
+    (buttonClick)="onSave()"
+  ></app-button>
+</ng-template>

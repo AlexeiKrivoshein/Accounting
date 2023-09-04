@@ -12,4 +12,10 @@ export class InputComponent {
 
   @Input()
   public control: FormControl<string | null> = new FormControl<string>("");
+
+  @Input()
+  public width: string = 'auto';
+
+  @Input()
+  public height: string = 'auto';
 }

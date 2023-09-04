@@ -1,21 +1,25 @@
 <div class="button-container">
   <app-button
     text="Добавить"
-    (buttonClick)="onAddClick()"
+    (buttonClick)="onAdd()"
   ></app-button>
 
   <app-button
     text="Изменить"
-    [enabled]="false"
+    [enabled]="!!selected"
+    (buttonClick)="onModify()"
   ></app-button>
 
   <app-button
     text="Удалить"
-    [enabled]="false"
+    [enabled]="!!selected"
+    (buttonClick)="onDelete()"
   ></app-button>
 </div>
 
 <app-table
+  [(selected)]="selected"
   [columns]="columns"
   [dataSource]="dataSource"
+  (doubleClick)="onDoubleClick($event)"
 ></app-table>

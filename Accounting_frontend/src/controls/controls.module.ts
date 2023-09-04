@@ -6,6 +6,10 @@ import { LabelComponent } from './label/label.component';
 import { ButtonComponent } from './button/button.component';
 import { InputComponent } from './input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,11 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MatTableModule,
-    ReactiveFormsModule
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule
   ], 
   exports: [
     TableComponent,
