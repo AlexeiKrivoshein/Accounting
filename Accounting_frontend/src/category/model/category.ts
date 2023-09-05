@@ -1,9 +1,18 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { EMPTY_GUID } from "src/const";
 
-// категория
+/**
+ * Категория
+ */
 export interface Category {
+  /**
+   * Идентификатор
+   */
   id: string;
+  
+  /**
+   * Наименование
+   */
   name: string;
 }
 

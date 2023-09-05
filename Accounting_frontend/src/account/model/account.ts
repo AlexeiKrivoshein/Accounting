@@ -1,9 +1,18 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { EMPTY_GUID } from "src/const";
 
-// счет
+/**
+ * Счет
+ */
 export interface Account {
+  /**
+   * Идентификатор
+   */
   id: string;
+
+  /**
+   * Наименование
+   */
   name: string;
 }
 

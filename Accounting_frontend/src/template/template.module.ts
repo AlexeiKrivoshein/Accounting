@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountListComponent } from './account-list/account-list.component';
-import { AccountEditorComponent } from './account-editor/account-editor.component';
+import { TemplateEditorComponent } from './template-editor/template-editor.component';
+import { TemplateListComponent } from './template-list/template-list.component';
 import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
 
 @NgModule({
   declarations: [
-    AccountListComponent,
-    AccountEditorComponent
+    TemplateEditorComponent,
+    TemplateListComponent
   ],
   imports: [
     CommonModule,
     ControlsModule,
-    DialogModule 
+    DialogModule
   ]
 })
-export class AccountModule { }
+export class TemplateModule { }

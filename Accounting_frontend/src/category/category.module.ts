@@ -5,8 +5,6 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
 
-
-
 @NgModule({
   declarations: [
     CategoryListComponent,
