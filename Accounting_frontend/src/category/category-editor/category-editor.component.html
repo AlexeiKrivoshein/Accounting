@@ -1,0 +1,33 @@
+<app-dialog
+  title="Категория"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
+
+<ng-template #body>
+  <app-label
+    class="acc-header-3 mb-1"
+    text="Наименование"
+    width="100%"
+  ></app-label>
+
+  <app-input
+    placeholder="Наименование"
+    [control]="getControl('name')"
+    width="100%"
+  ></app-input>
+</ng-template>
+
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    text="Сохранить"
+    [enabled]="formGroup.valid"
+    (buttonClick)="onSave()"
+  ></app-button>
+</ng-template>

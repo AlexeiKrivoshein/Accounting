@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { switchMap } from 'rxjs/operators';
 import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { AccountEditorComponent } from '../account-editor/account-editor.component';
-import { Account, accountDefault } from '../model/account';
-import { AccountService } from '../services/account.service';
+import { CategoryEditorComponent } from '../category-editor/category-editor.component';
+import { Category, categoryDefault } from '../model/category';
+import { CategoryService } from '../services/category.service';
 
-const ACCOUNT_COLUMNS: Column[] = [
+const CATEGORY_COLUMNS: Column[] = [
   {
     path: 'name',
     header: 'Наименование',
@@ -16,32 +16,32 @@ const ACCOUNT_COLUMNS: Column[] = [
 ];
 
 @Component({
-  selector: 'app-account-list',
-  templateUrl: './account-list.component.html',
-  styleUrls: ['./account-list.component.scss'],
+  selector: 'app-category-list',
+  templateUrl: './category-list.component.html',
+  styleUrls: ['./category-list.component.scss'],
 })
-export class AccountListComponent implements OnInit {
-  public selected: Account | null = null;
+export class CategoryListComponent {
+  public selected: Category | null = null;
 
-  public columns = ACCOUNT_COLUMNS;
+  public columns = CATEGORY_COLUMNS;
 
-  public dataSource: MatTableDataSource<Account> =
-    new MatTableDataSource<Account>([]);
+  public dataSource: MatTableDataSource<Category> =
+    new MatTableDataSource<Category>([]);
 
   constructor(
-    private accoutnService: AccountService,
+    private categoryService: CategoryService,
     public dialog: MatDialog,
     private notifyService: NotifyService
   ) {}
 
   public ngOnInit(): void {
-    this.accoutnService
+    this.categoryService
       .get()
       .subscribe((data) => (this.dataSource.data = data));
   }
 
   public onAdd() {
-    this.moodify(accountDefault());
+    this.moodify(categoryDefault());
   }
 
   public onModify() {
@@ -50,20 +50,20 @@ export class AccountListComponent implements OnInit {
     }
   }
 
-  private moodify(account: Account) {
-    if (!account) {
+  private moodify(category: Category) {
+    if (!category) {
       return;
     }
 
-    const dialog = this.dialog.open(AccountEditorComponent, {
+    const dialog = this.dialog.open(CategoryEditorComponent, {
       width: '40em',
       height: 'auto',
-      data: account,
+      data: category,
     });
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.accoutnService
+        this.categoryService
           .get()
           .subscribe((data) => (this.dataSource.data = data));
       }
@@ -75,9 +75,9 @@ export class AccountListComponent implements OnInit {
       return;
     }
 
-    this.accoutnService
+    this.categoryService
       .remove(this.selected.id)
-      .pipe(switchMap(() => this.accoutnService.get()))
+      .pipe(switchMap(() => this.categoryService.get()))
       .subscribe({
         next: (data) => {
           this.dataSource.data = data;
