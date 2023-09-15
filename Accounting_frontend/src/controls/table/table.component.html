@@ -2,16 +2,16 @@
   <ng-container *ngFor="let column of columns" [matColumnDef]="column.path">
     <th mat-header-cell *matHeaderCellDef class="acc-table__header-cell acc-header-3"> {{ column.header }} </th>
     <td mat-cell *matCellDef="let data" class="acc-table__data-cell acc-header-3"> 
-      {{ data[column.path] }}
+      {{ getData(data, column.path) }}
     </td>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
-    <tr mat-row 
-      class="acc-table__row"
-      [ngClass]="{'acc-table__row-selected': row.id === (selected?.id ?? EMPTY_GUID)}"
-      *matRowDef="let row; columns: columnsToDisplay;"
-      (click)="onSelectionChanged(row)"
-      (dblclick)="onDoubleClick(row)"
-    ></tr>
   </ng-container>
+
+  <tr mat-header-row class="acc-table__header-row" *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+  <tr mat-row 
+    class="acc-table__row"
+    [ngClass]="{'acc-table__row-selected': row.id === (selected?.id ?? EMPTY_GUID)}"
+    *matRowDef="let row; columns: columnsToDisplay;"
+    (click)="onSelectionChanged(row)"
+    (dblclick)="onDoubleClick(row)"
+  ></tr>
 </table>

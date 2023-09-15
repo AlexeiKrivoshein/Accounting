@@ -11,6 +11,7 @@ import { ControlsModule } from 'src/controls/controls.module';
 import { AccountModule } from 'src/account/account.module';
 import { NotifyModule } from 'src/notify/notify.module';
 import { CategoryModule } from 'src/category/category.module';
+import { TemplateModule } from 'src/template/template.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CategoryModule } from 'src/category/category.module';
     ControlsModule,
     AccountModule,
     CategoryModule,
+    TemplateModule,
     NotifyModule
   ],
   providers: [],

@@ -4,6 +4,7 @@ import { AccountEditorComponent } from 'src/account/account-editor/account-edito
 import { AccountListComponent } from 'src/account/account-list/account-list.component';
 import { CategoryEditorComponent } from 'src/category/category-editor/category-editor.component';
 import { CategoryListComponent } from 'src/category/category-list/category-list.component';
+import { TemplateListComponent } from 'src/template/template-list/template-list.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
@@ -14,29 +15,14 @@ const routes: Routes = [
     component: AccountListComponent,
   },
   {
-    path: 'accounts/:id',
-    pathMatch: 'full',
-    component: AccountEditorComponent
-  },
-  {
-    path: 'accounts/create',
-    pathMatch: 'full',
-    component: AccountEditorComponent
-  },
-  {
     path: 'categories',
     pathMatch: 'full',
     component: CategoryListComponent,
   },
   {
-    path: 'category/:id',
+    path: 'templates',
     pathMatch: 'full',
-    component: CategoryEditorComponent
-  },
-  {
-    path: ' /create',
-    pathMatch: 'full',
-    component: CategoryEditorComponent
+    component: TemplateListComponent,
   },
   { path: '**', component: HomeComponent },
 ];

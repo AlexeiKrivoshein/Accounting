@@ -18,7 +18,7 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<Template>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Template> result = await context.Templates.ToListAsync();
+            List<Template> result = await context.Templates.Include(item => item.DefaultCategory).ToListAsync();
 
             return result;
         }

@@ -10,13 +10,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { AutocompliteComponent } from './autocomplete/autocomplete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
     TableComponent,
     LabelComponent,
     ButtonComponent,
-    InputComponent
+    InputComponent,
+    AutocompliteComponent
   ],
   imports: [
     CommonModule,
@@ -24,14 +27,16 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    ReactiveFormsModule,
-    MatFormFieldModule
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    ReactiveFormsModule
   ], 
   exports: [
     TableComponent,
     LabelComponent,
     ButtonComponent,
-    InputComponent
+    InputComponent,
+    AutocompliteComponent
   ]
 })
 export class ControlsModule { }

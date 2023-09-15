@@ -12,28 +12,32 @@ $table-radius: 4px;
   &__header-cell {
     color: black;
     background-color: lightgray !important;
-    border-top-left-radius: $table-radius;
-    border-top-right-radius: $table-radius;
+
+    &:first-child {
+      border-top-left-radius: $table-radius;
+    }
+    &:last-child {
+      border-top-right-radius: $table-radius;
+    }
   }
 
   &__data-cell {
     color: black;
-
-    &:hover {
-      // background-color: inherit !important;
-      font-weight: 500;
-    }
   }
 
   &__row {
     cursor: pointer;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__row-selected {
-    background-color: antiquewhite;
+    background-color: antiquewhite !important;
+  }
 
-    &:hover {
-      background-color: antiquewhite !important;
-    }
+  &__header-row {
   }
 }

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EMPTY_GUID } from 'src/const';
 import { environment } from 'src/environments/environment';
 import { Template } from '../model/template';
 
@@ -19,7 +20,11 @@ export class TemplateService {
   }
 
   public set(account: Template): Observable<Template> {
-    return this.client.post<Template>(URL, account);
+    const stored = { ...account };
+    stored.defaultCategoryID = stored.defaultCategory?.id ?? EMPTY_GUID;
+    stored.defaultCategory = null;
+
+    return this.client.post<Template>(URL, stored);
   }
 
   public remove(id: string) {

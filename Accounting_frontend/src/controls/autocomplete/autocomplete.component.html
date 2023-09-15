@@ -1,0 +1,24 @@
+<div
+  class="app-autocomplete"
+  [style.width]="width"
+  [style.height]="height"
+>
+  <input matInput
+    class="acc-header-3 h-100 w-100"
+    type="text"
+    [placeholder]="placeholder"
+    aria-label="Number"
+    [formControl]="control"
+    [matAutocomplete]="auto"
+  />
+        
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFuncBind">
+    <mat-option *ngFor="let item of items" [value]="item">
+      {{ display && display.length ? item[display] : item}}
+    </mat-option>
+  </mat-autocomplete>
+
+  <div class="icon-container" *ngIf="control.invalid">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+  </div>
+</div>

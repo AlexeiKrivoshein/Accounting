@@ -1,0 +1,38 @@
+::ng-deep {
+  .mat-mdc-autocomplete-panel {
+    background-color: white;
+
+    .mat-mdc-option {
+      &:hover {
+        font-weight: 500;
+      }
+
+      .mdc-list-item__primary-text {
+        color: black;  
+      }
+    }
+  }
+}
+.app-autocomplete {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border-radius: 4px;
+
+  input {
+    padding: 5px;
+  }
+
+  .icon-container {
+    position: absolute;
+    height: 100%;
+    right: 0px;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    
+    .error-icon {
+      color: red;
+    }
+  }
+}

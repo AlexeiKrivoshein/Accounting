@@ -41,8 +41,23 @@ export class TableComponent implements OnInit {
   }
 
   public onDoubleClick(row: any) {
-    console.log('onDoubleClick');
     this.onSelectionChanged(row);
     this.doubleClick.emit(row);
+  }
+
+  public getData(data: any, path: string) {
+    const items = path.split('.');
+
+    let result: any = data;
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      if (result[item]) {
+        result = result[item];
+      } else {
+        result = '';
+      }
+    }
+
+    return result;
   }
 }
