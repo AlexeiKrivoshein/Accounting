@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Accounting.Controllers
 {
-    [Route("api/template")]
-    public class TemplateController : Controller
+    [Route("api/contractor")]
+    public class ContractorController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly TemplateManager _templateManager;
+        private readonly ContractorManager _contractorManager;
 
-        public TemplateController(IMapper mapper, TemplateManager templateManager)
+        public ContractorController(IMapper mapper, ContractorManager contractorManager)
         {
             _mapper = mapper;
-            _templateManager = templateManager;
+            _contractorManager = contractorManager;
         }
 
 
@@ -24,31 +24,31 @@ namespace Accounting.Controllers
         {
             if (id is not null && id != Guid.Empty)
             {
-                Template template = await _templateManager.GetAsync(id.Value);
-                TemplateDTO dto = _mapper.Map<TemplateDTO>(template);
+                Contractor contractor = await _contractorManager.GetAsync(id.Value);
+                СontractorDTO dto = _mapper.Map<СontractorDTO>(contractor);
 
-                return Ok(new List<TemplateDTO> { dto });
+                return Ok(new List<СontractorDTO> { dto });
             }
             else
             {
-                IReadOnlyCollection<Template> result = await _templateManager.GetAllAsync();
-                List<TemplateDTO> dto = _mapper.Map<List<TemplateDTO>>(result);
+                IReadOnlyCollection<Contractor> result = await _contractorManager.GetAllAsync();
+                List<СontractorDTO> dto = _mapper.Map<List<СontractorDTO>>(result);
 
                 return Ok(dto);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Set([FromBody] TemplateDTO dto)
+        public async Task<IActionResult> Set([FromBody] СontractorDTO dto)
         {
             if (dto is null)
             {
                 throw new ArgumentNullException("Не корректная сущность 'шаблон'");
             }
 
-            Template template = _mapper.Map<Template>(dto);
-            template = await _templateManager.SetAsync(template);
-            dto = _mapper.Map<TemplateDTO>(template);
+            Contractor contractor = _mapper.Map<Contractor>(dto);
+            contractor = await _contractorManager.SetAsync(contractor);
+            dto = _mapper.Map<СontractorDTO>(contractor);
 
             return Ok(dto);
         }
@@ -61,8 +61,8 @@ namespace Accounting.Controllers
                 throw new ArgumentNullException("Передан пустой ключ удаялемой записи");
             }
 
-            Template removed = await _templateManager.RemoveAsync(id);
-            TemplateDTO dto = _mapper.Map<TemplateDTO>(removed);
+            Contractor removed = await _contractorManager.RemoveAsync(id);
+            СontractorDTO dto = _mapper.Map<СontractorDTO>(removed);
 
             return Ok(dto);
         }

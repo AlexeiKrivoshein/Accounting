@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model
 {
     /// <summary>
-    /// Категория
+    /// Контрагент
     /// </summary>
-    public class Сategory : ModelElementBase
+    public class Contractor: ModelElementBase
     {
         /// <summary>
         /// Наименование
@@ -17,13 +18,14 @@ namespace AccountingDAL.Model
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Коллекция операций находящихся в данной категории
+        /// Идентификатор категории
         /// </summary>
-        public ICollection<Operation> Operations { get; set; }
+        [ForeignKey(nameof(Category))]
+        public Guid CategoryID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Коллекция контрагентов находящихся в данной категории
+        /// Категория
         /// </summary>
-        public ICollection<Contractor> Сontractors { get; set; }
+        public Сategory? Category { get; set; }
     }
 }

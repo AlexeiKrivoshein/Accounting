@@ -63,9 +63,19 @@ export class AccountListComponent implements OnInit {
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.accoutnService
-          .get()
-          .subscribe((data) => (this.dataSource.data = data));
+        this.accoutnService.get().subscribe((data) => {
+          this.dataSource.data = data;
+
+          const index = this.dataSource.data.findIndex(
+            (item) => item.id === account.id
+          );
+
+          if (index >= 0 && this.dataSource.data[index]) {
+            this.selected = this.dataSource.data[index];
+          } else {
+            this.selected = null;
+          }
+        });
       }
     });
   }

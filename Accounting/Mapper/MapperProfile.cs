@@ -12,7 +12,7 @@ namespace Accounting.Mapper
 
             CreateMap<CategoryDTO, Сategory>().ReverseMap();
             CreateMap<AccountDTO, Account>().ReverseMap();
-            CreateMap<TemplateDTO, Template>().ReverseMap();
+            CreateMap<СontractorDTO, Contractor>().ReverseMap();
             CreateMap<OperationDTO, Operation>().ReverseMap();
         }
     }

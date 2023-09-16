@@ -11,7 +11,7 @@ import { ControlsModule } from 'src/controls/controls.module';
 import { AccountModule } from 'src/account/account.module';
 import { NotifyModule } from 'src/notify/notify.module';
 import { CategoryModule } from 'src/category/category.module';
-import { TemplateModule } from 'src/template/template.module';
+import { ContractorModule } from 'src/contractor/contractor.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { TemplateModule } from 'src/template/template.module';
     ControlsModule,
     AccountModule,
     CategoryModule,
-    TemplateModule,
+    ContractorModule,
     NotifyModule
   ],
   providers: [],

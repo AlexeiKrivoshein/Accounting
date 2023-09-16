@@ -63,9 +63,19 @@ export class CategoryListComponent {
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.categoryService
-          .get()
-          .subscribe((data) => (this.dataSource.data = data));
+        this.categoryService.get().subscribe((data) => {
+          this.dataSource.data = data;
+
+          const index = this.dataSource.data.findIndex(
+            (item) => item.id === category.id
+          );
+
+          if (index >= 0 && this.dataSource.data[index]) {
+            this.selected = this.dataSource.data[index];
+          } else {
+            this.selected = null;
+          }
+        });
       }
     });
   }

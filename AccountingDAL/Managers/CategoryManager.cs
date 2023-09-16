@@ -15,7 +15,7 @@ namespace AccountingDAL.Managers
             using var context = new AccountingContext();
             List<Сategory> result = await context.Categories.ToListAsync();
 
-            return result;
+            return result.OrderBy(item => item.Name).ToList();
         }
 
         public async Task<Сategory> GetAsync(Guid id)

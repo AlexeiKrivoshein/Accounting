@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountEditorComponent } from 'src/account/account-editor/account-editor.component';
 import { AccountListComponent } from 'src/account/account-list/account-list.component';
-import { CategoryEditorComponent } from 'src/category/category-editor/category-editor.component';
 import { CategoryListComponent } from 'src/category/category-list/category-list.component';
-import { TemplateListComponent } from 'src/template/template-list/template-list.component';
-import { AppComponent } from './app.component';
+import { ContractorListComponent } from 'src/contractor/contractor-list/contractor-list.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
@@ -20,9 +17,9 @@ const routes: Routes = [
     component: CategoryListComponent,
   },
   {
-    path: 'templates',
+    path: 'contractors',
     pathMatch: 'full',
-    component: TemplateListComponent,
+    component: ContractorListComponent,
   },
   { path: '**', component: HomeComponent },
 ];

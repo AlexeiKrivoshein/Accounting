@@ -45,11 +45,16 @@ namespace AccountingDAL.Model.DTO
         /// <summary>
         /// Идентификатор шаблона
         /// </summary>
-        public Guid TemplateID { get; set; } = Guid.Empty;
+        public Guid ContractorID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Шаблон
         /// </summary>
-        public TemplateDTO Template { get; set; }
+        public СontractorDTO Contractor { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; }
     }
 }

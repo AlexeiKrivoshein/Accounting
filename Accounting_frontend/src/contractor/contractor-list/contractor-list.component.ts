@@ -4,48 +4,48 @@ import { MatTableDataSource } from '@angular/material/table';
 import { switchMap } from 'rxjs/operators';
 import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { Template, templateDefault } from '../model/template';
-import { TemplateService } from '../services/template.service';
-import { TemplateEditorComponent } from '../template-editor/template-editor.component';
+import { Contractor, contractorDefault } from '../model/contractor';
+import { ContractorService } from '../services/contractor.service';
+import { ContractorEditorComponent } from '../contractor-editor/contractor-editor.component';
 
-const TEMPLATE_COLUMNS: Column[] = [
+const CONTRACTOR_COLUMNS: Column[] = [
   {
     path: 'name',
     header: 'Наименование',
   },
   {
-    path: 'defaultCategory.name',
+    path: 'category.name',
     header: 'Категория',
   },
 ];
 
 @Component({
-  selector: 'app-template-list',
-  templateUrl: './template-list.component.html',
-  styleUrls: ['./template-list.component.scss'],
+  selector: 'app-contractor-list',
+  templateUrl: './contractor-list.component.html',
+  styleUrls: ['./contractor-list.component.scss'],
 })
-export class TemplateListComponent {
-  public selected: Template | null = null;
+export class ContractorListComponent {
+  public selected: Contractor | null = null;
 
-  public columns = TEMPLATE_COLUMNS;
+  public columns = CONTRACTOR_COLUMNS;
 
-  public dataSource: MatTableDataSource<Template> =
-    new MatTableDataSource<Template>([]);
+  public dataSource: MatTableDataSource<Contractor> =
+    new MatTableDataSource<Contractor>([]);
 
   constructor(
-    private templateService: TemplateService,
+    private contractorService: ContractorService,
     public dialog: MatDialog,
     private notifyService: NotifyService
   ) {}
 
   public ngOnInit(): void {
-    this.templateService
+    this.contractorService
       .get()
       .subscribe((data) => (this.dataSource.data = data));
   }
 
   public onAdd() {
-    this.moodify(templateDefault());
+    this.moodify(contractorDefault());
   }
 
   public onModify() {
@@ -54,22 +54,32 @@ export class TemplateListComponent {
     }
   }
 
-  private moodify(template: Template) {
-    if (!template) {
+  private moodify(contractor: Contractor) {
+    if (!contractor) {
       return;
     }
 
-    const dialog = this.dialog.open(TemplateEditorComponent, {
+    const dialog = this.dialog.open(ContractorEditorComponent, {
       width: '40em',
       height: 'auto',
-      data: template,
+      data: contractor,
     });
 
     dialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.templateService
-          .get()
-          .subscribe((data) => (this.dataSource.data = data));
+        this.contractorService.get().subscribe((data) => {
+          this.dataSource.data = data;
+
+          const index = this.dataSource.data.findIndex(
+            (item) => item.id === contractor.id
+          );
+
+          if (index >= 0 && this.dataSource.data[index]) {
+            this.selected = this.dataSource.data[index];
+          } else {
+            this.selected = null;
+          }
+        });
       }
     });
   }
@@ -79,11 +89,12 @@ export class TemplateListComponent {
       return;
     }
 
-    this.templateService
+    this.contractorService
       .remove(this.selected.id)
-      .pipe(switchMap(() => this.templateService.get()))
+      .pipe(switchMap(() => this.contractorService.get()))
       .subscribe({
         next: (data) => {
+          this.selected = null;
           this.dataSource.data = data;
           this.notifyService.notify('Запись удалена.', 'success');
         },

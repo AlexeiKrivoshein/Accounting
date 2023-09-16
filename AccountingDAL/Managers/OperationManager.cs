@@ -20,7 +20,7 @@ namespace AccountingDAL.Managers
             using var context = new AccountingContext();
             List<Operation> result = await context.Operations.ToListAsync();
 
-            return result;
+            return result.OrderBy(item => item.Date).ToList();
         }
 
         public async Task<Operation> GetAsync(Guid id)

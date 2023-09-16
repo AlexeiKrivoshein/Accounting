@@ -1,5 +1,5 @@
 <app-dialog
-  title="Шаблон"
+  title="Контрагент"
   [body]="body"
   [buttons]="buttons"
   (close)="onCancel()"
@@ -27,7 +27,7 @@
 
   <app-autocomplete
     placeholder="Категория"
-    [control]="getControl('defaultCategory')"
+    [control]="getControl('category')"
     [items]="(categories$ | async) || []"
     display="name"
   ></app-autocomplete>

@@ -9,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace AccountingDAL.Managers
 {
-    public class TemplateManager
+    public class ContractorManager
     {
-        public TemplateManager()
+        public ContractorManager()
         {
         }
 
-        public async Task<IReadOnlyCollection<Template>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Contractor>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Template> result = await context.Templates.Include(item => item.DefaultCategory).ToListAsync();
+            List<Contractor> result = await context.Contractors.Include(item => item.Category).ToListAsync();
 
-            return result;
+            return result.OrderBy(item => item.Name).ToList();
         }
 
-        public async Task<Template> GetAsync(Guid id)
+        public async Task<Contractor> GetAsync(Guid id)
         {
             using var context = new AccountingContext();
-            Template? stored = await context.Templates
-                .Include(item => item.DefaultCategory)
+            Contractor? stored = await context.Contractors
+                .Include(item => item.Category)
                 .FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
@@ -40,44 +40,44 @@ namespace AccountingDAL.Managers
             }
         }
 
-        public async Task<Template> SetAsync(Template template)
+        public async Task<Contractor> SetAsync(Contractor contractor)
         {
-            if (template is null)
+            if (contractor is null)
             {
-                throw new ArgumentNullException(nameof(template));
+                throw new ArgumentNullException(nameof(contractor));
             }
 
             using var context = new AccountingContext();
 
-            if (template.Id != Guid.Empty && await context.Templates.AnyAsync(item => item.Id == template.Id))
+            if (contractor.Id != Guid.Empty && await context.Contractors.AnyAsync(item => item.Id == contractor.Id))
             {
-                Template stored = await context.Templates.FirstAsync(item => item.Id == template.Id);
+                Contractor stored = await context.Contractors.FirstAsync(item => item.Id == contractor.Id);
 
                 //обновление записи
-                context.Entry(stored).CurrentValues.SetValues(template);
+                context.Entry(stored).CurrentValues.SetValues(contractor);
                 context.SaveChanges();
 
                 return stored;
             }
             else
             {
-                if (template.Id == Guid.Empty)
+                if (contractor.Id == Guid.Empty)
                 {
-                    template.Id = Guid.NewGuid();
+                    contractor.Id = Guid.NewGuid();
                 }
 
                 //создание записи
-                Template stored = (await context.AddAsync(template)).Entity;
+                Contractor stored = (await context.AddAsync(contractor)).Entity;
                 context.SaveChanges();
 
                 return stored;
             }
         }
 
-        public async Task<Template> RemoveAsync(Guid id)
+        public async Task<Contractor> RemoveAsync(Guid id)
         {
             using var context = new AccountingContext();
-            Template? stored = await context.Templates.FirstOrDefaultAsync(item => item.Id == id);
+            Contractor? stored = await context.Contractors.FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
             {
@@ -85,7 +85,7 @@ namespace AccountingDAL.Managers
             }
             else
             {
-                context.Templates.Remove(stored);
+                context.Contractors.Remove(stored);
                 context.SaveChanges();
             }
 

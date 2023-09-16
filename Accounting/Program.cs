@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<CategoryManager>();
 builder.Services.AddSingleton<AccountManager>();
-builder.Services.AddSingleton<TemplateManager>();
+builder.Services.AddSingleton<ContractorManager>();
 builder.Services.AddSingleton<OperationManager>();
 
 builder.Services.AddControllers();

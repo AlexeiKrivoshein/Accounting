@@ -45,14 +45,19 @@ namespace AccountingDAL.Model
         public Сategory Category { get; set; }
 
         /// <summary>
-        /// Идентификатор шаблона
+        /// Идентификатор категории
         /// </summary>
-        [ForeignKey(nameof(Template))]
-        public Guid TemplateID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(Contractor))]
+        public Guid ContractorID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Шаблон
+        /// Контрагент
         /// </summary>
-        public Template Template { get; set; }
+        public Contractor Contractor { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; }
     }
 }

@@ -5,16 +5,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from 'src/category/model/category';
 import { CategoryService } from 'src/category/services/category.service';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { Template, templateFormGroup } from '../model/template';
-import { TemplateService } from '../services/template.service';
+import { Contractor, contractorFormGroup } from '../model/contractor';
+import { ContractorService } from '../services/contractor.service';
 
 @Component({
-  selector: 'app-template-editor',
-  templateUrl: './template-editor.component.html',
-  styleUrls: ['./template-editor.component.scss']
+  selector: 'app-contractor-editor',
+  templateUrl: './contractor-editor.component.html',
+  styleUrls: ['./contractor-editor.component.scss']
 })
-export class TemplateEditorComponent {
-  public formGroup: FormGroup = templateFormGroup();
+export class ContractorEditorComponent {
+  public formGroup: FormGroup = contractorFormGroup();
 
   public categories$: BehaviorSubject<Category[]> = new BehaviorSubject<Category[]>([]);
 
@@ -28,9 +28,9 @@ export class TemplateEditorComponent {
   }
 
   constructor(
-    private dialogRef: MatDialogRef<TemplateEditorComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Template,
-    private templateService: TemplateService,
+    private dialogRef: MatDialogRef<ContractorEditorComponent>,
+    @Inject(MAT_DIALOG_DATA) data: Contractor,
+    private contractorService: ContractorService,
     private categoryService: CategoryService,
     private notifyService: NotifyService
   ) {
@@ -48,10 +48,10 @@ export class TemplateEditorComponent {
   }
 
   public onSave() {
-    const template = this.formGroup.getRawValue();
+    const contractor = this.formGroup.getRawValue();
 
-    this.templateService.set(template).subscribe(template => {
-      this.formGroup.setValue(template);
+    this.contractorService.set(contractor).subscribe(contractor => {
+      this.formGroup.setValue(contractor);
       this.notifyService.notify('Сохранено', 'success')
       this.dialogRef.close(true);
     })

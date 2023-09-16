@@ -15,7 +15,7 @@ namespace AccountingDAL.Model
 
         public DbSet<Сategory> Categories => Set<Сategory>();
 
-        public DbSet<Template> Templates => Set<Template>();
+        public DbSet<Contractor> Contractors => Set<Contractor>();
 
         public DbSet<Operation> Operations => Set<Operation>();
 
@@ -37,10 +37,10 @@ namespace AccountingDAL.Model
                         .HasForeignKey(m => m.CategoryID)
                         .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Template>()
-                        .HasOne(m => m.DefaultCategory)
-                        .WithMany(t => t.Templates)
-                        .HasForeignKey(m => m.DefaultCategoryID)
+            modelBuilder.Entity<Contractor>()
+                        .HasOne(m => m.Category)
+                        .WithMany(t => t.Сontractors)
+                        .HasForeignKey(m => m.CategoryID)
                         .OnDelete(DeleteBehavior.Restrict);
         }
     }
