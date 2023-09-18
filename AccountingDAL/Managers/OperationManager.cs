@@ -18,7 +18,11 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<Operation>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Operation> result = await context.Operations.ToListAsync();
+            List<Operation> result = await context.Operations
+                .Include(item => item.Account)
+                .Include(item => item.Category)
+                .Include(item => item.Contractor)
+                .ToListAsync();
 
             return result.OrderBy(item => item.Date).ToList();
         }
@@ -29,6 +33,7 @@ namespace AccountingDAL.Managers
             Operation? stored = await context.Operations
                 .Include(item => item.Account)
                 .Include(item => item.Category)
+                .Include(item => item.Contractor)
                 .FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)

@@ -41,16 +41,16 @@ export class CategoryListComponent {
   }
 
   public onAdd() {
-    this.moodify(categoryDefault());
+    this.modify(categoryDefault());
   }
 
   public onModify() {
     if (!!this.selected) {
-      this.moodify(this.selected);
+      this.modify(this.selected);
     }
   }
 
-  private moodify(category: Category) {
+  private modify(category: Category) {
     if (!category) {
       return;
     }
@@ -101,6 +101,6 @@ export class CategoryListComponent {
   }
 
   public onDoubleClick(event: any) {
-    this.moodify(event);
+    this.modify(event);
   }
 }

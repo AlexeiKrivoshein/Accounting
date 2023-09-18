@@ -12,6 +12,8 @@ import { AccountModule } from 'src/account/account.module';
 import { NotifyModule } from 'src/notify/notify.module';
 import { CategoryModule } from 'src/category/category.module';
 import { ContractorModule } from 'src/contractor/contractor.module';
+import { OperationModule } from 'src/operation/operation.module';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -29,9 +31,12 @@ import { ContractorModule } from 'src/contractor/contractor.module';
     AccountModule,
     CategoryModule,
     ContractorModule,
+    OperationModule,
     NotifyModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

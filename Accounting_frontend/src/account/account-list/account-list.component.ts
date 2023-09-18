@@ -41,16 +41,16 @@ export class AccountListComponent implements OnInit {
   }
 
   public onAdd() {
-    this.moodify(accountDefault());
+    this.modify(accountDefault());
   }
 
   public onModify() {
     if (!!this.selected) {
-      this.moodify(this.selected);
+      this.modify(this.selected);
     }
   }
 
-  private moodify(account: Account) {
+  private modify(account: Account) {
     if (!account) {
       return;
     }
@@ -101,6 +101,6 @@ export class AccountListComponent implements OnInit {
   }
 
   public onDoubleClick(event: any) {
-    this.moodify(event);
+    this.modify(event);
   }
 }

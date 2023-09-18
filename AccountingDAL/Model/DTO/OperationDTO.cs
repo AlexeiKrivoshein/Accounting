@@ -43,12 +43,12 @@ namespace AccountingDAL.Model.DTO
         public CategoryDTO Category { get; set; }
 
         /// <summary>
-        /// Идентификатор шаблона
+        /// Идентификатор контрагента
         /// </summary>
         public Guid ContractorID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Шаблон
+        /// Контрагент
         /// </summary>
         public СontractorDTO Contractor { get; set; }
 
@@ -56,5 +56,10 @@ namespace AccountingDAL.Model.DTO
         /// Описание
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Тип операции дебет/кредит
+        /// </summary>
+        public OperationType OperationType { get; set; }
     }
 }

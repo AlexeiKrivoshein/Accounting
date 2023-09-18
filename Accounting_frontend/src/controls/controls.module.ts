@@ -12,6 +12,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { AutocompliteComponent } from './autocomplete/autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { DatePickerComponent } from './date-picker/date-picker.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     LabelComponent,
     ButtonComponent,
     InputComponent,
-    AutocompliteComponent
+    AutocompliteComponent,
+    DatePickerComponent,
   ],
   imports: [
     CommonModule,
@@ -29,14 +33,17 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    ReactiveFormsModule
-  ], 
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+  ],
   exports: [
     TableComponent,
     LabelComponent,
     ButtonComponent,
     InputComponent,
-    AutocompliteComponent
-  ]
+    AutocompliteComponent,
+    DatePickerComponent,
+  ],
 })
-export class ControlsModule { }
+export class ControlsModule {}

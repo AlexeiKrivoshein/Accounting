@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { InputType } from './model/input-type';
 
 @Component({
   selector: 'app-input',
@@ -18,4 +19,7 @@ export class InputComponent {
 
   @Input()
   public height: string = 'auto';
+
+  @Input()
+  public type: InputType = 'text';
 }

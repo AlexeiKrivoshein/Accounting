@@ -1,12 +1,11 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Category } from "src/category/model/category";
-import { EMPTY_GUID } from "src/const";
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Category } from 'src/category/model/category';
+import { EMPTY_GUID } from 'src/const';
 
 /**
  * Контрагент
  */
-export interface Contractor
-{
+export interface Contractor {
   /**
    * Идентификатор
    */
@@ -23,7 +22,7 @@ export interface Contractor
   categoryID: string;
 
   /**
-   * Категория 
+   * Категория
    */
   category: Category | null;
 }
@@ -33,8 +32,8 @@ export function contractorDefault(): Contractor {
     id: EMPTY_GUID,
     name: '',
     categoryID: '',
-    category: null
-  }
+    category: null,
+  };
 }
 
 export function contractorFormGroup(): FormGroup {
@@ -42,6 +41,6 @@ export function contractorFormGroup(): FormGroup {
     id: new FormControl<string>(EMPTY_GUID),
     name: new FormControl<string>('', [Validators.required]),
     categoryID: new FormControl<string>(EMPTY_GUID),
-    category: new FormControl<Category | null>(null, [Validators.required])
-  })
+    category: new FormControl<Category | null>(null, [Validators.required]),
+  });
 }

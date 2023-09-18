@@ -6,14 +6,7 @@ import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
 
 @NgModule({
-  declarations: [
-    ContractorEditorComponent,
-    ContractorListComponent
-  ],
-  imports: [
-    CommonModule,
-    ControlsModule,
-    DialogModule
-  ]
+  declarations: [ContractorEditorComponent, ContractorListComponent],
+  imports: [CommonModule, ControlsModule, DialogModule],
 })
-export class ContractorModule { }
+export class ContractorModule {}

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -23,16 +23,12 @@ export class AutocompliteComponent {
   public items: any[] = [];
 
   @Input()
-  public display: string = '';
+  public displayFn: (data: any) => string = (data: any) => data;
 
-  public displayFuncBind = this.displayFunc.bind(this);
+  @Output()
+  public optionSelected: EventEmitter<any> = new EventEmitter<any>();
 
-  public displayFunc(value: any): string {
-    if (!value) {
-      return '';
-    }
-
-    const display = this.display
-    return (display && display.length) ? value[this.display] : value;
+  public onOptionSelected(event: any) {
+    this.optionSelected.emit(event);
   }
 }

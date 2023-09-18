@@ -1,0 +1,24 @@
+<div
+  class="app-date-picker"
+  [style.width]="width"
+  [style.height]="height"
+>
+  <input matInput
+    class="acc-header-3 h-100 w-100"
+    [matDatepicker]="picker"
+    [placeholder]="placeholder"
+    [formControl]="control"
+  >
+
+  <mat-datepicker-toggle 
+    matIconSuffix 
+    [for]="picker"
+  ></mat-datepicker-toggle>
+
+  <mat-datepicker #picker></mat-datepicker>
+
+  <div class="icon-container" *ngIf="control.invalid">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+  </div>
+</div>
+

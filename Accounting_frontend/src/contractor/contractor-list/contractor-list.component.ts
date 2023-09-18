@@ -45,16 +45,16 @@ export class ContractorListComponent {
   }
 
   public onAdd() {
-    this.moodify(contractorDefault());
+    this.modify(contractorDefault());
   }
 
   public onModify() {
     if (!!this.selected) {
-      this.moodify(this.selected);
+      this.modify(this.selected);
     }
   }
 
-  private moodify(contractor: Contractor) {
+  private modify(contractor: Contractor) {
     if (!contractor) {
       return;
     }
@@ -106,6 +106,6 @@ export class ContractorListComponent {
   }
 
   public onDoubleClick(event: any) {
-    this.moodify(event);
+    this.modify(event);
   }
 }

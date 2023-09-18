@@ -29,7 +29,7 @@
     placeholder="Категория"
     [control]="getControl('category')"
     [items]="(categories$ | async) || []"
-    display="name"
+    [displayFn]="categoryDisplayFn"
   ></app-autocomplete>
 </ng-template>
 

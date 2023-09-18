@@ -26,6 +26,6 @@ namespace AccountingDAL.Model
         /// <summary>
         /// Категория
         /// </summary>
-        public Сategory? Category { get; set; }
+        public Сategory Category { get; set; }
     }
 }

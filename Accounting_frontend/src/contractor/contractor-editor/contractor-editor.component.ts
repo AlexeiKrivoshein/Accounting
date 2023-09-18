@@ -11,12 +11,16 @@ import { ContractorService } from '../services/contractor.service';
 @Component({
   selector: 'app-contractor-editor',
   templateUrl: './contractor-editor.component.html',
-  styleUrls: ['./contractor-editor.component.scss']
+  styleUrls: ['./contractor-editor.component.scss'],
 })
 export class ContractorEditorComponent {
   public formGroup: FormGroup = contractorFormGroup();
 
-  public categories$: BehaviorSubject<Category[]> = new BehaviorSubject<Category[]>([]);
+  public categoryDisplayFn = (item: any) => item['name'];
+
+  public categories$: BehaviorSubject<Category[]> = new BehaviorSubject<
+    Category[]
+  >([]);
 
   public getControl(fieldName: string): FormControl<any> {
     const control = this.formGroup.get(fieldName);
@@ -38,22 +42,22 @@ export class ContractorEditorComponent {
   }
 
   ngOnInit(): void {
-    this.categoryService.get().subscribe(categories => {
+    this.categoryService.get().subscribe((categories) => {
       this.categories$.next(categories);
-    })
+    });
   }
 
   public onCancel() {
-    this.dialogRef.close(false)
+    this.dialogRef.close(false);
   }
 
   public onSave() {
     const contractor = this.formGroup.getRawValue();
 
-    this.contractorService.set(contractor).subscribe(contractor => {
+    this.contractorService.set(contractor).subscribe((contractor) => {
       this.formGroup.setValue(contractor);
-      this.notifyService.notify('Сохранено', 'success')
+      this.notifyService.notify('Сохранено', 'success');
       this.dialogRef.close(true);
-    })
+    });
   }
 }

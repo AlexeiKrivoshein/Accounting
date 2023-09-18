@@ -59,5 +59,10 @@ namespace AccountingDAL.Model
         /// Описание
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Тип операции дебет/кредит
+        /// </summary>
+        public OperationType OperationType { get; set; }
     }
 }
