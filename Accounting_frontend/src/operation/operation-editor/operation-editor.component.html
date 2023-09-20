@@ -27,6 +27,7 @@
   ></app-label>
 
   <app-autocomplete
+    class="mb-3"
     placeholder="Счет"
     [control]="getControl('account')"
     [items]="(accounts$ | async) || []"
@@ -40,10 +41,11 @@
   ></app-label>
 
   <app-autocomplete
+    class="mb-3"
     placeholder="Контрагент"
     [control]="getControl('contractor')"
     [items]="(contractors$ | async) || []"
-    (optionSelected)="onOptionSelected($event)"
+    (optionSelected)="onContractorSelected($event)"
     [displayFn]="contractorDisplayFn"
   ></app-autocomplete>
 
@@ -68,6 +70,7 @@
   ></app-label>
 
   <app-autocomplete
+    class="mb-3"
     placeholder="Категория"
     [control]="getControl('category')"
     [items]="(categories$ | async) || []"
@@ -81,11 +84,11 @@
   ></app-label>
 
   <app-autocomplete
+    class="mb-3"
     placeholder="Тип операции"
     [control]="getControl('operationType')"
-    [items]="OPERATION_TYPE_LOCALIZED"
+    [items]="operationTypes"
     [displayFn]="operationTypeDisplayFn"
-    (optionSelected)="onOptionSelected($event)"
   ></app-autocomplete>
 
   <app-label

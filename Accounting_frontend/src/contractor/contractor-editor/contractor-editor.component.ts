@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from 'src/category/model/category';
 import { CategoryService } from 'src/category/services/category.service';
 import { NotifyService } from 'src/notify/service/notify-service';
+import { OperationType, operationTypeDisplayFn, OPERATION_TYPE_LOCALIZED } from 'src/operation/model/operation-type';
 import { Contractor, contractorFormGroup } from '../model/contractor';
 import { ContractorService } from '../services/contractor.service';
 
@@ -14,9 +15,14 @@ import { ContractorService } from '../services/contractor.service';
   styleUrls: ['./contractor-editor.component.scss'],
 })
 export class ContractorEditorComponent {
+  public operationTypes = Object.values(OperationType).filter(
+    (value) => !isNaN(Number(value))
+  );
+  public operationTypeDisplayFn = operationTypeDisplayFn;
+  
   public formGroup: FormGroup = contractorFormGroup();
 
-  public categoryDisplayFn = (item: any) => item['name'];
+  public categoryDisplayFn = (data: any) => data ? data['name'] : '';
 
   public categories$: BehaviorSubject<Category[]> = new BehaviorSubject<
     Category[]

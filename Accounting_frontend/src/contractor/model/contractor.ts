@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/category/model/category';
 import { EMPTY_GUID } from 'src/const';
+import { OperationType } from 'src/operation/model/operation-type';
 
 /**
  * Контрагент
@@ -25,6 +26,11 @@ export interface Contractor {
    * Категория
    */
   category: Category | null;
+
+  /**
+   * Основной тип операций для данного контрагента дебет/кредит
+   */
+  operationType: OperationType;
 }
 
 export function contractorDefault(): Contractor {
@@ -33,6 +39,7 @@ export function contractorDefault(): Contractor {
     name: '',
     categoryID: '',
     category: null,
+    operationType: OperationType.Credited,
   };
 }
 
@@ -42,5 +49,6 @@ export function contractorFormGroup(): FormGroup {
     name: new FormControl<string>('', [Validators.required]),
     categoryID: new FormControl<string>(EMPTY_GUID),
     category: new FormControl<Category | null>(null, [Validators.required]),
+    operationType: new FormControl<OperationType>(OperationType.Credited, [Validators.required]),
   });
 }

@@ -12,6 +12,7 @@ const OPERATION_COLUMNS: Column[] = [
   {
     path: 'date',
     header: 'Дата',
+    type: 'Date'
   },
   {
     path: 'account.name',
@@ -28,6 +29,7 @@ const OPERATION_COLUMNS: Column[] = [
   {
     path: 'sum',
     header: 'Сумма операции',
+    type: 'Currency'
   },
   {
     path: 'category.name',

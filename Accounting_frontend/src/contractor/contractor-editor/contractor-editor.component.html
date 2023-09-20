@@ -26,10 +26,24 @@
   ></app-label>
 
   <app-autocomplete
+    class="mb-3"
     placeholder="Категория"
     [control]="getControl('category')"
     [items]="(categories$ | async) || []"
     [displayFn]="categoryDisplayFn"
+  ></app-autocomplete>
+
+  <app-label
+    class="acc-header-3 mb-1"
+    text="Тип операции"
+    width="100%"
+  ></app-label>
+
+  <app-autocomplete
+    placeholder="Тип операции"
+    [control]="getControl('operationType')"
+    [items]="operationTypes"
+    [displayFn]="operationTypeDisplayFn"
   ></app-autocomplete>
 </ng-template>
 

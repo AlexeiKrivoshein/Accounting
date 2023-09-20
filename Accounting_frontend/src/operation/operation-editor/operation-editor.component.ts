@@ -10,7 +10,7 @@ import { Contractor } from 'src/contractor/model/contractor';
 import { ContractorService } from 'src/contractor/services/contractor.service';
 import { NotifyService } from 'src/notify/service/notify-service';
 import { Operation, operationFormGroup } from '../model/operation';
-import { OPERATION_TYPE_LOCALIZED } from '../model/operation-type';
+import { OperationType, operationTypeDisplayFn } from '../model/operation-type';
 import { OperationService } from '../services/operation.service';
 
 @Component({
@@ -19,7 +19,10 @@ import { OperationService } from '../services/operation.service';
   styleUrls: ['./operation-editor.component.scss'],
 })
 export class OperationEditorComponent {
-  public OPERATION_TYPE_LOCALIZED = OPERATION_TYPE_LOCALIZED;
+  public operationTypes = Object.values(OperationType).filter(
+    (value) => !isNaN(Number(value))
+  );
+  public operationTypeDisplayFn = operationTypeDisplayFn;
 
   public formGroup: FormGroup = operationFormGroup();
 
@@ -44,18 +47,11 @@ export class OperationEditorComponent {
     return this.operationService.get();
   }
 
-  public accountDisplayFn = (data: any) => data['name'];
+  public accountDisplayFn = (data: any) => (data ? data['name'] : '');
 
-  public contractorDisplayFn = (data: any) => data['name'];
+  public contractorDisplayFn = (data: any) => (data ? data['name'] : '');
 
-  public categoryDisplayFn = (data: any) => data['name'];
-
-  public operationTypeDisplayFn = (data: any) => {
-    const index = OPERATION_TYPE_LOCALIZED.findIndex(
-      (item) => item.type == data
-    );
-    return index >= 0 ? OPERATION_TYPE_LOCALIZED[index].local : '';
-  };
+  public categoryDisplayFn = (data: any) => (data ? data['name'] : '');
 
   constructor(
     private dialogRef: MatDialogRef<OperationEditorComponent>,
@@ -97,12 +93,29 @@ export class OperationEditorComponent {
     });
   }
 
-  public onOptionSelected(event: any) {
+  public onContractorSelected(event: any) {
     const category = event?.option?.value?.category;
     const categoryControl = this.formGroup.get('category');
 
-    if (category && !!categoryControl && !categoryControl?.value) {
+    if (
+      category != undefined &&
+      category != null &&
+      !!categoryControl &&
+      !categoryControl?.touched
+    ) {
       categoryControl.setValue(category);
+    }
+
+    const operationType = event?.option?.value?.operationType;
+    const operationTypeControl = this.formGroup.get('operationType');
+
+    if (
+      operationType != undefined &&
+      operationType != null &&
+      !!operationTypeControl &&
+      !operationTypeControl?.touched
+    ) {
+      operationTypeControl.setValue(operationType);
     }
   }
 }

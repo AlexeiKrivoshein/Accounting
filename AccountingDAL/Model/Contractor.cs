@@ -10,7 +10,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Контрагент
     /// </summary>
-    public class Contractor: ModelElementBase
+    public class Contractor : ModelElementBase
     {
         /// <summary>
         /// Наименование
@@ -27,5 +27,10 @@ namespace AccountingDAL.Model
         /// Категория
         /// </summary>
         public Сategory Category { get; set; }
+
+        /// <summary>
+        /// Основной тип операций для данного контрагента дебет/кредит
+        /// </summary>
+        public OperationType OperationType { get; set; }
     }
 }

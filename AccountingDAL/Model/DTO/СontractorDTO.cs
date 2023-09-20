@@ -10,7 +10,7 @@ namespace AccountingDAL.Model.DTO
     /// <summary>
     /// Шаблон
     /// </summary>
-    public class СontractorDTO: ModelElementBaseDTO
+    public class СontractorDTO : ModelElementBaseDTO
     {
         /// <summary>
         /// Наименование
@@ -26,5 +26,10 @@ namespace AccountingDAL.Model.DTO
         /// Категория
         /// </summary>
         public CategoryDTO Category { get; set; }
+
+        /// <summary>
+        /// Основной тип операций для данного контрагента дебет/кредит
+        /// </summary>
+        public OperationType OperationType { get; set; }
     }
 }

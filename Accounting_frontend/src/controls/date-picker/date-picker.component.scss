@@ -11,10 +11,9 @@
         height: 100%;
         padding: 0px;
         width: auto;
-
-        .mat-datepicker-toggle-default-icon {
-          vertical-align: middle;
-        }
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
         .mat-mdc-button-touch-target {
           width: 100%;

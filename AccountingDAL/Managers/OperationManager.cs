@@ -55,6 +55,22 @@ namespace AccountingDAL.Managers
 
             using var context = new AccountingContext();
 
+            if (operation.Index < 0)
+            {
+                List<Operation> operations = await context.Operations.Where(item =>
+                item.Date.Year == operation.Date.Year &&
+                item.Date.Month == operation.Date.Month &&
+                item.Date.Day == operation.Date.Day).ToListAsync();
+
+                int index = 0;
+                if (operations.Any())
+                {
+                    index = operations.Max(item => item.Index) + 1;
+                }
+
+                operation.Index = index;
+            }
+
             if (operation.Id != Guid.Empty && await context.Operations.AnyAsync(item => item.Id == operation.Id))
             {
                 Operation stored = await context.Operations.FirstAsync(item => item.Id == operation.Id);

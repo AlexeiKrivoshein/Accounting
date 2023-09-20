@@ -63,6 +63,11 @@ export interface Operation {
    * Тип операции дебет/кредит
    */
   operationType: OperationType;
+
+  /**
+   * Порядковый номер операции в разрезе дня
+   */
+  index: number;
 }
 
 export function operationDefault(): Operation {
@@ -78,6 +83,7 @@ export function operationDefault(): Operation {
     contractor: null,
     description: '',
     operationType: OperationType.Credited,
+    index: -1,
   };
 }
 
@@ -94,5 +100,6 @@ export function operationFormGroup(): FormGroup {
     contractor: new FormControl<Contractor | null>(null, [Validators.required]),
     description: new FormControl<string>(''),
     operationType: new FormControl<OperationType>(OperationType.Credited),
+    index: new FormControl<number>(-1),
   });
 }

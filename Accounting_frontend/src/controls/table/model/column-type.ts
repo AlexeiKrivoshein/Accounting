@@ -1,0 +1,1 @@
+export type ColumnType = 'String' | 'Number' | 'Currency' | 'Date';

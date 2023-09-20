@@ -12,6 +12,7 @@ $table-radius: 4px;
   &__header-cell {
     color: black;
     background-color: lightgray !important;
+    border: solid 1px lightgray;
 
     &:first-child {
       border-top-left-radius: $table-radius;
@@ -23,6 +24,12 @@ $table-radius: 4px;
 
   &__data-cell {
     color: black;
+
+    &__number {
+      float: right;
+    }
+
+    border: solid 1px lightgray;
   }
 
   &__row {

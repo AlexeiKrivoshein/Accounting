@@ -61,5 +61,10 @@ namespace AccountingDAL.Model.DTO
         /// Тип операции дебет/кредит
         /// </summary>
         public OperationType OperationType { get; set; }
+
+        /// <summary>
+        /// Порядковый номер операции в разрезе дня
+        /// </summary>
+        public int Index { get; set; }
     }
 }
