@@ -1,0 +1,15 @@
+<div
+  class="app-input"
+  [style.width]="width"
+  [style.height]="height"
+>
+  <textarea matInput
+    class="acc-header-3 h-100 w-100"
+    [placeholder]="placeholder"
+    [formControl]="control"
+  ></textarea>
+
+  <div class="icon-container" *ngIf="control.invalid">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+  </div>
+</div>

@@ -3,27 +3,14 @@ import { Account } from 'src/account/model/account';
 import { Category } from 'src/category/model/category';
 import { EMPTY_GUID } from 'src/const';
 import { Contractor } from 'src/contractor/model/contractor';
+import { Movement, movementDefault } from './movement';
+import { MovementType } from './movement-type';
 import { OperationType } from './operation-type';
 
 /**
- * Операция
+ * Операция с контрагентом
  */
-export interface Operation {
-  /**
-   * Идентификатор
-   */
-  id: string;
-
-  /**
-   * Дата
-   */
-  date: Date;
-
-  /**
-   * Сумма
-   */
-  sum: number;
-
+export interface Operation extends Movement {
   /**
    * Идентификатор счета кредита
    */
@@ -33,16 +20,6 @@ export interface Operation {
    * Счет кредит
    */
   account: Account | null;
-
-  /**
-   * Идентификатор категории
-   */
-  categoryID: string;
-
-  /**
-   * Категория
-   */
-  category: Category | null;
 
   /**
    * Идентификатор контрагента
@@ -55,35 +32,31 @@ export interface Operation {
   contractor: Contractor | null;
 
   /**
-   * Описание
+   * Идентификатор категории
    */
-  description: string;
+  categoryID: string;
+
+  /**
+   * Категория
+   */
+  category: Category | null;
 
   /**
    * Тип операции дебет/кредит
    */
   operationType: OperationType;
-
-  /**
-   * Порядковый номер операции в разрезе дня
-   */
-  index: number;
 }
 
 export function operationDefault(): Operation {
   return {
-    id: EMPTY_GUID,
-    date: new Date(),
-    sum: 0,
+    ...movementDefault(),
     accountID: '',
     account: null,
-    categoryID: '',
-    category: null,
     contractorID: '',
     contractor: null,
-    description: '',
+    categoryID: '',
+    category: null,
     operationType: OperationType.Credited,
-    index: -1,
   };
 }
 
@@ -92,14 +65,15 @@ export function operationFormGroup(): FormGroup {
     id: new FormControl<string>(EMPTY_GUID),
     date: new FormControl<Date>(new Date()),
     sum: new FormControl<number>(0, [Validators.required]),
+    description: new FormControl<string>(''),
+    index: new FormControl<number>(-1),
+
     accountID: new FormControl<string>(EMPTY_GUID),
     account: new FormControl<Account | null>(null, [Validators.required]),
-    categoryID: new FormControl<string>(EMPTY_GUID),
-    category: new FormControl<Category | null>(null, [Validators.required]),
     contractorID: new FormControl<string>(EMPTY_GUID),
     contractor: new FormControl<Contractor | null>(null, [Validators.required]),
-    description: new FormControl<string>(''),
+    categoryID: new FormControl<string>(EMPTY_GUID),
+    category: new FormControl<Category | null>(null, [Validators.required]),
     operationType: new FormControl<OperationType>(OperationType.Credited),
-    index: new FormControl<number>(-1),
   });
 }

@@ -1,0 +1,17 @@
+<app-button
+  mat-button [matMenuTriggerFor]="menu"
+  [text]="text"
+  [height]="height"
+  [width]="width"
+  [enabled]="enabled"
+  [icon]="icon"
+></app-button>
+
+<mat-menu #menu="matMenu" class="dropdown-button-menu">
+  <button *ngFor="let item of items" mat-menu-item (click)="item.click()">
+    <div class="menu-item">
+      <mat-icon class="icon">{{ item.icon }}</mat-icon>
+      <span class="text">{{ item.text }}</span>
+    </div>
+  </button>
+</mat-menu>

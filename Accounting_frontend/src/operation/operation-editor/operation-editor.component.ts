@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import { OperationService } from '../services/operation.service';
   templateUrl: './operation-editor.component.html',
   styleUrls: ['./operation-editor.component.scss'],
 })
-export class OperationEditorComponent {
+export class OperationEditorComponent implements OnInit {
   public operationTypes = Object.values(OperationType).filter(
     (value) => !isNaN(Number(value))
   );
@@ -70,8 +70,8 @@ export class OperationEditorComponent {
       this.categories$.next(categories);
     });
 
-    this.accountService.get().subscribe((categories) => {
-      this.accounts$.next(categories);
+    this.accountService.get().subscribe((accounts) => {
+      this.accounts$.next(accounts);
     });
 
     this.contractorService.get().subscribe((contractors) => {
@@ -85,9 +85,9 @@ export class OperationEditorComponent {
 
   public onSave() {
     const operation = this.formGroup.getRawValue();
-
-    this.operationService.set(operation).subscribe((contractor) => {
-      this.formGroup.setValue(contractor);
+    
+    this.operationService.set(operation).subscribe((operation) => {
+      this.formGroup.setValue(operation);
       this.notifyService.notify('Сохранено', 'success');
       this.dialogRef.close(true);
     });

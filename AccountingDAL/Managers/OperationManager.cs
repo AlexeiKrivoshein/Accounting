@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AccountingDAL.Managers
 {
-    public class OperationManager
+    public class OperationManager : MovementManagerBase
     {
         public OperationManager()
         {
@@ -22,9 +22,11 @@ namespace AccountingDAL.Managers
                 .Include(item => item.Account)
                 .Include(item => item.Category)
                 .Include(item => item.Contractor)
+                .OrderBy(item => item.Date)
+                .ThenBy(item => item.Index)
                 .ToListAsync();
 
-            return result.OrderBy(item => item.Date).ToList();
+            return result.ToList();
         }
 
         public async Task<Operation> GetAsync(Guid id)
@@ -57,19 +59,11 @@ namespace AccountingDAL.Managers
 
             if (operation.Index < 0)
             {
-                List<Operation> operations = await context.Operations.Where(item =>
-                item.Date.Year == operation.Date.Year &&
-                item.Date.Month == operation.Date.Month &&
-                item.Date.Day == operation.Date.Day).ToListAsync();
-
-                int index = 0;
-                if (operations.Any())
-                {
-                    index = operations.Max(item => item.Index) + 1;
-                }
-
-                operation.Index = index;
+                operation.Index = await GetNextIndexAsync(operation.Date);
             }
+
+            // время ввода операции хранить нет необходимости
+            operation.Date = new DateTime(operation.Date.Year, operation.Date.Month, operation.Date.Day, 0, 0, 0);
 
             if (operation.Id != Guid.Empty && await context.Operations.AnyAsync(item => item.Id == operation.Id))
             {

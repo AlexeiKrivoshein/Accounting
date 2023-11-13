@@ -18,6 +18,11 @@ namespace AccountingDAL.Model.DTO
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
+        /// Код
+        /// </summary>
+        public string Code { get; set; } = string.Empty;
+
+        /// <summary>
         /// Идентификатор категории
         /// </summary>
         public Guid CategoryID { get; set; } = Guid.Empty;

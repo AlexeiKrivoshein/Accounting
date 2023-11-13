@@ -1,0 +1,29 @@
+::ng-deep {
+  .dropdown-button-menu {
+    background-color: white;
+
+    .mat-mdc-menu-content {
+      padding: unset;
+    }
+
+    .mat-mdc-menu-item {
+      &:hover {
+        background-color: antiquewhite;
+      }
+
+      .menu-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .icon {
+          color: black;
+        }
+    
+        .text {
+          color: black;
+        }
+      }
+    }
+  }
+}

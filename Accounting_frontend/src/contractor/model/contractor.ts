@@ -18,6 +18,11 @@ export interface Contractor {
   name: string;
 
   /**
+   * Код
+   */
+  code: string;
+
+  /**
    * Идентификатор категории
    */
   categoryID: string;
@@ -37,6 +42,7 @@ export function contractorDefault(): Contractor {
   return {
     id: EMPTY_GUID,
     name: '',
+    code: '',
     categoryID: '',
     category: null,
     operationType: OperationType.Credited,
@@ -49,6 +55,9 @@ export function contractorFormGroup(): FormGroup {
     name: new FormControl<string>('', [Validators.required]),
     categoryID: new FormControl<string>(EMPTY_GUID),
     category: new FormControl<Category | null>(null, [Validators.required]),
-    operationType: new FormControl<OperationType>(OperationType.Credited, [Validators.required]),
+    operationType: new FormControl<OperationType>(OperationType.Credited, [
+      Validators.required,
+    ]),
+    code: new FormControl<string>(''),
   });
 }

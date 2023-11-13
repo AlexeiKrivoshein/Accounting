@@ -1,0 +1,73 @@
+<app-dialog
+  title="Импорт"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
+
+<ng-template #body>
+  <div
+    class="h-100"
+    [ngClass]="{'display-none': selectedTab != IMPORT_TAB}"
+  >
+    <app-textarea 
+      class="h-100"
+      [control]="control"
+    ></app-textarea>
+  </div>
+  
+  <div
+    class="d-flex flex-column h-100"
+    [ngClass]="{'display-none': selectedTab != OPERATIONS_TAB}"
+  >
+    <div class="button-container mb-2">
+      <app-button
+        text="Импорт"
+        (buttonClick)="loadFile()"
+      ></app-button>
+  
+      <app-button
+        text="Добавить"
+        (buttonClick)="onAdd()"
+      ></app-button>
+  
+      <app-button
+        text="Изменить"
+        [enabled]="!!selected"
+        (buttonClick)="onModify()"
+      ></app-button>
+  
+      <app-button
+        text="Удалить"
+        [enabled]="!!selected"
+        (buttonClick)="onDelete()"
+      ></app-button>
+    </div>
+
+    <app-table
+      [(selected)]="selected"
+      [columns]="columns"
+      [dataSource]="dataSource"
+      (selectedChange)="onSelectedChange($event)"
+    ></app-table>
+  </div>
+</ng-template>
+
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    [ngClass]="{'display-none': selectedTab != IMPORT_TAB}"
+    text="Анализ"
+    (buttonClick)="onParse()"
+  ></app-button>
+
+  <app-button
+    [ngClass]="{'display-none': selectedTab != OPERATIONS_TAB}"
+    text="Импорт"
+    (buttonClick)="onImport()"
+  ></app-button>
+</ng-template>

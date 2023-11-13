@@ -20,7 +20,7 @@ export class OperationService {
 
   public set(operation: Operation): Observable<Operation> {
     const stored = { ...operation };
-    
+
     stored.accountID = stored.account?.id ?? EMPTY_GUID;
     stored.account = null;
 

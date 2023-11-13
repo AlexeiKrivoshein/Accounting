@@ -14,6 +14,8 @@ namespace Accounting.Mapper
             CreateMap<AccountDTO, Account>().ReverseMap();
             CreateMap<СontractorDTO, Contractor>().ReverseMap();
             CreateMap<OperationDTO, Operation>().ReverseMap();
+            CreateMap<TransferDTO, Transfer>().ReverseMap();
+            CreateMap<BalanceDTO, Balance>().ReverseMap();
         }
     }
 }

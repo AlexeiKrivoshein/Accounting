@@ -1,5 +1,5 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { EMPTY_GUID } from "src/const";
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EMPTY_GUID } from 'src/const';
 
 /**
  * Счет
@@ -14,18 +14,25 @@ export interface Account {
    * Наименование
    */
   name: string;
+
+  /**
+   * Код
+   */
+  code: string;
 }
 
 export function accountDefault(): Account {
   return {
     id: EMPTY_GUID,
-    name: ''
-  }
+    name: '',
+    code: '',
+  };
 }
 
 export function accountFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
-    name: new FormControl<string>('', [Validators.required])
-  })
+    name: new FormControl<string>('', [Validators.required]),
+    code: new FormControl<string>(''),
+  });
 }

@@ -19,6 +19,10 @@ namespace AccountingDAL.Model
 
         public DbSet<Operation> Operations => Set<Operation>();
 
+        public DbSet<Transfer> Transfers=> Set<Transfer>();
+
+        public DbSet<Balance> Balances => Set<Balance>();
+
         public AccountingContext()
         {
             Database.EnsureCreated();
@@ -41,6 +45,18 @@ namespace AccountingDAL.Model
                         .HasOne(m => m.Category)
                         .WithMany(t => t.Сontractors)
                         .HasForeignKey(m => m.CategoryID)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Transfer>()
+                        .HasOne(m => m.CreditAccount)
+                        .WithMany(t => t.CreditTransfers)
+                        .HasForeignKey(m => m.CreditAccountID)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Transfer>()
+                        .HasOne(m => m.DebitAccount)
+                        .WithMany(t => t.DeditTransfers)
+                        .HasForeignKey(m => m.DebitAccountID)
                         .OnDelete(DeleteBehavior.Restrict);
         }
     }

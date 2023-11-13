@@ -1,14 +1,22 @@
+using Accounting.JSON;
 using Accounting.Mapper;
 using AccountingDAL.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<CategoryManager>();
-builder.Services.AddSingleton<AccountManager>();
-builder.Services.AddSingleton<ContractorManager>();
-builder.Services.AddSingleton<OperationManager>();
+builder.Services
+    .AddSingleton<CategoryManager>()
+    .AddSingleton<AccountManager>()
+    .AddSingleton<ContractorManager>()
+    .AddSingleton<OperationManager>()
+    .AddSingleton<TransferManager>()
+    .AddSingleton<BalanceManager>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+    });
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddSwaggerGen();
 

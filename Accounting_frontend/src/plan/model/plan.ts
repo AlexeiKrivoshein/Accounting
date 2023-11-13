@@ -1,0 +1,6 @@
+/**
+ * План
+ */
+export interface Plan {
+
+}

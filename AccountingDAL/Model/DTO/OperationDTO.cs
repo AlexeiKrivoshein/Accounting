@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model.DTO
 {
     /// <summary>
-    /// Операция
+    /// Операция с контрагентом
     /// </summary>
-    public class OperationDTO: ModelElementBaseDTO
+    public class OperationDTO : ModelElementBaseDTO
     {
         /// <summary>
         /// Дата операции
@@ -23,7 +23,7 @@ namespace AccountingDAL.Model.DTO
         public float Sum { get; set; } = 0F;
 
         /// <summary>
-        /// Идентификатор счета кредита
+        /// Идентификатор счет
         /// </summary>
         public Guid AccountID { get; set; } = Guid.Empty;
 

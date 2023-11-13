@@ -18,6 +18,9 @@ export class ButtonComponent {
   @Input()
   public enabled: boolean = true;
 
+  @Input()
+  public icon: string = "";
+
   @Output()
   public buttonClick: EventEmitter<void> = new EventEmitter<void>();
 }

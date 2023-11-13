@@ -15,6 +15,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { TextAreaComponent } from './textarea/textarea.component';
+import { DropdownButtonComponent } from './dropdown-button/dropdown-button.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     InputComponent,
     AutocompliteComponent,
     DatePickerComponent,
+    TextAreaComponent,
+    DropdownButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +40,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatMenuModule,
     ReactiveFormsModule,
   ],
   exports: [
@@ -44,6 +50,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     InputComponent,
     AutocompliteComponent,
     DatePickerComponent,
+    TextAreaComponent,
+    DropdownButtonComponent
   ],
 })
 export class ControlsModule {}

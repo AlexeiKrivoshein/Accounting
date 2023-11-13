@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./colors.scss";
 @import "./drawer.scss";
+@import "./mattabgroup.scss";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -27,4 +28,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   gap: 20px;
   width: 100%;
   height: auto;
+}
+
+.min-height-0 {
+  min-height: 0px;
+}
+
+.flex-0 {
+  flex-wrap: 0;
+  flex-shrink: 0;
+}
+
+.flex-1 {
+  flex-wrap: 1;
+  flex-shrink: 1;
+}
+
+.display-none {
+  display: none !important;
 }

@@ -14,6 +14,8 @@ import { CategoryModule } from 'src/category/category.module';
 import { ContractorModule } from 'src/contractor/contractor.module';
 import { OperationModule } from 'src/operation/operation.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { BalanceModule } from 'src/balance/balance.module';
+import { PlanModule } from 'src/plan/plan.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     CategoryModule,
     ContractorModule,
     OperationModule,
+    BalanceModule,
+    PlanModule,
     NotifyModule
   ],
   providers: [

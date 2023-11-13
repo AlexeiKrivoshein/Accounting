@@ -15,5 +15,10 @@ namespace AccountingDAL.Model.DTO
         /// Наименование
         /// </summary>
         public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Код
+        /// </summary>
+        public string Code { get; set; } = string.Empty;
     }
 }

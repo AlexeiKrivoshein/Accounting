@@ -7,14 +7,28 @@
 
 <ng-template #body>
   <app-label
-    class="acc-header-3 mb-1"
+    class="acc-header-3"
     text="Наименование"
     width="100%"
   ></app-label>
 
   <app-input
+    class="mb-2"
     placeholder="Наименование"
     [control]="getControl('name')"
+    width="100%"
+  ></app-input>
+
+  <app-label
+    class="acc-header-3"
+    text="Код"
+    width="100%"
+  ></app-label>
+
+  <app-input
+    class="mb-2"
+    placeholder="Код"
+    [control]="getControl('code')"
     width="100%"
   ></app-input>
 </ng-template>

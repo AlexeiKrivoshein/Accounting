@@ -1,0 +1,8 @@
+
+.mat-mdc-tab {
+  color: lightgray !important;
+
+  &:not(.mat-mdc-tab-disabled) {
+    color: gray !important;
+  }
+}

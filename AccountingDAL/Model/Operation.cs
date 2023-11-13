@@ -8,22 +8,12 @@ using System.Threading.Tasks;
 namespace AccountingDAL.Model
 {
     /// <summary>
-    /// Операция
+    /// Операция с контрагентом
     /// </summary>
-    public class Operation : ModelElementBase
+    public class Operation : Movement
     {
         /// <summary>
-        /// Дата операции
-        /// </summary>
-        public DateTime Date { get; set; } = DateTime.Now;
-
-        /// <summary>
-        /// Сумма
-        /// </summary>
-        public float Sum { get; set; } = 0F;
-
-        /// <summary>
-        /// Идентификатор счета списания
+        /// Идентификатор счета
         /// </summary>
         [ForeignKey(nameof(Account))]
         public Guid AccountID { get; set; } = Guid.Empty;
@@ -32,17 +22,6 @@ namespace AccountingDAL.Model
         /// Счет кредит
         /// </summary>
         public Account Account { get; set; }
-
-        /// <summary>
-        /// Идентификатор категории
-        /// </summary>
-        [ForeignKey(nameof(Category))]
-        public Guid CategoryID { get; set; } = Guid.Empty;
-
-        /// <summary>
-        /// Категория
-        /// </summary>
-        public Сategory Category { get; set; }
 
         /// <summary>
         /// Идентификатор категории
@@ -56,18 +35,19 @@ namespace AccountingDAL.Model
         public Contractor Contractor { get; set; }
 
         /// <summary>
-        /// Описание
+        /// Идентификатор категории
         /// </summary>
-        public string Description { get; set; }
+        [ForeignKey(nameof(Category))]
+        public Guid CategoryID { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Категория
+        /// </summary>
+        public Сategory Category { get; set; }
 
         /// <summary>
         /// Тип операции дебет/кредит
         /// </summary>
         public OperationType OperationType { get; set; }
-
-        /// <summary>
-        /// Порядковый номер операции в разрезе дня
-        /// </summary>
-        public int Index { get; set; }
     }
 }
