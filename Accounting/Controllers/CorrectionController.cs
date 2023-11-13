@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Accounting.Controllers
 {
-    [Route("api/transfer")]
-    public class TransferController : Controller
+    [Route("api/correction")]
+    public class CorrectionController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly TransferManager _transferManager;
+        private readonly CorrectionManager _correctionManager;
 
-        public TransferController(IMapper mapper, TransferManager transferManager)
+        public CorrectionController(IMapper mapper, CorrectionManager operationManager)
         {
             _mapper = mapper;
-            _transferManager = transferManager;
+            _correctionManager = operationManager;
         }
 
         [HttpGet]
@@ -23,31 +23,31 @@ namespace Accounting.Controllers
         {
             if (id is not null && id != Guid.Empty)
             {
-                Transfer operation = await _transferManager.GetAsync(id.Value);
-                TransferDTO dto = _mapper.Map<TransferDTO>(operation);
+                Correction correction = await _correctionManager.GetAsync(id.Value);
+                CorrectionDTO dto = _mapper.Map<CorrectionDTO>(correction);
 
-                return Ok(new List<TransferDTO> { dto });
+                return Ok(new List<CorrectionDTO> { dto });
             }
             else
             {
-                IReadOnlyCollection<Transfer> result = await _transferManager.GetAllAsync();
-                List<TransferDTO> dto = _mapper.Map<List<TransferDTO>>(result);
+                IReadOnlyCollection<Correction> result = await _correctionManager.GetAllAsync();
+                List<CorrectionDTO> dto = _mapper.Map<List<CorrectionDTO>>(result);
 
                 return Ok(dto);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Set([FromBody] TransferDTO dto)
+        public async Task<IActionResult> Set([FromBody] CorrectionDTO dto)
         {
             if (dto is null)
             {
                 throw new ArgumentNullException("Не корректная сущность 'операция'");
             }
 
-            Transfer operation = _mapper.Map<Transfer>(dto);
-            operation = await _transferManager.SetAsync(operation);
-            dto = _mapper.Map<TransferDTO>(operation);
+            Correction correction = _mapper.Map<Correction>(dto);
+            correction = await _correctionManager.SetAsync(correction);
+            dto = _mapper.Map<CorrectionDTO>(correction);
 
             return Ok(dto);
         }
@@ -60,8 +60,8 @@ namespace Accounting.Controllers
                 throw new ArgumentNullException("Передан пустой ключ удаялемой записи");
             }
 
-            Transfer removed = await _transferManager.RemoveAsync(id);
-            TransferDTO dto = _mapper.Map<TransferDTO>(removed);
+            Correction removed = await _correctionManager.RemoveAsync(id);
+            CorrectionDTO dto = _mapper.Map<CorrectionDTO>(removed);
 
             return Ok(dto);
         }

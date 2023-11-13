@@ -10,12 +10,11 @@ namespace AccountingDAL.Model.DTO
     /// <summary>
     /// Коррекция остатков по счету
     /// </summary>
-    public class CorrectionDTO : ModelElementBaseDTO
+    public class CorrectionDTO : MovementDTO
     {
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        [ForeignKey(nameof(Account))]
         public Guid AccountID { get; set; } = Guid.Empty;
 
         /// <summary>

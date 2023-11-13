@@ -10,6 +10,7 @@ builder.Services
     .AddSingleton<ContractorManager>()
     .AddSingleton<OperationManager>()
     .AddSingleton<TransferManager>()
+    .AddSingleton<CorrectionManager>()
     .AddSingleton<BalanceManager>();
 
 builder.Services.AddControllers()
