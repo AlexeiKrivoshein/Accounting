@@ -10,18 +10,8 @@ namespace AccountingDAL.Model.DTO
     /// <summary>
     /// Операция с контрагентом
     /// </summary>
-    public class OperationDTO : ModelElementBaseDTO
+    public class OperationDTO : MovementDTO
     {
-        /// <summary>
-        /// Дата операции
-        /// </summary>
-        public DateTime Date { get; set; } = DateTime.Now;
-
-        /// <summary>
-        /// Сумма
-        /// </summary>
-        public float Sum { get; set; } = 0F;
-
         /// <summary>
         /// Идентификатор счет
         /// </summary>
@@ -31,16 +21,6 @@ namespace AccountingDAL.Model.DTO
         /// Счет кредит
         /// </summary>
         public AccountDTO Account { get; set; }
-
-        /// <summary>
-        /// Идентификатор категории
-        /// </summary>
-        public Guid CategoryID { get; set; } = Guid.Empty;
-
-        /// <summary>
-        /// Категория
-        /// </summary>
-        public CategoryDTO Category { get; set; }
 
         /// <summary>
         /// Идентификатор контрагента
@@ -53,18 +33,18 @@ namespace AccountingDAL.Model.DTO
         public СontractorDTO Contractor { get; set; }
 
         /// <summary>
-        /// Описание
+        /// Идентификатор категории
         /// </summary>
-        public string Description { get; set; }
+        public Guid CategoryID { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Категория
+        /// </summary>
+        public CategoryDTO Category { get; set; }
 
         /// <summary>
         /// Тип операции дебет/кредит
         /// </summary>
         public OperationType OperationType { get; set; }
-
-        /// <summary>
-        /// Порядковый номер операции в разрезе дня
-        /// </summary>
-        public int Index { get; set; }
     }
 }

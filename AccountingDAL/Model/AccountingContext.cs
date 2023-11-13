@@ -21,6 +21,8 @@ namespace AccountingDAL.Model
 
         public DbSet<Transfer> Transfers=> Set<Transfer>();
 
+        public DbSet<Correction> Corrections => Set<Correction>();
+
         public DbSet<Balance> Balances => Set<Balance>();
 
         public AccountingContext()

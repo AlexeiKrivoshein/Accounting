@@ -10,18 +10,8 @@ namespace AccountingDAL.Model.DTO
     /// <summary>
     /// Операция перевода между счетами
     /// </summary>
-    public class TransferDTO : ModelElementBaseDTO
+    public class TransferDTO : MovementDTO
     {
-        /// <summary>
-        /// Дата операции
-        /// </summary>
-        public DateTime Date { get; set; } = DateTime.Now;
-
-        /// <summary>
-        /// Сумма
-        /// </summary>
-        public float Sum { get; set; } = 0F;
-
         /// <summary>
         /// Идентификатор счета кредита
         /// </summary>
@@ -41,15 +31,5 @@ namespace AccountingDAL.Model.DTO
         /// Счет дебета
         /// </summary>
         public AccountDTO DebitAccount { get; set; }
-
-        /// <summary>
-        /// Описание
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Порядковый номер операции в разрезе дня
-        /// </summary>
-        public int Index { get; set; }
     }
 }
