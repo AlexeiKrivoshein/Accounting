@@ -18,7 +18,10 @@ import { TransferEditorComponent } from '../transfer-editor/transfer-editor.comp
 import { forkJoin, Observable } from 'rxjs';
 import { MovementType } from '../model/movement-type';
 import { OperationType } from '../model/operation-type';
-import { Correction } from '../model/correction';
+import { Correction, correctionDefault } from '../model/correction';
+import { CorrectionEditorComponent } from '../correction-editor/correction-editor.component';
+import { CorrectionService } from '../services/correction.service';
+import { isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-movement-list',
@@ -119,13 +122,18 @@ export class MovementListComponent implements OnInit {
   public items: DropdownButtonItem[] = [
     {
       text: 'Операция',
-      icon: 'money',
+      icon: 'paid',
       click: () => this.onOperationAdd(),
     },
     {
       text: 'Перевод',
-      icon: 'compare_arrows',
+      icon: 'currency_exchange',
       click: () => this.onTransferAdd(),
+    },
+    {
+      text: 'Корректировка',
+      icon: 'balance',
+      click: () => this.onCorrectionAdd(),
     },
   ];
 
@@ -134,6 +142,7 @@ export class MovementListComponent implements OnInit {
   constructor(
     private operationService: OperationService,
     private transferService: TransferService,
+    private correctionService: CorrectionService,
     private balanceService: BalanceService,
     public dialog: MatDialog,
     private notifyService: NotifyService
@@ -147,6 +156,7 @@ export class MovementListComponent implements OnInit {
     const movements$ = forkJoin([
       this.operationService.get(),
       this.transferService.get(),
+      this.correctionService.get(),
     ]);
 
     return movements$.pipe(
@@ -164,9 +174,30 @@ export class MovementListComponent implements OnInit {
           movements.push(item);
         });
 
-        return movements;
+        data[2].map((item) => {
+          this.typer.set(item.id, MovementType.Correction);
+          movements.push(item);
+        });
+
+        return movements.sort(this.compareMovement);
       })
     );
+  }
+
+  private compareMovement(m1: Movement, m2: Movement): number {
+    if (m1.date > m2.date) {
+      return -1;
+    } else if (m1.date === m2.date) {
+      if (m1.index > m2.index) {
+        return -1;
+      } else if (m1.index === m2.index) {
+        return 0;
+      } else {
+        return 0;
+      }
+    } else {
+      return 1;
+    }
   }
 
   public onOperationAdd() {
@@ -177,6 +208,10 @@ export class MovementListComponent implements OnInit {
     this.modifyTransfer(transferDefault());
   }
 
+  public onCorrectionAdd() {
+    this.modifyCorrection(correctionDefault());
+  }
+
   public onModify() {
     if (!this.selected) {
       return;
@@ -185,6 +220,8 @@ export class MovementListComponent implements OnInit {
     const type = this.typer.get(this.selected.id);
     if (type === MovementType.Operation) {
       this.modifyOperation(this.selected);
+    } else if (type === MovementType.Correction) {
+      this.modifyCorrection(this.selected);
     } else {
       this.modifyTransfer(this.selected);
     }
@@ -250,6 +287,35 @@ export class MovementListComponent implements OnInit {
     });
   }
 
+  private modifyCorrection(correction: Movement) {
+    if (!correction) {
+      return;
+    }
+
+    const dialog = this.dialog.open(CorrectionEditorComponent, {
+      width: '40em',
+      height: 'auto',
+      data: correction,
+    });
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.load().subscribe((data) => {
+          this.dataSource.data = data;
+
+          const index = this.dataSource.data.findIndex(
+            (item) => item.id === correction.id
+          );
+
+          if (index >= 0 && this.dataSource.data[index]) {
+            this.selected = this.dataSource.data[index];
+          } else {
+            this.selected = null;
+          }
+        });
+      }
+    });
+  }
   public onDelete() {
     if (!this.selected) {
       return;
@@ -260,6 +326,8 @@ export class MovementListComponent implements OnInit {
     const type = this.typer.get(this.selected.id);
     if (type == MovementType.Operation) {
       removed$ = this.operationService.remove(this.selected.id);
+    } else if (type == MovementType.Correction) {
+      removed$ = this.correctionService.remove(this.selected.id);
     } else {
       removed$ = this.transferService.remove(this.selected.id);
     }
