@@ -18,7 +18,7 @@ namespace AccountingDAL.Model.DTO
         public Guid AccountID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет кредит
+        /// Счет
         /// </summary>
         public AccountDTO Account { get; set; }
 

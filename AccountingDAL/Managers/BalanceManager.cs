@@ -68,7 +68,9 @@ namespace AccountingDAL.Managers
         public async Task<List<Balance>> GetMovementBalanceAsync(Guid movementId)
         {
             using var context = new AccountingContext();
+
             Movement? movement = await context.Operations.FirstOrDefaultAsync(x => x.Id == movementId);
+
             if (movement is null)
             {
                 movement = await context.Transfers.FirstOrDefaultAsync(x => x.Id == movementId);
@@ -76,7 +78,12 @@ namespace AccountingDAL.Managers
 
             if (movement is null)
             {
-                throw new Exception($"На найдена операция/перевод с идентикатором {movementId}.");
+                movement = await context.Corrections.FirstOrDefaultAsync(x => x.Id == movementId);
+            }
+
+            if (movement is null)
+            {
+                throw new Exception($"На найдена операция/перевод/корректировка с идентикатором {movementId}.");
             }
 
             List<Balance> balances = new List<Balance>();
@@ -131,6 +138,7 @@ namespace AccountingDAL.Managers
             List<Movement> movements = new List<Movement>();
             List<Operation> operations = new List<Operation>();
             List<Transfer> transfers = new List<Transfer>();
+            List<Correction> corrections = new List<Correction>();
 
             // нет расчитанных балансов, суммируем все операции и переводы
             if (balance is null)
@@ -143,6 +151,11 @@ namespace AccountingDAL.Managers
                 // все предыдущие переводы по счету
                 transfers = await context.Transfers
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .ToListAsync();
+
+                // все предыдущие корректировки по счету
+                corrections = await context.Corrections
+                    .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
             else
@@ -159,11 +172,18 @@ namespace AccountingDAL.Managers
                 transfers = await context.Transfers
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
+
+                // корректировки от последнего баланса и до движения
+                corrections = await context.Corrections
+                    .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .ToListAsync();
             }
 
             // оперции и переводы в одном списке, отсортированном по дате и индексу
             movements.AddRange(operations.Cast<Movement>());
             movements.AddRange(transfers.Cast<Movement>());
+            movements.AddRange(corrections.Cast<Movement>());
+
             movements = movements.OrderBy(x => x.Date).ThenBy(x => x.Index).ToList();
 
             // подсчет баланса счета
@@ -183,6 +203,17 @@ namespace AccountingDAL.Managers
                 else if (item is Transfer transfer)
                 {
                     if (transfer.CreditAccountID == account.Id)
+                    {
+                        sum -= item.Sum;
+                    }
+                    else
+                    {
+                        sum += item.Sum;
+                    }
+                }
+                else if (item is Correction correction)
+                {
+                    if (correction.OperationType == OperationType.Credited)
                     {
                         sum -= item.Sum;
                     }
@@ -211,6 +242,9 @@ namespace AccountingDAL.Managers
         public async Task CalculateAndStoreBalancesAsync()
         {
             Operation? operation = null;
+            Transfer? transfer = null;
+            Correction? correction = null;
+
             List<Account> accounts = new List<Account>();
 
             using (var context = new AccountingContext())
@@ -219,15 +253,25 @@ namespace AccountingDAL.Managers
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
+                transfer = await context.Transfers
+                    .OrderBy(x => x.Date)
+                    .FirstOrDefaultAsync();
+
+                correction = await context.Corrections
+                    .OrderBy(x => x.Date)
+                    .FirstOrDefaultAsync();
+
                 accounts = await context.Accounts.ToListAsync();
             }
 
-            if (operation is null || !accounts.Any())
+            if ((operation is null && transfer is null && correction is null) || !accounts.Any())
             {
                 return;
             }
 
-            DateTime current = new DateTime(operation.Date.Year, operation.Date.Month, operation.Date.Day, 23, 59, 59);
+            DateTime date = new[] { operation?.Date ?? DateTime.MaxValue, transfer?.Date ?? DateTime.MaxValue, correction?.Date ?? DateTime.MaxValue }.Min();
+
+            DateTime current = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59);
             DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             while (current < end)
             {

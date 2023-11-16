@@ -19,7 +19,7 @@ namespace AccountingDAL.Model
         public Guid AccountID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет кредит
+        /// Счет
         /// </summary>
         public Account Account { get; set; }
 
