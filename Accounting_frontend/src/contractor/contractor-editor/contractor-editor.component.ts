@@ -8,7 +8,7 @@ import { NotifyService } from 'src/notify/service/notify-service';
 import {
   OperationType,
   operationTypeDisplayFn,
-} from 'src/movement/model/operation-type';
+} from 'src/operation/model/operation-type';
 import { Contractor, contractorFormGroup } from '../model/contractor';
 import { ContractorService } from '../services/contractor.service';
 

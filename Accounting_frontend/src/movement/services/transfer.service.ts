@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EMPTY_GUID } from 'src/const';
 import { environment } from 'src/environments/environment';
-import { Transfer } from '../model/transfer';
+import { Transfer } from '../../transfer/model/transfer';
 
 const URL: string = `${environment.url}/api/transfer`;
 

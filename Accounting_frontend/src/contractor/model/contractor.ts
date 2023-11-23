@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Category } from 'src/category/model/category';
 import { EMPTY_GUID } from 'src/const';
-import { OperationType } from 'src/movement/model/operation-type';
+import { OperationType } from 'src/operation/model/operation-type';
 
 /**
  * Контрагент

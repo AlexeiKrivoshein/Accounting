@@ -7,21 +7,21 @@ import { BalanceService } from 'src/balance/services/balance.service';
 import { DropdownButtonItem } from 'src/controls/dropdown-button/model/dropdown-button-item';
 import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { ImportComponent } from '../import/import.component';
+import { ImportComponent } from '../../import/import/import.component';
 import { Movement } from '../model/movement';
-import { Operation, operationDefault } from '../model/operation';
-import { Transfer, transferDefault } from '../model/transfer';
-import { OperationEditorComponent } from '../operation-editor/operation-editor.component';
-import { OperationService } from '../services/operation.service';
+import { Transfer, transferDefault } from '../../transfer/model/transfer';
+import { OperationEditorComponent } from '../../operation/operation-editor/operation-editor.component';
+import { OperationService } from '../../operation/services/operation.service';
 import { TransferService } from '../services/transfer.service';
-import { TransferEditorComponent } from '../transfer-editor/transfer-editor.component';
+import { TransferEditorComponent } from '../../transfer/transfer-editor/transfer-editor.component';
 import { forkJoin, Observable } from 'rxjs';
 import { MovementType } from '../model/movement-type';
-import { OperationType } from '../model/operation-type';
-import { Correction, correctionDefault } from '../model/correction';
-import { CorrectionEditorComponent } from '../correction-editor/correction-editor.component';
-import { CorrectionService } from '../services/correction.service';
+import { OperationType } from '../../operation/model/operation-type';
+import { Correction, correctionDefault } from '../../correction/model/correction';
+import { CorrectionEditorComponent } from '../../correction/correction-editor/correction-editor.component';
+import { CorrectionService } from '../../correction/services/correction.service';
 import { isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
+import { Operation, operationDefault } from 'src/operation/model/operation';
 
 @Component({
   selector: 'app-movement-list',

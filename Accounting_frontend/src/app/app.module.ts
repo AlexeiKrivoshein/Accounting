@@ -12,7 +12,7 @@ import { AccountModule } from 'src/account/account.module';
 import { NotifyModule } from 'src/notify/notify.module';
 import { CategoryModule } from 'src/category/category.module';
 import { ContractorModule } from 'src/contractor/contractor.module';
-import { OperationModule } from 'src/movement/operation.module';
+import { MovementModule } from 'src/movement/movement.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { BalanceModule } from 'src/balance/balance.module';
 import { PlanModule } from 'src/plan/plan.module';
@@ -33,7 +33,7 @@ import { PlanModule } from 'src/plan/plan.module';
     AccountModule,
     CategoryModule,
     ContractorModule,
-    OperationModule,
+    MovementModule,
     BalanceModule,
     PlanModule,
     NotifyModule
