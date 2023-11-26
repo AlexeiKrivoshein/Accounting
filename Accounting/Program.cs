@@ -1,3 +1,4 @@
+using Accounting;
 using Accounting.JSON;
 using Accounting.Mapper;
 using AccountingDAL.Managers;
@@ -22,6 +23,14 @@ builder.Services.AddControllers()
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddWindowsService();
+builder.Services.AddHostedService<AccountingService>();
+
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot";
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -31,10 +40,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
+app.UseHttpsRedirection().
+    UseStaticFiles().
+    UseRouting().
+    UseAuthorization().
+    UseDefaultFiles().
+    UseSpaStaticFiles();
+
 
 if (app.Environment.IsDevelopment())
 {
