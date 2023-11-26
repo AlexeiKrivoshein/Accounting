@@ -7,13 +7,14 @@ import { Movement } from 'src/movement/model/movement';
 const URL: string = `${environment.url}/api/import`;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImportService {
-
-  constructor(private client: HttpClient) { }
+  constructor(private client: HttpClient) {}
 
   public parse(content: string): Observable<Movement[]> {
-    return this.client.post<Movement[]>(`${URL}/parse`, content);
+    return this.client.post<Movement[]>(`${URL}/parse`, {
+      content
+    });
   }
 }

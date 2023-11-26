@@ -63,13 +63,13 @@
 
   <app-button
     [ngClass]="{'display-none': selectedTab != IMPORT_TAB}"
-    text="Разбор"
+    text="Анализ"
     (buttonClick)="onParse()"
   ></app-button>
 
   <app-button
     [ngClass]="{'display-none': selectedTab != MOVEMENTS_TAB}"
-    text="Импорт"
-    (buttonClick)="onImport()"
+    text="Сохранить"
+    (buttonClick)="onSave()"
   ></app-button>
 </ng-template>

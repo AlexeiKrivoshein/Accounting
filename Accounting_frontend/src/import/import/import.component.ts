@@ -96,7 +96,7 @@ export class ImportComponent {
     this.dialogRef.close(false);
   }
 
-  public onImport() {
+  public onSave() {
     
   }
 
