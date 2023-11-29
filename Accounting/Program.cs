@@ -12,8 +12,7 @@ builder.Services
     .AddSingleton<OperationManager>()
     .AddSingleton<TransferManager>()
     .AddSingleton<CorrectionManager>()
-    .AddSingleton<BalanceManager>()
-    .AddSingleton<ImportManager>();
+    .AddSingleton<BalanceManager>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

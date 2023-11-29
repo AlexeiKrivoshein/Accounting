@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { OperationModule } from 'src/operation/operation.module';
 import { CorrectionModule } from 'src/correction/correction.module';
 import { TransferModule } from 'src/transfer/transfer.module';
-import { ImportModule } from 'src/import/import.module';
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { ImportModule } from 'src/import/import.module';
     MatIconModule,
     OperationModule,
     CorrectionModule,
-    TransferModule,
-    ImportModule
+    TransferModule
   ],
 })
 export class MovementModule {}

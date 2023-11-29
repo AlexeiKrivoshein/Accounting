@@ -7,7 +7,6 @@ import { BalanceService } from 'src/balance/services/balance.service';
 import { DropdownButtonItem } from 'src/controls/dropdown-button/model/dropdown-button-item';
 import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { ImportComponent } from '../../import/import/import.component';
 import { Movement } from '../model/movement';
 import { Transfer, transferDefault } from '../../transfer/model/transfer';
 import { OperationEditorComponent } from '../../operation/operation-editor/operation-editor.component';
@@ -343,15 +342,6 @@ export class MovementListComponent implements OnInit {
         this.notifyService.notify('Не удалось удалить запись.', 'error');
       },
     });
-  }
-
-  public onImport() {
-    const dialog = this.dialog.open(ImportComponent, {
-      width: '80%',
-      height: '80%',
-    });
-
-    dialog.afterClosed().subscribe();
   }
 
   public onSelectedChange(event: Movement) {
