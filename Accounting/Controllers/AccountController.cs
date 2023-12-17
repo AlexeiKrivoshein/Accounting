@@ -43,7 +43,7 @@ namespace Accounting.Controllers
         {
             if (dto is null)
             {
-                throw new ArgumentNullException("Не корректная сущность 'операция'");
+                throw new ArgumentNullException("Некорректная сущность 'счет'");
             }
 
             Account account = _mapper.Map<Account>(dto);

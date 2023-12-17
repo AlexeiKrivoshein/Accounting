@@ -1,0 +1,7 @@
+<div class="button-container mb-2">
+  <app-button *ngFor="let button of buttons"
+    [text]="button.text"
+    [enabled]="enabled(button)"
+    (buttonClick)="button.click()"
+  ></app-button>
+</div>

@@ -6,14 +6,7 @@ import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
 
 @NgModule({
-  declarations: [
-    AccountListComponent,
-    AccountEditorComponent
-  ],
-  imports: [
-    CommonModule,
-    ControlsModule,
-    DialogModule 
-  ]
+  declarations: [AccountListComponent, AccountEditorComponent],
+  imports: [CommonModule, ControlsModule, DialogModule],
 })
-export class AccountModule { }
+export class AccountModule {}

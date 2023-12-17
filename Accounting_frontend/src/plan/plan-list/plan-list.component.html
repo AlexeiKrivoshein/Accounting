@@ -1,78 +1,13 @@
 <div class="d-flex flex-column h-100">
-  <div class="tab-button-container mb-3">
-    <div
-      class="tab-button acc-header-3" 
-      (click)="selectedTab = PLAN_TAB"
-      [ngClass]="{'selected': selectedTab == PLAN_TAB}"
-    >
-      Планы
-    </div>
+  <app-toolbar
+    [buttons]="toolbar"
+  ></app-toolbar>
 
-    <div 
-      class="tab-button acc-header-3"
-      (click)="selectedTab = BALANCE_TAB"
-      [ngClass]="{'selected': selectedTab == BALANCE_TAB}"
-    >
-      Балансы
-    </div>
-
-    <div 
-      class="tab-button acc-header-3"
-      (click)="selectedTab = TURNOVER_TAB"
-      [ngClass]="{'selected': selectedTab == TURNOVER_TAB}"
-    >
-      Обороты
-    </div>
-  </div>
-
-  <div class="tab-container">
-    <div
-      class="tab-item"
-      [ngClass]="{'hide-tab': selectedTab != PLAN_TAB,
-                  'd-flex': selectedTab == PLAN_TAB}"
-    >
-      <div class="button-container mb-2 flex-0">
-        <app-button
-          text="Добавить"
-          (buttonClick)="onAddPlan()"
-        ></app-button>
-    
-        <app-button
-          text="Изменить"
-          [enabled]="!!selected"
-          (buttonClick)="onModifyPlan()"
-        ></app-button>
-    
-        <app-button
-          text="Удалить"
-          [enabled]="!!selected"
-          (buttonClick)="onDeletePlan()"
-        ></app-button>
-      </div>
-
-      <app-table
-        class="flex-1 h-100 min-height-0"
-        [columns]="columns"
-        [dataSource]="dataSource"
-        [(selected)]="selected"
-      ></app-table>
-    </div>
-
-    <div
-      class="tab-item"
-      [ngClass]="{'hide-tab': selectedTab != BALANCE_TAB,
-                  'd-flex': selectedTab == BALANCE_TAB}"
-    >
-      <div class="button-container mb-2 flex-0">
-        <app-button
-          text="Перерасчет"
-          (buttonClick)="check()"
-        ></app-button>
-      </div>
-      
-      <app-balance-list
-        class="flex-1 h-100 min-height-0"
-      ></app-balance-list>
-    </div>
-  </div>
+  <app-table
+    class="min-height-0"
+    [(selected)]="selected"
+    [columns]="columns"
+    [dataSource]="dataSource"
+    (doubleClick)="onModify()"
+  ></app-table>
 </div>

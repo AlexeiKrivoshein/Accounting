@@ -43,7 +43,7 @@ namespace Accounting.Controllers
         {
             if (dto is null)
             {
-                throw new ArgumentNullException("Не корректная сущность 'шаблон'");
+                throw new ArgumentNullException("Некорректная сущность 'контрагент'");
             }
 
             Contractor contractor = _mapper.Map<Contractor>(dto);

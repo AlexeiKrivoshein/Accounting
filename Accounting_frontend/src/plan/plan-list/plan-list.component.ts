@@ -1,12 +1,20 @@
-import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { BalanceService } from 'src/balance/services/balance.service';
+import { switchMap } from 'rxjs/operators';
 import { Column } from 'src/controls/table/model/column';
+import { ToolbarButtonConfig } from 'src/controls/toolbar/model/toolbar-button-config';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { Plan } from '../model/plan';
+import { Plan, planDefault } from '../model/plan';
+import { PlanEditorComponent } from '../plan-editor/plan-editor.component';
+import { PlanService } from '../services/plan.service';
 
 const PLAN_COLUMNS: Column[] = [
+  {
+    path: 'name',
+    header: 'Имя',
+    type: 'String',
+  },
   {
     path: 'startDate',
     header: 'Дата начала',
@@ -17,50 +25,117 @@ const PLAN_COLUMNS: Column[] = [
     header: 'Дата окончания',
     type: 'Date',
   },
+  {
+    path: 'description',
+    header: 'Описание',
+    type: 'String',
+  },
 ];
-
-const PLAN_TAB: string = 'plantab';
-const BALANCE_TAB: string = 'balancetab';
-const TURNOVER_TAB: string = 'turnover';
 
 @Component({
   selector: 'app-plan-list',
   templateUrl: './plan-list.component.html',
   styleUrls: ['./plan-list.component.scss'],
 })
-export class PlanListComponent {
+export class PlanListComponent implements OnInit {
   public selected: Plan | null = null;
 
   public columns = PLAN_COLUMNS;
-
-  public PLAN_TAB = PLAN_TAB;
-  public BALANCE_TAB = BALANCE_TAB;
-  public TURNOVER_TAB = TURNOVER_TAB;
-
-  public selectedTab: string = PLAN_TAB;
 
   public dataSource: MatTableDataSource<Plan> = new MatTableDataSource<Plan>(
     []
   );
 
-  public dateControl: FormControl<Date | null> = new FormControl<Date>(
-    new Date()
-  );
+  public toolbar: ToolbarButtonConfig[] = [
+    {
+      text: 'Добавить',
+      click: this.onAdd.bind(this),
+    },
+    {
+      text: 'Изменить',
+      click: this.onModify.bind(this),
+      enabled: () => !!this.selected,
+    },
+    {
+      text: 'Удалить',
+      click: this.onDelete.bind(this),
+      enabled: () => !!this.selected,
+    },
+  ];
 
   constructor(
-    private balanceService: BalanceService,
+    private planService: PlanService,
+    public dialog: MatDialog,
     private notifyService: NotifyService
   ) {}
 
-  public onAddPlan() {}
+  public ngOnInit(): void {
+    this.planService.get().subscribe((data) => (this.dataSource.data = data));
+  }
 
-  public onModifyPlan() {}
+  public onAdd() {
+    this.modify(planDefault());
+  }
 
-  public onDeletePlan() {}
+  public onModify() {
+    if (!!this.selected) {
+      this.planService.get(this.selected.id).subscribe({
+        next: (plans: Plan[]) => this.modify(plans[0]),
+        error: (err: any) => {
+          console.log(err);
+          this.notifyService.notify('Не удалось загрузить план.', 'error');
+        },
+      });
+    }
+  }
 
-  public check() {
-    this.balanceService.check().subscribe(() => {
-      this.notifyService.notify('Операция выполнена', 'success');
+  private modify(plan: Plan) {
+    if (!plan) {
+      return;
+    }
+
+    const dialog = this.dialog.open(PlanEditorComponent, {
+      width: '40em',
+      height: '40em',
+      data: plan,
     });
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result) {
+        this.planService.get().subscribe((data) => {
+          this.dataSource.data = data;
+
+          const index = this.dataSource.data.findIndex(
+            (item) => item.id === plan.id
+          );
+
+          if (index >= 0 && this.dataSource.data[index]) {
+            this.selected = this.dataSource.data[index];
+          } else {
+            this.selected = null;
+          }
+        });
+      }
+    });
+  }
+
+  public onDelete() {
+    if (!this.selected) {
+      return;
+    }
+
+    this.planService
+      .remove(this.selected.id)
+      .pipe(switchMap(() => this.planService.get()))
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.notifyService.notify('Запись удалена.', 'success');
+        },
+        error: (err) => {
+          console.log(err);
+          this.notifyService.notify('Не удалось удалить запись.', 'error');
+        },
+      });
   }
 }

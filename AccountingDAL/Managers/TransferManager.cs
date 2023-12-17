@@ -70,7 +70,7 @@ namespace AccountingDAL.Managers
 
                 //обновление записи
                 context.Entry(stored).CurrentValues.SetValues(transfer);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -83,7 +83,7 @@ namespace AccountingDAL.Managers
 
                 //создание записи
                 Transfer stored = (await context.AddAsync(transfer)).Entity;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -101,7 +101,7 @@ namespace AccountingDAL.Managers
             else
             {
                 context.Transfers.Remove(stored);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return stored;

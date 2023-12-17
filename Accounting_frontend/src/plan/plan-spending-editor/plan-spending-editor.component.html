@@ -1,0 +1,61 @@
+<app-dialog
+  title="Расход"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
+
+<ng-template #body>
+  <app-label
+    class="acc-header-3 mb-1"
+    text="Категория"
+    width="100%"
+  ></app-label>
+
+  <app-autocomplete
+    class="mb-3"
+    placeholder="Категория"
+    [control]="getControl('category')"
+    [items]="(categories$ | async) || []"
+    [displayFn]="categoryDisplayFn"
+  ></app-autocomplete>
+
+  <app-label
+    class="acc-header-3"
+    text="Сумма"
+    width="100%"
+  ></app-label>
+
+  <app-input
+    class="mb-2"
+    placeholder="Сумма"
+    [control]="getControl('sum')"
+    width="100%"
+  ></app-input>
+
+  <app-label
+    class="acc-header-3"
+    text="Описание"
+    width="100%"
+  ></app-label>
+
+  <app-input
+    class="mb-2"
+    placeholder="Описание"
+    [control]="getControl('description')"
+    width="100%"
+  ></app-input>
+</ng-template>
+
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    text="Сохранить"
+    [enabled]="formGroup.valid"
+    (buttonClick)="onSave()"
+  ></app-button>
+</ng-template>

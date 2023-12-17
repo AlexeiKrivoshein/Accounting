@@ -42,7 +42,7 @@ namespace Accounting.Controllers
         {
             if (dto is null)
             {
-                throw new ArgumentNullException("Не корректная сущность 'операция'");
+                throw new ArgumentNullException("Некорректная сущность 'перевод'");
             }
 
             Transfer operation = _mapper.Map<Transfer>(dto);

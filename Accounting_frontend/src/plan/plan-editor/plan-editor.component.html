@@ -1,0 +1,112 @@
+<app-dialog
+  title="План"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
+
+<ng-template #body>
+  <mat-tab-group class="h-100">
+    <mat-tab class="h-100" label="Основные">
+      <div class="pt-3 d-flex flex-column h-100">
+        <app-label
+          class="acc-header-3"
+          text="Наименование"
+          width="100%"
+        ></app-label>
+
+        <app-input
+          class="mb-2"
+          placeholder="Наименование"
+          [control]="getControl('name')"
+          width="100%"
+        ></app-input>
+
+        <app-label
+          class="acc-header-3"
+          text="Дата начала"
+          width="100%"
+        ></app-label>
+
+        <app-date-picker
+          class="mb-2"
+          placeholder="Дата"
+          [control]="getControl('startDate')"
+          width="100%"
+        ></app-date-picker>
+
+        <app-label
+          class="acc-header-3"
+          text="Дата окончания"
+          width="100%"
+        ></app-label>
+
+        <app-date-picker
+          class="mb-2"
+          placeholder="Дата"
+          [control]="getControl('endDate')"
+          width="100%"
+        ></app-date-picker>
+
+        <app-label
+          class="acc-header-3"
+          text="Описание"
+          width="100%"
+        ></app-label>
+
+        <app-input
+          placeholder="Описание"
+          [control]="getControl('description')"
+          width="100%"
+        ></app-input>
+      </div>
+    </mat-tab>
+
+    <mat-tab class="h-100" label="Траты">
+      <div class="pt-3 d-flex flex-column h-100">
+        <app-toolbar
+          class="flex-0"
+          [buttons]="spendingToolbar"
+        ></app-toolbar>
+
+        <app-table
+          class="mb-2 flex-1"
+          [(selected)]="selectedSpending"
+          [columns]="spendingColumns"
+          [dataSource]="spendingDS"
+          (doubleClick)="onSpendingModify()"
+        ></app-table>
+      </div>
+    </mat-tab>
+
+    <mat-tab class="h-100" label="Накопления">
+      <div class="pt-3 d-flex flex-column h-100">
+        <app-toolbar
+          class="flex-0"
+          [buttons]="savingToolbar"
+        ></app-toolbar>
+
+        <app-table
+          class="mb-2 flex-1"
+          [(selected)]="selectedSaving"
+          [columns]="savingsColumns"
+          [dataSource]="savingsDS"
+          (doubleClick)="onSavingModify()"
+        ></app-table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>
+
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    text="Сохранить"
+    [enabled]="formGroup.valid"
+    (buttonClick)="onSave()"
+  ></app-button>
+</ng-template>

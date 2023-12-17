@@ -12,7 +12,11 @@
     [matAutocomplete]="auto"
   />
   
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
+  <mat-autocomplete 
+    #auto="matAutocomplete" 
+    [displayWith]="displayFn" 
+    (optionSelected)="onOptionSelected($event)"
+  >
     <mat-option *ngFor="let item of items" [value]="item">
       {{ displayFn(item) }}
     </mat-option>

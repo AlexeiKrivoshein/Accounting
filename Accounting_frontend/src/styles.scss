@@ -35,15 +35,56 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .flex-0 {
-  flex-wrap: 0;
+  flex-grow: 0;
   flex-shrink: 0;
 }
 
 .flex-1 {
-  flex-wrap: 1;
+  flex-grow: 1;
   flex-shrink: 1;
 }
 
 .display-none {
   display: none !important;
+}
+
+.mat-mdc-dialog-content {
+  max-height: 70vh !important;
+}
+
+// вкладки
+.mat-mdc-tab-group {
+  .mat-mdc-tab-header {
+    .mat-mdc-tab-label-container {
+      .mat-mdc-tab-list {
+        .mat-mdc-tab-labels {
+          .mdc-tab {
+            &__content {
+
+            }
+
+            &__text-label {
+              color: black;
+            }
+
+            .mdc-tab-indicator {
+              &__content--underline {
+                border-color: gray;
+              }
+            }
+          }
+
+          .mat-mdc-focus-indicator {
+            .mat-mdc-tab-ripple {
+              background-color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mat-mdc-tab-body-wrapper {
+    height: 100%;
+  }
 }

@@ -25,6 +25,12 @@ namespace AccountingDAL.Model
 
         public DbSet<Balance> Balances => Set<Balance>();
 
+        public DbSet<Plan> Plans => Set<Plan>();
+
+        public DbSet<PlanSpending> PlanSpendings => Set<PlanSpending>();
+
+        public DbSet<PlanSaving> PlanSavings => Set<PlanSaving>();
+
         public AccountingContext()
         {
             Database.EnsureCreated();
@@ -58,7 +64,18 @@ namespace AccountingDAL.Model
             modelBuilder.Entity<Transfer>()
                         .HasOne(m => m.DebitAccount)
                         .WithMany(t => t.DeditTransfers)
-                        .HasForeignKey(m => m.DebitAccountID)
+                        .HasForeignKey(m => m.DebitAccountID);
+
+            modelBuilder.Entity<PlanSaving>()
+                        .HasOne(m => m.Plan)
+                        .WithMany(t => t.Savings)
+                        .HasForeignKey(m => m.PlanID)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PlanSpending>()
+                        .HasOne(m => m.Plan)
+                        .WithMany(t => t.Spendings)
+                        .HasForeignKey(m => m.PlanID)
                         .OnDelete(DeleteBehavior.Restrict);
         }
     }

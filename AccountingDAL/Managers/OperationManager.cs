@@ -71,7 +71,7 @@ namespace AccountingDAL.Managers
 
                 //обновление записи
                 context.Entry(stored).CurrentValues.SetValues(operation);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -84,7 +84,7 @@ namespace AccountingDAL.Managers
 
                 //создание записи
                 Operation stored = (await context.AddAsync(operation)).Entity;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -102,7 +102,7 @@ namespace AccountingDAL.Managers
             else
             {
                 context.Operations.Remove(stored);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return stored;

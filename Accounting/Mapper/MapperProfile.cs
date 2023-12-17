@@ -17,6 +17,9 @@ namespace Accounting.Mapper
             CreateMap<TransferDTO, Transfer>().ReverseMap();
             CreateMap<CorrectionDTO, Correction>().ReverseMap();
             CreateMap<BalanceDTO, Balance>().ReverseMap();
+            CreateMap<PlanDTO, Plan>().ReverseMap();
+            CreateMap<PlanSpendingDTO, PlanSpending>().ReverseMap();
+            CreateMap<PlanSavingDTO, PlanSaving>().ReverseMap();
         }
     }
 }

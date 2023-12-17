@@ -55,7 +55,7 @@ namespace AccountingDAL.Managers
 
                 //обновление записи
                 context.Entry(stored).CurrentValues.SetValues(contractor);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -68,7 +68,7 @@ namespace AccountingDAL.Managers
 
                 //создание записи
                 Contractor stored = (await context.AddAsync(contractor)).Entity;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 return stored;
             }
@@ -86,7 +86,7 @@ namespace AccountingDAL.Managers
             else
             {
                 context.Contractors.Remove(stored);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return stored;

@@ -43,7 +43,7 @@ namespace Accounting.Controllers
         {
             if(dto is null)
             {
-                throw new ArgumentNullException("Не корректная сущность 'категория'");
+                throw new ArgumentNullException("Некорректная сущность 'категория'");
             }
 
             Сategory category = _mapper.Map<Сategory>(dto);
