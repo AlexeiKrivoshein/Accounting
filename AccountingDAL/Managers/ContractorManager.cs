@@ -18,7 +18,7 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<Contractor>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Contractor> result = await context.Contractors.Include(item => item.Category).ToListAsync();
+            List<Contractor> result = await context.Contractors.Where(x => !x.Removed).Include(item => item.Category).ToListAsync();
 
             return result.OrderBy(item => item.Name).ToList();
         }
@@ -85,7 +85,10 @@ namespace AccountingDAL.Managers
             }
             else
             {
-                context.Contractors.Remove(stored);
+                stored.Removed = true;
+                stored.RemovedDate = DateTime.Now;
+                context.Entry(stored).State = EntityState.Modified;
+
                 await context.SaveChangesAsync();
             }
 

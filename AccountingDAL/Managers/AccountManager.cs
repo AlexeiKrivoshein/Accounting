@@ -13,7 +13,7 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<Account>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Account> result = await context.Accounts.ToListAsync();
+            List<Account> result = await context.Accounts.Where(x => !x.Removed).ToListAsync();
 
             return result.OrderBy(item => item.Name).ToList();
         }
@@ -78,7 +78,10 @@ namespace AccountingDAL.Managers
             }
             else
             {
-                context.Accounts.Remove(stored);
+                stored.Removed = true;
+                stored.RemovedDate = DateTime.Now;
+                context.Entry(stored).State = EntityState.Modified;
+
                 await context.SaveChangesAsync();
             }
 

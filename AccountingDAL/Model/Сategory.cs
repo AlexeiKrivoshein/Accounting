@@ -9,7 +9,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Категория
     /// </summary>
-    public class Сategory : ModelElementBase
+    public class Сategory : DictionaryElementBase
     {
         /// <summary>
         /// Наименование

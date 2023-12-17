@@ -10,7 +10,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Контрагент
     /// </summary>
-    public class Contractor : ModelElementBase
+    public class Contractor : DictionaryElementBase
     {
         /// <summary>
         /// Наименование

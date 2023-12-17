@@ -11,7 +11,7 @@ namespace AccountingDAL.Model
     /// <summary>
     /// Счет
     /// </summary>
-    public class Account : ModelElementBase
+    public class Account : DictionaryElementBase
     {
         /// <summary>
         /// Наименование
