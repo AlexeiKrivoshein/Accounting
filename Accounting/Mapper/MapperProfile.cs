@@ -1,5 +1,11 @@
 ﻿using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
 using AccountingDAL.Model.DTO;
+using AccountingDAL.Model.DTO.Dictionaries;
+using AccountingDAL.Model.DTO.Operation;
+using AccountingDAL.Model.DTO.Plans;
+using AccountingDAL.Model.Operations;
+using AccountingDAL.Model.Plans;
 using AutoMapper;
 
 namespace Accounting.Mapper
@@ -10,12 +16,12 @@ namespace Accounting.Mapper
         {
             AllowNullCollections = true;
 
-            CreateMap<CategoryDTO, Сategory>().ReverseMap();
+            CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<AccountDTO, Account>().ReverseMap();
-            CreateMap<СontractorDTO, Contractor>().ReverseMap();
-            CreateMap<OperationDTO, Operation>().ReverseMap();
-            CreateMap<TransferDTO, Transfer>().ReverseMap();
-            CreateMap<CorrectionDTO, Correction>().ReverseMap();
+            CreateMap<ContractorDTO, Contractor>().ReverseMap();
+            CreateMap<ContractorOperationDTO, ContractorOperation>().ReverseMap();
+            CreateMap<TransferOperationDTO, TransferOperation>().ReverseMap();
+            CreateMap<CorrectionOperationDTO, CorrectionOperation>().ReverseMap();
             CreateMap<BalanceDTO, Balance>().ReverseMap();
             CreateMap<PlanDTO, Plan>().ReverseMap();
             CreateMap<PlanSpendingDTO, PlanSpending>().ReverseMap();

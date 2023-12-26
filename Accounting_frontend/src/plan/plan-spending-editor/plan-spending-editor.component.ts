@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
-import { Category } from 'src/category/model/category';
-import { CategoryService } from 'src/category/services/category.service';
+import { Category } from 'src/dictionaries/category/model/category';
+import { CategoryService } from 'src/dictionaries/category/services/category.service';
 import { PlanSpending, planSpendingFormGroup } from '../model/plan-spending';
 
 @Component({

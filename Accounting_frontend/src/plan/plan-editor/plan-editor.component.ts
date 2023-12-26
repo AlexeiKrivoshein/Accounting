@@ -85,6 +85,8 @@ export class PlanEditorComponent implements OnInit {
     },
   ];
 
+  public spendingSum: number = 0;
+
   //НАКОПЛЕНИЯ
   /**
    * Источник данных иаблицы накопления
@@ -122,6 +124,8 @@ export class PlanEditorComponent implements OnInit {
     },
   ];
 
+  public savingsSum: number = 0;
+
   /**
    * FormGroup формы, сущность План
    */
@@ -146,7 +150,9 @@ export class PlanEditorComponent implements OnInit {
   ) {
     this.formGroup.setValue(data);
     this.savingsDS.data = data.savings;
+    this.calcSavings();
     this.spendingDS.data = data.spendings;
+    this.calcSpending();
   }
 
   ngOnInit(): void {}
@@ -205,6 +211,7 @@ export class PlanEditorComponent implements OnInit {
       plan.spendings.splice(index, 1);
       this.selectedSpending = null;
       this.spendingDS.data = plan.spendings;
+      this.calcSpending();
       this.formGroup.patchValue(plan);
     }
   }
@@ -222,7 +229,7 @@ export class PlanEditorComponent implements OnInit {
       width: '40em',
       height: 'auto',
       data: spending,
-      autoFocus: 'dialog'
+      autoFocus: 'dialog',
     });
 
     dialog.afterClosed().subscribe((spending) => {
@@ -239,6 +246,7 @@ export class PlanEditorComponent implements OnInit {
         }
 
         this.spendingDS.data = plan.spendings;
+        this.calcSpending();
         this.formGroup.setValue(plan);
       }
     });
@@ -279,6 +287,7 @@ export class PlanEditorComponent implements OnInit {
       plan.savings.splice(index, 1);
       this.selectedSaving = null;
       this.savingsDS.data = plan.savings;
+      this.calcSavings();
       this.formGroup.patchValue(plan);
     }
   }
@@ -296,7 +305,7 @@ export class PlanEditorComponent implements OnInit {
       width: '40em',
       height: 'auto',
       data: saving,
-      autoFocus: 'dialog'
+      autoFocus: 'dialog',
     });
 
     dialog.afterClosed().subscribe((saving) => {
@@ -311,8 +320,21 @@ export class PlanEditorComponent implements OnInit {
         }
 
         this.savingsDS.data = plan.savings;
+        this.calcSavings();
         this.formGroup.setValue(plan);
       }
     });
+  }
+
+  private calcSpending() {
+    const spendings = this.spendingDS.data;
+    this.spendingSum = 0;
+    spendings.forEach((spend) => (this.spendingSum += spend.sum));
+  }
+
+  private calcSavings() {
+    const savings = this.savingsDS.data;
+    this.savingsSum = 0;
+    savings.forEach((saving) => (this.savingsSum += saving.sum));
   }
 }

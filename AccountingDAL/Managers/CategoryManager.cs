@@ -1,5 +1,6 @@
 ﻿using AccountingDAL.Exceptions;
 using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountingDAL.Managers
@@ -10,18 +11,18 @@ namespace AccountingDAL.Managers
         {
         }
 
-        public async Task<IReadOnlyCollection<Сategory>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Category>> GetAllAsync()
         {
             using var context = new AccountingContext();
-            List<Сategory> result = await context.Categories.Where(x => !x.Removed).ToListAsync();
+            List<Category> result = await context.Categories.Where(x => !x.Removed).ToListAsync();
 
             return result.OrderBy(item => item.Name).ToList();
         }
 
-        public async Task<Сategory> GetAsync(Guid id)
+        public async Task<Category> GetAsync(Guid id)
         {
             using var context = new AccountingContext();
-            Сategory? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
+            Category? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
             {
@@ -33,7 +34,7 @@ namespace AccountingDAL.Managers
             }
         }
 
-        public async Task<Сategory> SetAsync(Сategory category)
+        public async Task<Category> SetAsync(Category category)
         {
             if (category is null)
             {
@@ -44,7 +45,7 @@ namespace AccountingDAL.Managers
 
             if (category.Id != Guid.Empty && await context.Categories.AnyAsync(item => item.Id == category.Id))
             {
-                Сategory stored = await context.Categories.FirstAsync(item => item.Id == category.Id);
+                Category stored = await context.Categories.FirstAsync(item => item.Id == category.Id);
 
                 //обновление записи
                 context.Entry(stored).CurrentValues.SetValues(category);
@@ -60,17 +61,17 @@ namespace AccountingDAL.Managers
                 }
 
                 //создание записи
-                Сategory stored = (await context.AddAsync(category)).Entity;
+                Category stored = (await context.AddAsync(category)).Entity;
                 await context.SaveChangesAsync();
 
                 return stored;
             }
         }
 
-        public async Task<Сategory> RemoveAsync(Guid id)
+        public async Task<Category> RemoveAsync(Guid id)
         {
             using var context = new AccountingContext();
-            Сategory? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
+            Category? stored = await context.Categories.FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)
             {

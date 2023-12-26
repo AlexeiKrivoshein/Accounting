@@ -8,14 +8,14 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ControlsModule } from 'src/controls/controls.module';
-import { AccountModule } from 'src/account/account.module';
 import { NotifyModule } from 'src/notify/notify.module';
-import { CategoryModule } from 'src/category/category.module';
-import { ContractorModule } from 'src/contractor/contractor.module';
-import { MovementModule } from 'src/movement/movement.module';
+import { OperationModule } from 'src/operation/operation.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { BalanceModule } from 'src/balance/balance.module';
 import { PlanModule } from 'src/plan/plan.module';
+import { AccountModule } from 'src/dictionaries/account/account.module';
+import { CategoryModule } from 'src/dictionaries/category/category.module';
+import { ContractorModule } from 'src/dictionaries/contractor/contractor.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { PlanModule } from 'src/plan/plan.module';
     AccountModule,
     CategoryModule,
     ContractorModule,
-    MovementModule,
+    OperationModule,
     BalanceModule,
     PlanModule,
     NotifyModule

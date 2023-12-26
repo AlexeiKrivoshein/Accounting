@@ -1,5 +1,6 @@
 ﻿using AccountingDAL.Exceptions;
 using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountingDAL.Managers

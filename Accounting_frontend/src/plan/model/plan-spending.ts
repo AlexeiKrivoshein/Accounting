@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Category } from 'src/category/model/category';
 import { EMPTY_GUID } from 'src/const';
+import { Category } from 'src/dictionaries/category/model/category';
 import * as uuid from 'uuid';
 
 /**

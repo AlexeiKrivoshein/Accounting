@@ -1,11 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using AccountingDAL.Model.Dictionaries;
+using AccountingDAL.Model.Operations;
+using AccountingDAL.Model.Plans;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccountingDAL.Model
 {
@@ -13,15 +9,17 @@ namespace AccountingDAL.Model
     {
         public DbSet<Account> Accounts => Set<Account>();
 
-        public DbSet<Сategory> Categories => Set<Сategory>();
+        public DbSet<Category> Categories => Set<Category>();
 
         public DbSet<Contractor> Contractors => Set<Contractor>();
 
-        public DbSet<Operation> Operations => Set<Operation>();
+        public DbSet<ContractorOperation> ContractorOperations => Set<ContractorOperation>();
 
-        public DbSet<Transfer> Transfers=> Set<Transfer>();
+        public DbSet<TransferOperation> TransferOperations => Set<TransferOperation>();
 
-        public DbSet<Correction> Corrections => Set<Correction>();
+        public DbSet<CorrectionOperation> CorrectionOperations => Set<CorrectionOperation>();
+
+        public DbSet<CashOperation> CashOperations => Set<CashOperation>();
 
         public DbSet<Balance> Balances => Set<Balance>();
 
@@ -43,7 +41,7 @@ namespace AccountingDAL.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Operation>()
+            modelBuilder.Entity<ContractorOperation>()
                         .HasOne(m => m.Category)
                         .WithMany(t => t.Operations)
                         .HasForeignKey(m => m.CategoryID)
@@ -51,17 +49,17 @@ namespace AccountingDAL.Model
 
             modelBuilder.Entity<Contractor>()
                         .HasOne(m => m.Category)
-                        .WithMany(t => t.Сontractors)
+                        .WithMany(t => t.Contractors)
                         .HasForeignKey(m => m.CategoryID)
                         .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Transfer>()
+            modelBuilder.Entity<TransferOperation>()
                         .HasOne(m => m.CreditAccount)
                         .WithMany(t => t.CreditTransfers)
                         .HasForeignKey(m => m.CreditAccountID)
                         .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Transfer>()
+            modelBuilder.Entity<TransferOperation>()
                         .HasOne(m => m.DebitAccount)
                         .WithMany(t => t.DeditTransfers)
                         .HasForeignKey(m => m.DebitAccountID);

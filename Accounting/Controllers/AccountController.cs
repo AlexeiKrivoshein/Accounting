@@ -1,6 +1,6 @@
 ﻿using AccountingDAL.Managers;
-using AccountingDAL.Model.DTO;
-using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
+using AccountingDAL.Model.DTO.Dictionaries;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 

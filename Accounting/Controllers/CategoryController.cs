@@ -1,6 +1,6 @@
 ﻿using AccountingDAL.Managers;
-using AccountingDAL.Model;
-using AccountingDAL.Model.DTO;
+using AccountingDAL.Model.Dictionaries;
+using AccountingDAL.Model.DTO.Dictionaries;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,14 +24,14 @@ namespace Accounting.Controllers
         {
             if (id is not null && id != Guid.Empty)
             {
-                Сategory category = await _categoryManager.GetAsync(id.Value);
+                Category category = await _categoryManager.GetAsync(id.Value);
                 CategoryDTO dto = _mapper.Map<CategoryDTO>(category);
 
                 return Ok(new List<CategoryDTO> { dto });
             }
             else
             {
-                IReadOnlyCollection<Сategory> result = await _categoryManager.GetAllAsync();
+                IReadOnlyCollection<Category> result = await _categoryManager.GetAllAsync();
                 List<CategoryDTO> dto = _mapper.Map<List<CategoryDTO>>(result);
 
                 return Ok(dto);
@@ -46,7 +46,7 @@ namespace Accounting.Controllers
                 throw new ArgumentNullException("Некорректная сущность 'категория'");
             }
 
-            Сategory category = _mapper.Map<Сategory>(dto);
+            Category category = _mapper.Map<Category>(dto);
             category = await _categoryManager.SetAsync(category);
             dto = _mapper.Map<CategoryDTO>(category);
 
@@ -61,7 +61,7 @@ namespace Accounting.Controllers
                 throw new ArgumentNullException("Передан пустой ключ удаялемой записи");
             }
 
-            Сategory removed = await _categoryManager.RemoveAsync(id);
+            Category removed = await _categoryManager.RemoveAsync(id);
             CategoryDTO dto = _mapper.Map<CategoryDTO>(removed);
 
             return Ok(dto);

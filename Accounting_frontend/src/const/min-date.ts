@@ -1,0 +1,1 @@
+export const MIN_DATE = new Date(1, 1, 1, 0, 0, 0, 0);

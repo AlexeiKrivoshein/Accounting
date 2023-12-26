@@ -70,12 +70,17 @@
         ></app-toolbar>
 
         <app-table
-          class="mb-2 flex-1"
+          class="mb-2 flex-1 min-height-0"
           [(selected)]="selectedSpending"
           [columns]="spendingColumns"
           [dataSource]="spendingDS"
           (doubleClick)="onSpendingModify()"
         ></app-table>
+
+        <app-label
+          class="flex-0"
+          [text]="'Итого траты: ' + spendingSum + 'р.'"
+        ></app-label>
       </div>
     </mat-tab>
 
@@ -87,12 +92,17 @@
         ></app-toolbar>
 
         <app-table
-          class="mb-2 flex-1"
+          class="mb-2 flex-1 min-height-0"
           [(selected)]="selectedSaving"
           [columns]="savingsColumns"
           [dataSource]="savingsDS"
           (doubleClick)="onSavingModify()"
         ></app-table>
+
+        <app-label
+          class="flex-0"
+          [text]="'Итого накопления: ' + savingsSum + 'р.'"
+        ></app-label>
       </div>
     </mat-tab>
   </mat-tab-group>

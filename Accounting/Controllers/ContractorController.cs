@@ -1,6 +1,6 @@
 ﻿using AccountingDAL.Managers;
-using AccountingDAL.Model.DTO;
-using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
+using AccountingDAL.Model.DTO.Dictionaries;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,21 +25,21 @@ namespace Accounting.Controllers
             if (id is not null && id != Guid.Empty)
             {
                 Contractor contractor = await _contractorManager.GetAsync(id.Value);
-                СontractorDTO dto = _mapper.Map<СontractorDTO>(contractor);
+                ContractorDTO dto = _mapper.Map<ContractorDTO>(contractor);
 
-                return Ok(new List<СontractorDTO> { dto });
+                return Ok(new List<ContractorDTO> { dto });
             }
             else
             {
                 IReadOnlyCollection<Contractor> result = await _contractorManager.GetAllAsync();
-                List<СontractorDTO> dto = _mapper.Map<List<СontractorDTO>>(result);
+                List<ContractorDTO> dto = _mapper.Map<List<ContractorDTO>>(result);
 
                 return Ok(dto);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Set([FromBody] СontractorDTO dto)
+        public async Task<IActionResult> Set([FromBody] ContractorDTO dto)
         {
             if (dto is null)
             {
@@ -48,7 +48,7 @@ namespace Accounting.Controllers
 
             Contractor contractor = _mapper.Map<Contractor>(dto);
             contractor = await _contractorManager.SetAsync(contractor);
-            dto = _mapper.Map<СontractorDTO>(contractor);
+            dto = _mapper.Map<ContractorDTO>(contractor);
 
             return Ok(dto);
         }
@@ -62,7 +62,7 @@ namespace Accounting.Controllers
             }
 
             Contractor removed = await _contractorManager.RemoveAsync(id);
-            СontractorDTO dto = _mapper.Map<СontractorDTO>(removed);
+            ContractorDTO dto = _mapper.Map<ContractorDTO>(removed);
 
             return Ok(dto);
         }

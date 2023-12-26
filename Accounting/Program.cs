@@ -9,9 +9,9 @@ builder.Services
     .AddSingleton<CategoryManager>()
     .AddSingleton<AccountManager>()
     .AddSingleton<ContractorManager>()
-    .AddSingleton<OperationManager>()
-    .AddSingleton<TransferManager>()
-    .AddSingleton<CorrectionManager>()
+    .AddSingleton<ContractorOperationManager>()
+    .AddSingleton<TransferOperationManager>()
+    .AddSingleton<CorrectionOperationManager>()
     .AddSingleton<BalanceManager>()
     .AddSingleton<PlanManager>();
 

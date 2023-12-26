@@ -1,4 +1,6 @@
 ﻿using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
+using AccountingDAL.Model.Operations;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -69,16 +71,16 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
 
-            Movement? movement = await context.Operations.FirstOrDefaultAsync(x => x.Id == movementId);
+            Operation? movement = await context.ContractorOperations.FirstOrDefaultAsync(x => x.Id == movementId);
 
             if (movement is null)
             {
-                movement = await context.Transfers.FirstOrDefaultAsync(x => x.Id == movementId);
+                movement = await context.TransferOperations.FirstOrDefaultAsync(x => x.Id == movementId);
             }
 
             if (movement is null)
             {
-                movement = await context.Corrections.FirstOrDefaultAsync(x => x.Id == movementId);
+                movement = await context.CorrectionOperations.FirstOrDefaultAsync(x => x.Id == movementId);
             }
 
             if (movement is null)
@@ -135,26 +137,26 @@ namespace AccountingDAL.Managers
                 FirstOrDefaultAsync();
 
             float sum = 0F;
-            List<Movement> movements = new List<Movement>();
-            List<Operation> operations = new List<Operation>();
-            List<Transfer> transfers = new List<Transfer>();
-            List<Correction> corrections = new List<Correction>();
+            List<Operation> movements = new List<Operation>();
+            List<ContractorOperation> operations = new List<ContractorOperation>();
+            List<TransferOperation> transfers = new List<TransferOperation>();
+            List<CorrectionOperation> corrections = new List<CorrectionOperation>();
 
             // нет расчитанных балансов, суммируем все операции и переводы
             if (balance is null)
             {
                 // все предыдущие операции по счету
-                operations = await context.Operations
+                operations = await context.ContractorOperations
                     .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие переводы по счету
-                transfers = await context.Transfers
+                transfers = await context.TransferOperations
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие корректировки по счету
-                corrections = await context.Corrections
+                corrections = await context.CorrectionOperations
                     .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
@@ -164,32 +166,32 @@ namespace AccountingDAL.Managers
                 sum = balance.Sum;
 
                 // операции от последнего баланса и до движения
-                operations = await context.Operations
+                operations = await context.ContractorOperations
                     .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // переводы от последнего баланса и до движения
-                transfers = await context.Transfers
+                transfers = await context.TransferOperations
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // корректировки от последнего баланса и до движения
-                corrections = await context.Corrections
+                corrections = await context.CorrectionOperations
                     .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
 
             // оперции и переводы в одном списке, отсортированном по дате и индексу
-            movements.AddRange(operations.Cast<Movement>());
-            movements.AddRange(transfers.Cast<Movement>());
-            movements.AddRange(corrections.Cast<Movement>());
+            movements.AddRange(operations.Cast<Operation>());
+            movements.AddRange(transfers.Cast<Operation>());
+            movements.AddRange(corrections.Cast<Operation>());
 
             movements = movements.OrderBy(x => x.Date).ThenBy(x => x.Index).ToList();
 
             // подсчет баланса счета
-            foreach (Movement item in movements)
+            foreach (Operation item in movements)
             {
-                if (item is Operation operation)
+                if (item is ContractorOperation operation)
                 {
                     if (operation.OperationType == OperationType.Credited)
                     {
@@ -200,7 +202,7 @@ namespace AccountingDAL.Managers
                         sum += item.Sum;
                     }
                 }
-                else if (item is Transfer transfer)
+                else if (item is TransferOperation transfer)
                 {
                     if (transfer.CreditAccountID == account.Id)
                     {
@@ -211,7 +213,7 @@ namespace AccountingDAL.Managers
                         sum += item.Sum;
                     }
                 }
-                else if (item is Correction correction)
+                else if (item is CorrectionOperation correction)
                 {
                     if (correction.OperationType == OperationType.Credited)
                     {
@@ -241,23 +243,23 @@ namespace AccountingDAL.Managers
         /// <returns></returns>
         public async Task CalculateAndStoreBalancesAsync()
         {
-            Operation? operation = null;
-            Transfer? transfer = null;
-            Correction? correction = null;
+            ContractorOperation? operation = null;
+            TransferOperation? transfer = null;
+            CorrectionOperation? correction = null;
 
             List<Account> accounts = new List<Account>();
 
             using (var context = new AccountingContext())
             {
-                operation = await context.Operations
+                operation = await context.ContractorOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
-                transfer = await context.Transfers
+                transfer = await context.TransferOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
-                correction = await context.Corrections
+                correction = await context.CorrectionOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 

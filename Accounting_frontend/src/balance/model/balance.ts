@@ -1,4 +1,4 @@
-import { Account } from "src/account/model/account";
+import { Account } from "src/dictionaries/account/model/account";
 
 /**
  * Баланс счета на конец дня

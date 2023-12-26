@@ -1,5 +1,6 @@
 ﻿using AccountingDAL.Exceptions;
 using AccountingDAL.Model;
+using AccountingDAL.Model.Plans;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

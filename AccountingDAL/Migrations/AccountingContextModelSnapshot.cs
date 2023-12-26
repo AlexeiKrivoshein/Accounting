@@ -22,7 +22,30 @@ namespace AccountingDAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AccountingDAL.Model.Account", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Balance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Sum")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountID");
+
+                    b.ToTable("Balances");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Account", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,30 +71,29 @@ namespace AccountingDAL.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Balance", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<bool>("Removed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("RemovedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("Sum")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountID");
-
-                    b.ToTable("Balances");
+                    b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Contractor", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Contractor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +127,7 @@ namespace AccountingDAL.Migrations
                     b.ToTable("Contractors");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Correction", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.CashOperation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,10 +157,10 @@ namespace AccountingDAL.Migrations
 
                     b.HasIndex("AccountID");
 
-                    b.ToTable("Corrections");
+                    b.ToTable("CashOperations");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Operation", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.ContractorOperation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,36 +200,10 @@ namespace AccountingDAL.Migrations
 
                     b.HasIndex("ContractorID");
 
-                    b.ToTable("Operations");
+                    b.ToTable("ContractorOperations");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Plan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Plans");
-                });
-
-            modelBuilder.Entity("AccountingDAL.Model.PlanSaving", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.CorrectionOperation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,12 +213,18 @@ namespace AccountingDAL.Migrations
                     b.Property<Guid>("AccountID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PlanID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OperationType")
+                        .HasColumnType("int");
 
                     b.Property<float>("Sum")
                         .HasColumnType("real");
@@ -231,41 +233,10 @@ namespace AccountingDAL.Migrations
 
                     b.HasIndex("AccountID");
 
-                    b.HasIndex("PlanID");
-
-                    b.ToTable("PlanSavings");
+                    b.ToTable("CorrectionOperations");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.PlanSpending", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PlanID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("Sum")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryID");
-
-                    b.HasIndex("PlanID");
-
-                    b.ToTable("PlanSpendings");
-                });
-
-            modelBuilder.Entity("AccountingDAL.Model.Transfer", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.TransferOperation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,34 +268,96 @@ namespace AccountingDAL.Migrations
 
                     b.HasIndex("DebitAccountID");
 
-                    b.ToTable("Transfers");
+                    b.ToTable("TransferOperations");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Сategory", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Plans.Plan", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36)
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Removed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("RemovedDate")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Plans");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Plans.PlanSaving", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PlanID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Sum")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountID");
+
+                    b.HasIndex("PlanID");
+
+                    b.ToTable("PlanSavings");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Plans.PlanSpending", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PlanID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Sum")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("PlanID");
+
+                    b.ToTable("PlanSpendings");
                 });
 
             modelBuilder.Entity("AccountingDAL.Model.Balance", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -333,10 +366,10 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Contractor", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Contractor", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Сategory", "Category")
-                        .WithMany("Сontractors")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Category", "Category")
+                        .WithMany("Contractors")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -344,9 +377,9 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Correction", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.CashOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -355,21 +388,21 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Operation", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.ContractorOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AccountingDAL.Model.Сategory", "Category")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Category", "Category")
                         .WithMany("Operations")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AccountingDAL.Model.Contractor", "Contractor")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Contractor", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,53 +415,26 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Contractor");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.PlanSaving", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.CorrectionOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AccountingDAL.Model.Plan", "Plan")
-                        .WithMany("Savings")
-                        .HasForeignKey("PlanID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("Plan");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.PlanSpending", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Operations.TransferOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Сategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AccountingDAL.Model.Plan", "Plan")
-                        .WithMany("Spendings")
-                        .HasForeignKey("PlanID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Plan");
-                });
-
-            modelBuilder.Entity("AccountingDAL.Model.Transfer", b =>
-                {
-                    b.HasOne("AccountingDAL.Model.Account", "CreditAccount")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "CreditAccount")
                         .WithMany("CreditTransfers")
                         .HasForeignKey("CreditAccountID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("AccountingDAL.Model.Account", "DebitAccount")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "DebitAccount")
                         .WithMany("DeditTransfers")
                         .HasForeignKey("DebitAccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -439,25 +445,63 @@ namespace AccountingDAL.Migrations
                     b.Navigation("DebitAccount");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Account", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Plans.PlanSaving", b =>
+                {
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AccountingDAL.Model.Plans.Plan", "Plan")
+                        .WithMany("Savings")
+                        .HasForeignKey("PlanID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Plans.PlanSpending", b =>
+                {
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AccountingDAL.Model.Plans.Plan", "Plan")
+                        .WithMany("Spendings")
+                        .HasForeignKey("PlanID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Account", b =>
                 {
                     b.Navigation("CreditTransfers");
 
                     b.Navigation("DeditTransfers");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Plan", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Category", b =>
+                {
+                    b.Navigation("Contractors");
+
+                    b.Navigation("Operations");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Plans.Plan", b =>
                 {
                     b.Navigation("Savings");
 
                     b.Navigation("Spendings");
-                });
-
-            modelBuilder.Entity("AccountingDAL.Model.Сategory", b =>
-                {
-                    b.Navigation("Operations");
-
-                    b.Navigation("Сontractors");
                 });
 #pragma warning restore 612, 618
         }

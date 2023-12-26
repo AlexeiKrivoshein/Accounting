@@ -96,7 +96,8 @@ export class PlanListComponent implements OnInit {
 
     const dialog = this.dialog.open(PlanEditorComponent, {
       width: '40em',
-      height: '40em',
+      height: 'auto',
+      maxHeight: '80%',
       data: plan,
     });
 

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountListComponent } from 'src/account/account-list/account-list.component';
-import { CategoryListComponent } from 'src/category/category-list/category-list.component';
-import { ContractorListComponent } from 'src/contractor/contractor-list/contractor-list.component';
-import { MovementListComponent } from 'src/movement/movement-list/movement-list.component';
+import { AccountListComponent } from 'src/dictionaries/account/account-list/account-list.component';
+import { CategoryListComponent } from 'src/dictionaries/category/category-list/category-list.component';
+import { ContractorListComponent } from 'src/dictionaries/contractor/contractor-list/contractor-list.component';
+import { MovementListComponent } from 'src/operation/operation-list/movement-list.component';
 import { PlanListComponent } from 'src/plan/plan-list/plan-list.component';
 import { HomeComponent } from './home/home.component';
 

@@ -1,78 +1,37 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Account } from 'src/account/model/account';
-import { Category } from 'src/category/model/category';
 import { EMPTY_GUID } from 'src/const';
-import { Contractor } from 'src/contractor/model/contractor';
-import { Movement, movementDefault } from 'src/movement/model/movement';
-import { OperationType } from './operation-type';
+import { ModelElementBase } from 'src/model/model-element-base';
 
 /**
- * Операция с контрагентом
+ * Операция
  */
-export interface Operation extends Movement {
+export interface Operation extends ModelElementBase {
   /**
-   * Идентификатор счета
+   * Дата
    */
-  accountID: string;
+  date: Date;
 
   /**
-   * Счет
+   * Сумма
    */
-  account: Account | null;
+  sum: number;
 
   /**
-   * Идентификатор контрагента
+   * Описание
    */
-  contractorID: string;
+  description: string;
 
   /**
-   * Контрагент
+   * Порядковый номер операции в разрезе дня
    */
-  contractor: Contractor | null;
-
-  /**
-   * Идентификатор категории
-   */
-  categoryID: string;
-
-  /**
-   * Категория
-   */
-  category: Category | null;
-
-  /**
-   * Тип операции дебет/кредит
-   */
-  operationType: OperationType;
+  index: number;
 }
 
 export function operationDefault(): Operation {
   return {
-    ...movementDefault(),
-    accountID: '',
-    account: null,
-    contractorID: '',
-    contractor: null,
-    categoryID: '',
-    category: null,
-    operationType: OperationType.Credited,
+    id: EMPTY_GUID,
+    date: new Date(),
+    sum: 0,
+    description: '',
+    index: -1
   };
-}
-
-export function operationFormGroup(): FormGroup {
-  return new FormGroup({
-    id: new FormControl<string>(EMPTY_GUID),
-    date: new FormControl<Date>(new Date()),
-    sum: new FormControl<number>(0, [Validators.required]),
-    description: new FormControl<string>(''),
-    index: new FormControl<number>(-1),
-
-    accountID: new FormControl<string>(EMPTY_GUID),
-    account: new FormControl<Account | null>(null, [Validators.required]),
-    contractorID: new FormControl<string>(EMPTY_GUID),
-    contractor: new FormControl<Contractor | null>(null, [Validators.required]),
-    categoryID: new FormControl<string>(EMPTY_GUID),
-    category: new FormControl<Category | null>(null, [Validators.required]),
-    operationType: new FormControl<OperationType>(OperationType.Credited),
-  });
 }
