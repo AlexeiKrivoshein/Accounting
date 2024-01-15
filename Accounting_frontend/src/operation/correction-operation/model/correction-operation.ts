@@ -3,37 +3,39 @@ import { EMPTY_GUID } from 'src/const';
 import { Operation, operationDefault } from 'src/operation/model/operation';
 import { OperationType } from 'src/operation/model/operation-type';
 import { Account } from 'src/dictionaries/account/model/account';
+import { OperationClass } from 'src/operation/model/operation-class';
 
 /**
  * Корректировка
  */
-export interface CorrectionOperation extends Operation {
+export class CorrectionOperation extends Operation {
   /**
    * Идентификатор счета
    */
-  accountID: string;
+  public accountID: string = '';
 
   /**
    * Счет
    */
-  account: Account | null;
+  public account: Account | null = null;
 
   /**
    * Тип операции дебет/кредит
    */
-  operationType: OperationType;
+  public operationType: OperationType = OperationType.Credited;
 }
 
-export function correctionDefault(): CorrectionOperation {
+export function correctionOperationDefault(): CorrectionOperation {
   return {
     ...operationDefault(),
     accountID: '',
     account: null,
     operationType: OperationType.Debited,
+    operationClass: OperationClass.CorrectionOperation,
   };
 }
 
-export function correctionFormGroup(): FormGroup {
+export function correctionOperationFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
     date: new FormControl<Date>(new Date()),
@@ -44,5 +46,8 @@ export function correctionFormGroup(): FormGroup {
     accountID: new FormControl<string>(EMPTY_GUID),
     account: new FormControl<Account | null>(null, [Validators.required]),
     operationType: new FormControl<OperationType>(OperationType.Debited),
+    operationClass: new FormControl<OperationClass>(
+      OperationClass.CorrectionOperation
+    ),
   });
 }

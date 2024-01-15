@@ -2,26 +2,27 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
 import { Account } from 'src/dictionaries/account/model/account';
 import { operationDefault, Operation } from 'src/operation/model/operation';
+import { OperationClass } from 'src/operation/model/operation-class';
 import { OperationType } from 'src/operation/model/operation-type';
 
 /**
  * Операции с наличными
  */
-export interface CashOperation extends Operation {
+export class CashOperation extends Operation {
   /**
    * Идентификатор счета
    */
-  accountID: string;
+  public accountID: string = '';
 
   /**
    * Счет
    */
-  account: Account | null;
+  public account: Account | null = null;
 
   /**
    * Тип операции дебет/кредит
    */
-  operationType: OperationType;
+  public operationType: OperationType = OperationType.Credited;
 }
 
 export function cashOperationDefault(): CashOperation {
@@ -30,6 +31,7 @@ export function cashOperationDefault(): CashOperation {
     accountID: '',
     account: null,
     operationType: OperationType.Debited,
+    operationClass: OperationClass.CashOperation,
   };
 }
 
@@ -44,5 +46,8 @@ export function cashOperationFormGroup(): FormGroup {
     accountID: new FormControl<string>(EMPTY_GUID),
     account: new FormControl<Account | null>(null, [Validators.required]),
     operationType: new FormControl<OperationType>(OperationType.Credited),
+    operationClass: new FormControl<OperationClass>(
+      OperationClass.CashOperation
+    ),
   });
 }

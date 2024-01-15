@@ -2,43 +2,45 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
 import { Account } from 'src/dictionaries/account/model/account';
 import { Operation, operationDefault } from 'src/operation/model/operation';
+import { OperationClass } from 'src/operation/model/operation-class';
 
 /**
  * Операция перевода между счетами
  */
-export interface TransferOperation extends Operation {
+export class TransferOperation extends Operation {
   /**
    * Идентификатор счета кредита
    */
-  creditAccountID: string;
+  public creditAccountID: string = '';
 
   /**
    * Счет кредит
    */
-  creditAccount: Account | null;
+  public creditAccount: Account | null = null;
 
   /**
    * Идентификатор счета дебета
    */
-  debitAccountID: string;
+  public debitAccountID: string = '';
 
   /**
    * Счет дебета
    */
-  debitAccount: Account | null;
+  public debitAccount: Account | null = null;
 }
 
-export function transferDefault(): TransferOperation {
+export function transferOperationDefault(): TransferOperation {
   return {
     ...operationDefault(),
     creditAccountID: '',
     creditAccount: null,
     debitAccountID: '',
     debitAccount: null,
+    operationClass: OperationClass.TransferOperation,
   };
 }
 
-export function transferFormGroup(): FormGroup {
+export function transferOperationFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
     date: new FormControl<Date>(new Date()),
@@ -50,5 +52,8 @@ export function transferFormGroup(): FormGroup {
     creditAccount: new FormControl<Account | null>(null, [Validators.required]),
     debitAccountID: new FormControl<string>(EMPTY_GUID),
     debitAccount: new FormControl<Account | null>(null, [Validators.required]),
+    operationClass: new FormControl<OperationClass>(
+      OperationClass.TransferOperation
+    ),
   });
 }

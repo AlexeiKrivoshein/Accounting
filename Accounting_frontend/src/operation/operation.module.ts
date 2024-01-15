@@ -4,16 +4,17 @@ import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { MovementEditorComponent } from './movement-editor/movement-editor.component';
 import { CorrectionOperationModule } from 'src/operation/correction-operation/correction-operation.module';
 import { TransferOperationModule } from 'src/operation/transfer-operation/transfer-operation.module';
 import { ContractorOperationModule } from 'src/operation/contractor-operation/contractor-operation.module';
-import { MovementListComponent } from './operation-list/movement-list.component';
+import { OperationEditorDialogComponent } from './operation-editor-dialog/operation-editor-dialog.component';
+import { OperationListComponent } from './operation-list/operation-list.component';
+import { CashOperationModule } from './cash-operation/cash-operation.module';
 
 @NgModule({
   declarations: [
-    MovementListComponent,
-    MovementEditorComponent,
+    OperationListComponent,
+    OperationEditorDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +24,8 @@ import { MovementListComponent } from './operation-list/movement-list.component'
     MatIconModule,
     ContractorOperationModule,
     CorrectionOperationModule,
-    TransferOperationModule
+    TransferOperationModule,
+    CashOperationModule
   ],
 })
 export class OperationModule {}

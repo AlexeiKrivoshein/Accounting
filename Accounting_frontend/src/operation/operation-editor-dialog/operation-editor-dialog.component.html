@@ -1,0 +1,50 @@
+<app-dialog
+  title="Операция"
+  [body]="body"
+  [buttons]="buttons"
+  (close)="onCancel()"
+></app-dialog>
+
+<ng-template #body>
+  <app-label
+    class="acc-header-3 mb-1"
+    text="Тип операции"
+    width="100%"
+  ></app-label>
+
+  <app-autocomplete
+    class="mb-3"
+    placeholder="Тип операции"
+    [control]="classControl"
+    [items]="operationClasses"
+    [displayFn]="operationClassLocal"
+  ></app-autocomplete>
+
+  <app-contractor-operation-editor
+    *ngIf="classControl.value === OperationClass.ContractorOperation"
+  ></app-contractor-operation-editor>
+
+  <app-transfer-operation-editor
+    *ngIf="classControl.value === OperationClass.TransferOperation"
+  ></app-transfer-operation-editor> 
+
+  <app-correction-operation-editor
+    *ngIf="classControl.value === OperationClass.CorrectionOperation"
+  ></app-correction-operation-editor>
+
+  <app-cash-operation-editor
+    *ngIf="classControl.value === OperationClass.CashOperation"
+  ></app-cash-operation-editor>
+</ng-template>
+
+<ng-template #buttons>
+  <app-button
+    text="Отмена"
+    (buttonClick)="onCancel()"
+  ></app-button>
+
+  <app-button
+    text="Сохранить"
+    (buttonClick)="onSave()"
+  ></app-button>
+</ng-template>

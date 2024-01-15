@@ -49,6 +49,17 @@ namespace AccountingDAL.Managers
                 index = Math.Max(indexes.Max(), index);
             }
 
+            indexes = await context.CashOperations.Where(x =>
+                x.Date.Year == date.Year &&
+                x.Date.Month == date.Month &&
+                x.Date.Day == date.Day)
+                .Select(x => x.Index).ToListAsync();
+
+            if (indexes is not null && indexes.Any())
+            {
+                index = Math.Max(indexes.Max(), index);
+            }
+
             return index + 1;
         }
     }

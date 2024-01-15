@@ -66,32 +66,37 @@ namespace AccountingDAL.Managers
         /// <summary>
         /// Получить баланс счетов на момент движения
         /// </summary>
-        /// <param name="movementId">Идентификатор движения</param>
-        public async Task<List<Balance>> GetMovementBalanceAsync(Guid movementId)
+        /// <param name="operationId">Идентификатор операции</param>
+        public async Task<List<Balance>> GetMovementBalanceAsync(Guid operationId)
         {
             using var context = new AccountingContext();
 
-            Operation? movement = await context.ContractorOperations.FirstOrDefaultAsync(x => x.Id == movementId);
+            Operation? operation = await context.ContractorOperations.FirstOrDefaultAsync(x => x.Id == operationId);
 
-            if (movement is null)
+            if (operation is null)
             {
-                movement = await context.TransferOperations.FirstOrDefaultAsync(x => x.Id == movementId);
+                operation = await context.TransferOperations.FirstOrDefaultAsync(x => x.Id == operationId);
             }
 
-            if (movement is null)
+            if (operation is null)
             {
-                movement = await context.CorrectionOperations.FirstOrDefaultAsync(x => x.Id == movementId);
+                operation = await context.CorrectionOperations.FirstOrDefaultAsync(x => x.Id == operationId);
             }
 
-            if (movement is null)
+            if (operation is null)
             {
-                throw new Exception($"На найдена операция/перевод/корректировка с идентикатором {movementId}.");
+                operation = await context.CashOperations.FirstOrDefaultAsync(x => x.Id == operationId);
+            }
+
+            if (operation is null)
+            {
+                throw new Exception($"На найдена операция/перевод/корректировка с идентикатором {operationId}.");
             }
 
             List<Balance> balances = new List<Balance>();
             foreach (Account account in await context.Accounts.ToListAsync())
             {
-                Balance balance = await CalculateBalanceAsync(context, (movement.Date, movement.Index), account);
+                Balance balance = await CalculateBalanceAsync(context, (operation.Date, operation.Index), account);
                 balances.Add(balance);
             }
 
@@ -137,26 +142,32 @@ namespace AccountingDAL.Managers
                 FirstOrDefaultAsync();
 
             float sum = 0F;
-            List<Operation> movements = new List<Operation>();
-            List<ContractorOperation> operations = new List<ContractorOperation>();
-            List<TransferOperation> transfers = new List<TransferOperation>();
-            List<CorrectionOperation> corrections = new List<CorrectionOperation>();
+            List<Operation> operations = new List<Operation>();
+            List<ContractorOperation> contractorOperations = new List<ContractorOperation>();
+            List<TransferOperation> transfersOperations = new List<TransferOperation>();
+            List<CorrectionOperation> correctionOperations = new List<CorrectionOperation>();
+            List<CashOperation> cashOperations = new List<CashOperation>();
 
             // нет расчитанных балансов, суммируем все операции и переводы
             if (balance is null)
             {
-                // все предыдущие операции по счету
-                operations = await context.ContractorOperations
+                // все предыдущие операции с контрагентами по счету
+                contractorOperations = await context.ContractorOperations
                     .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
-                // все предыдущие переводы по счету
-                transfers = await context.TransferOperations
+                // все предыдущие внутренние переводы по счету
+                transfersOperations = await context.TransferOperations
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие корректировки по счету
-                corrections = await context.CorrectionOperations
+                correctionOperations = await context.CorrectionOperations
+                    .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .ToListAsync();
+
+                // все предыдущие операции с наличными по счету
+                cashOperations = await context.CashOperations
                     .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
@@ -165,63 +176,80 @@ namespace AccountingDAL.Managers
                 // сумма баланса = баланс предыдущего счета + все движения
                 sum = balance.Sum;
 
-                // операции от последнего баланса и до движения
-                operations = await context.ContractorOperations
+                // операции с контрагентом от последнего баланса и до движения
+                contractorOperations = await context.ContractorOperations
                     .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // переводы от последнего баланса и до движения
-                transfers = await context.TransferOperations
+                transfersOperations = await context.TransferOperations
                     .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // корректировки от последнего баланса и до движения
-                corrections = await context.CorrectionOperations
+                correctionOperations = await context.CorrectionOperations
+                    .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .ToListAsync();
+
+                // операцции с наличными от последнего баланса и до движения
+                cashOperations = await context.CashOperations
                     .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
 
-            // оперции и переводы в одном списке, отсортированном по дате и индексу
-            movements.AddRange(operations.Cast<Operation>());
-            movements.AddRange(transfers.Cast<Operation>());
-            movements.AddRange(corrections.Cast<Operation>());
+            // оперции с контрагентом, корректировки, переводы и операции с наличными в одном списке, отсортированном по дате и индексу
+            operations.AddRange(contractorOperations.Cast<Operation>());
+            operations.AddRange(transfersOperations.Cast<Operation>());
+            operations.AddRange(correctionOperations.Cast<Operation>());
+            operations.AddRange(cashOperations.Cast<Operation>());
 
-            movements = movements.OrderBy(x => x.Date).ThenBy(x => x.Index).ToList();
+            operations = operations.OrderBy(x => x.Date).ThenBy(x => x.Index).ToList();
 
             // подсчет баланса счета
-            foreach (Operation item in movements)
+            foreach (Operation operation in operations)
             {
-                if (item is ContractorOperation operation)
+                if (operation is ContractorOperation contractorOperation)
                 {
-                    if (operation.OperationType == OperationType.Credited)
+                    if (contractorOperation.OperationType == OperationType.Credited)
                     {
-                        sum -= item.Sum;
+                        sum -= operation.Sum;
                     }
                     else
                     {
-                        sum += item.Sum;
+                        sum += operation.Sum;
                     }
                 }
-                else if (item is TransferOperation transfer)
+                else if (operation is TransferOperation transferOperation)
                 {
-                    if (transfer.CreditAccountID == account.Id)
+                    if (transferOperation.CreditAccountID == account.Id)
                     {
-                        sum -= item.Sum;
+                        sum -= operation.Sum;
                     }
                     else
                     {
-                        sum += item.Sum;
+                        sum += operation.Sum;
                     }
                 }
-                else if (item is CorrectionOperation correction)
+                else if (operation is CorrectionOperation correctionOperation)
                 {
-                    if (correction.OperationType == OperationType.Credited)
+                    if (correctionOperation.OperationType == OperationType.Credited)
                     {
-                        sum -= item.Sum;
+                        sum -= operation.Sum;
                     }
                     else
                     {
-                        sum += item.Sum;
+                        sum += operation.Sum;
+                    }
+                }
+                else if (operation is CashOperation cashOperation)
+                {
+                    if (cashOperation.OperationType == OperationType.Credited)
+                    {
+                        sum -= operation.Sum;
+                    }
+                    else
+                    {
+                        sum += operation.Sum;
                     }
                 }
             }
@@ -243,35 +271,46 @@ namespace AccountingDAL.Managers
         /// <returns></returns>
         public async Task CalculateAndStoreBalancesAsync()
         {
-            ContractorOperation? operation = null;
-            TransferOperation? transfer = null;
-            CorrectionOperation? correction = null;
+            ContractorOperation? contractorOperation = null;
+            TransferOperation? transferOperation = null;
+            CorrectionOperation? correctionOperation = null;
+            CashOperation? cashOperation = null;
 
             List<Account> accounts = new List<Account>();
 
             using (var context = new AccountingContext())
             {
-                operation = await context.ContractorOperations
+                contractorOperation = await context.ContractorOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
-                transfer = await context.TransferOperations
+                transferOperation = await context.TransferOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
-                correction = await context.CorrectionOperations
+                correctionOperation = await context.CorrectionOperations
+                    .OrderBy(x => x.Date)
+                    .FirstOrDefaultAsync();
+
+                cashOperation = await context.CashOperations
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
                 accounts = await context.Accounts.ToListAsync();
             }
 
-            if ((operation is null && transfer is null && correction is null) || !accounts.Any())
+            if ((contractorOperation is null && transferOperation is null && correctionOperation is null && cashOperation is null) || !accounts.Any())
             {
                 return;
             }
 
-            DateTime date = new[] { operation?.Date ?? DateTime.MaxValue, transfer?.Date ?? DateTime.MaxValue, correction?.Date ?? DateTime.MaxValue }.Min();
+            DateTime date = new[]
+            {
+                contractorOperation?.Date ?? DateTime.MaxValue,
+                transferOperation?.Date ?? DateTime.MaxValue,
+                correctionOperation?.Date ?? DateTime.MaxValue,
+                cashOperation?.Date ?? DateTime.MaxValue
+            }.Min();
 
             DateTime current = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59);
             DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);

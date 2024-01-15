@@ -1,9 +1,9 @@
 /**
  * Базовый класс элементов модели данных
  */
-export interface ModelElementBase {
+export class ModelElementBase {
   /**
    * Идентификатор
    */
-  id: string;
+  public id: string = '';
 }

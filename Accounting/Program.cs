@@ -13,7 +13,8 @@ builder.Services
     .AddSingleton<TransferOperationManager>()
     .AddSingleton<CorrectionOperationManager>()
     .AddSingleton<BalanceManager>()
-    .AddSingleton<PlanManager>();
+    .AddSingleton<PlanManager>()
+    .AddSingleton<CashOperationManager>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

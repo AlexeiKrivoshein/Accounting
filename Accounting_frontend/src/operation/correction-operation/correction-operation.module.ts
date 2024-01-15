@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlsModule } from 'src/controls/controls.module';
-import { DialogModule } from 'src/dialog/dialog.module';
-import { CorrectionEditorComponent } from './correction-operation-editor/correction-editor.component';
+import { CorrectionOperationEditorComponent } from './correction-operation-editor/correction-operation-editor.component';
 
 @NgModule({
-  declarations: [CorrectionEditorComponent],
-  imports: [CommonModule, DialogModule, ControlsModule],
+  declarations: [CorrectionOperationEditorComponent],
+  imports: [CommonModule, ControlsModule],
+  exports: [CorrectionOperationEditorComponent]
 })
 export class CorrectionOperationModule {}

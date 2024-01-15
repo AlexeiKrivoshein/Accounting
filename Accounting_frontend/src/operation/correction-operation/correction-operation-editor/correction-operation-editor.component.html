@@ -1,0 +1,68 @@
+<app-label
+  class="acc-header-3 mb-1"
+  text="Дата"
+  width="100%"
+></app-label>
+
+<app-date-picker
+  class="mb-3"
+  placeholder="Дата"
+  [control]="getControl('date')"
+  type="date"
+  width="100%"
+></app-date-picker>
+
+<app-label
+  class="acc-header-3 mb-1"
+  text="Счет"
+  width="100%"
+></app-label>
+
+<app-autocomplete
+  class="mb-3"
+  placeholder="Счет"
+  [control]="getControl('account')"
+  [items]="(accounts$ | async) || []"
+  [displayFn]="accountDisplayFn"
+></app-autocomplete>
+
+<app-label
+  class="acc-header-3 mb-1"
+  text="Сумма"
+  width="100%"
+></app-label>
+
+<app-input
+  class="mb-3"
+  placeholder="Сумма"
+  [control]="getControl('sum')"
+  type="number"
+  width="100%"
+></app-input>
+
+<app-label
+  class="acc-header-3 mb-1"
+  text="Тип операции"
+  width="100%"
+></app-label>
+
+<app-autocomplete
+  class="mb-3"
+  placeholder="Тип операции"
+  [control]="getControl('operationType')"
+  [items]="operationTypes"
+  [displayFn]="operationTypeDisplayFn"
+></app-autocomplete>
+
+<app-label
+  class="acc-header-3 mb-1"
+  text="Описание"
+  width="100%"
+></app-label>
+
+<app-input
+  class="mb-3"
+  placeholder="Описание"
+  [control]="getControl('description')"
+  width="100%"
+></app-input>

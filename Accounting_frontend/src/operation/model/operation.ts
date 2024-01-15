@@ -1,29 +1,35 @@
 import { EMPTY_GUID } from 'src/const';
 import { ModelElementBase } from 'src/model/model-element-base';
+import { OperationClass } from './operation-class';
 
 /**
  * Операция
  */
-export interface Operation extends ModelElementBase {
+export class Operation extends ModelElementBase {
   /**
    * Дата
    */
-  date: Date;
+  public date: Date = new Date();
 
   /**
    * Сумма
    */
-  sum: number;
+  public sum: number = 0;
 
   /**
    * Описание
    */
-  description: string;
+  public description: string = '';
 
   /**
    * Порядковый номер операции в разрезе дня
    */
-  index: number;
+  public index: number = 0;
+
+  /**
+   * Класс/тип операции, заполняется при получении на фронте
+   */
+  public operationClass: OperationClass = OperationClass.ContractorOperation;
 }
 
 export function operationDefault(): Operation {
@@ -32,6 +38,7 @@ export function operationDefault(): Operation {
     date: new Date(),
     sum: 0,
     description: '',
-    index: -1
+    index: -1,
+    operationClass: OperationClass.ContractorOperation,
   };
 }

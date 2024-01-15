@@ -4,49 +4,50 @@ import { Account } from 'src/dictionaries/account/model/account';
 import { Category } from 'src/dictionaries/category/model/category';
 import { Contractor } from 'src/dictionaries/contractor/model/contractor';
 import { Operation, operationDefault } from 'src/operation/model/operation';
+import { OperationClass } from 'src/operation/model/operation-class';
 import { OperationType } from '../../model/operation-type';
 
 /**
  * Операция с контрагентом
  */
-export interface ContractorOperation extends Operation {
+export class ContractorOperation extends Operation {
   /**
    * Идентификатор счета
    */
-  accountID: string;
+  public accountID: string = '';
 
   /**
    * Счет
    */
-  account: Account | null;
+  public account: Account | null = null;
 
   /**
    * Идентификатор контрагента
    */
-  contractorID: string;
+  public contractorID: string = '';
 
   /**
    * Контрагент
    */
-  contractor: Contractor | null;
+  public contractor: Contractor | null = null;
 
   /**
    * Идентификатор категории
    */
-  categoryID: string;
+  public categoryID: string = '';
 
   /**
    * Категория
    */
-  category: Category | null;
+  public category: Category | null = null;
 
   /**
    * Тип операции дебет/кредит
    */
-  operationType: OperationType;
+  public operationType: OperationType = OperationType.Credited;
 }
 
-export function operationDefault(): ContractorOperation {
+export function contractorOperationDefault(): ContractorOperation {
   return {
     ...operationDefault(),
     accountID: '',
@@ -56,10 +57,11 @@ export function operationDefault(): ContractorOperation {
     categoryID: '',
     category: null,
     operationType: OperationType.Credited,
+    operationClass: OperationClass.ContractorOperation,
   };
 }
 
-export function operationFormGroup(): FormGroup {
+export function contractorOperationFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
     date: new FormControl<Date>(new Date()),
@@ -74,5 +76,8 @@ export function operationFormGroup(): FormGroup {
     categoryID: new FormControl<string>(EMPTY_GUID),
     category: new FormControl<Category | null>(null, [Validators.required]),
     operationType: new FormControl<OperationType>(OperationType.Credited),
+    operationClass: new FormControl<OperationClass>(
+      OperationClass.ContractorOperation
+    ),
   });
 }

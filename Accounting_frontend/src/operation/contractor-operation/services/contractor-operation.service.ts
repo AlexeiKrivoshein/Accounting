@@ -1,11 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { EMPTY_GUID } from 'src/const';
 import { environment } from 'src/environments/environment';
+import { OperationClass } from 'src/operation/model/operation-class';
 import { ContractorOperation } from '../model/contractor-operation';
 
-const URL: string = `${environment.url}/api/operation`;
+const URL: string = `${environment.url}/api/contractorOperation`;
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,14 @@ export class ContractorOperationService {
 
   public get(id: string = ''): Observable<ContractorOperation[]> {
     const params = new HttpParams().append('id', id);
-    return this.client.get<ContractorOperation[]>(URL, { params });
+    return this.client.get<ContractorOperation[]>(URL, { params }).pipe(
+      map((operations) =>
+        operations.map((operation) => {
+          operation.operationClass = OperationClass.ContractorOperation;
+          return operation;
+        })
+      )
+    );
   }
 
   public set(operation: ContractorOperation): Observable<ContractorOperation> {
@@ -30,10 +38,19 @@ export class ContractorOperationService {
     stored.contractorID = stored.contractor?.id ?? EMPTY_GUID;
     stored.contractor = null;
 
-    return this.client.post<ContractorOperation>(URL, stored);
+    return this.client.post<ContractorOperation>(URL, stored).pipe(
+      map((operation) => {
+        operation.operationClass = OperationClass.ContractorOperation;
+        return operation;
+      })
+    );
   }
 
   public remove(id: string) {
+    if (!id) {
+      return of(null);
+    }
+
     const params = new HttpParams().append('id', id);
     return this.client.delete<ContractorOperation>(URL, { params });
   }

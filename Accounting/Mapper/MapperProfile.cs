@@ -3,6 +3,7 @@ using AccountingDAL.Model.Dictionaries;
 using AccountingDAL.Model.DTO;
 using AccountingDAL.Model.DTO.Dictionaries;
 using AccountingDAL.Model.DTO.Operation;
+using AccountingDAL.Model.DTO.Operations;
 using AccountingDAL.Model.DTO.Plans;
 using AccountingDAL.Model.Operations;
 using AccountingDAL.Model.Plans;
@@ -15,14 +16,18 @@ namespace Accounting.Mapper
         public MapperProfile()
         {
             AllowNullCollections = true;
-
+            // справочники
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<AccountDTO, Account>().ReverseMap();
             CreateMap<ContractorDTO, Contractor>().ReverseMap();
+            // операции
             CreateMap<ContractorOperationDTO, ContractorOperation>().ReverseMap();
             CreateMap<TransferOperationDTO, TransferOperation>().ReverseMap();
             CreateMap<CorrectionOperationDTO, CorrectionOperation>().ReverseMap();
+            CreateMap<CashOperationDTO, CashOperation>().ReverseMap();
+            // баланс
             CreateMap<BalanceDTO, Balance>().ReverseMap();
+            // план
             CreateMap<PlanDTO, Plan>().ReverseMap();
             CreateMap<PlanSpendingDTO, PlanSpending>().ReverseMap();
             CreateMap<PlanSavingDTO, PlanSaving>().ReverseMap();

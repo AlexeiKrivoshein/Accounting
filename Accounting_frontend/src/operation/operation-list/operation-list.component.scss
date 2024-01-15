@@ -1,0 +1,28 @@
+.file-upload {
+  display: none;
+}
+
+.balances {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  .balance {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    color: black;
+    opacity: 0.8;
+    border: 1px solid gray;
+    border-radius: 3px;
+    background-color: lightgray;
+    padding: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+
+    .sum {
+      font-weight: bold;
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 10px;
+    }
+  }
+}
