@@ -1,9 +1,6 @@
 <div class="d-flex flex-column h-100">
   <div class="button-container mb-2">
-    <app-button
-      text="Добавить"
-      (buttonClick)="onCreate()"
-    ></app-button>
+    <app-button text="Добавить" (buttonClick)="onCreate()"></app-button>
 
     <app-button
       text="Изменить"
@@ -18,14 +15,44 @@
     ></app-button>
   </div>
 
-  <app-table
+  <app-list-component
     class="min-height-0"
     [(selected)]="selected"
-    [columns]="columns"
-    [dataSource]="dataSource"
+    [items]="items$ | async"
+    [template]="item"
     (doubleClick)="onModify()"
-    (selectedChange)="onSelectedChange($event)"
-  ></app-table>
+  ></app-list-component>
+
+  <ng-template #item let-data>
+    <div class="text operation-item">
+      <mat-icon
+        class="class_icon"
+        aria-hidden="true"
+        [fontIcon]="data.icon"
+      ></mat-icon>
+
+      <div class="d-flex flex-column flex-1">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+          <div class="d-flex flex-1 align-items-center justify-content-start">
+            <span class="credit">{{ data.from ?? "" }}</span>
+
+            <mat-icon
+              *ngIf="data.to"
+              class="arrow"
+              aria-hidden="true"
+              fontIcon="arrow_right_alt"
+            ></mat-icon>
+
+            <span class="debit">{{ data.to ?? "" }}</span>
+          </div>
+
+          <span class="sum">{{ data.sum ?? 0 | number : "0.2-2" }} ₽</span>
+        </div>
+
+        <span>{{ data.description ?? "" }}</span>
+      </div>
+    </div>
+  </ng-template>
 
   <div *ngIf="balances?.length" class="balances">
     <div *ngFor="let balance of balances" class="balance">
@@ -33,9 +60,7 @@
         {{ balance.account }}
       </div>
 
-      <div class="sum acc-header-3">
-        {{ balance.sum | number:'1.2-2' }}р.
-      </div>
+      <div class="sum acc-header-3">{{ balance.sum | number : "1.2-2" }}р.</div>
     </div>
   </div>
 </div>

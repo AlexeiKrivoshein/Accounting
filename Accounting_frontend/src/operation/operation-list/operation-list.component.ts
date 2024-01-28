@@ -1,23 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { Balance } from 'src/balance/model/balance';
 import { BalanceService } from 'src/balance/services/balance.service';
-import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
-  ContractorOperation,
   contractorOperationDefault,
 } from 'src/operation/contractor-operation/model/contractor-operation';
 import { OperationType } from 'src/operation/model/operation-type';
-import { CorrectionOperation } from 'src/operation/correction-operation/model/correction-operation';
-import { TransferOperation } from 'src/operation/transfer-operation/model/transfer-operation';
 import { Operation } from '../model/operation';
 import { OperationEditorDialogComponent } from '../operation-editor-dialog/operation-editor-dialog.component';
-import { CashOperation } from '../cash-operation/model/cash-operation';
 import { OperationsDataSource } from './service/operations-data-source';
+import { OperationClass } from '../model/operation-class';
+import { OperationView } from './model/operation-view';
 
 @Component({
   selector: 'app-operation-list',
@@ -26,86 +22,14 @@ import { OperationsDataSource } from './service/operations-data-source';
   providers: [OperationsDataSource],
 })
 export class OperationListComponent implements OnInit {
-  public selected: Operation | null = null;
+  public operationClass = OperationClass;
+  public operationType = OperationType;
 
-  public columns: Column[] = [
-    {
-      path: 'date',
-      header: 'Дата',
-      type: 'Date',
-    },
-    {
-      path: 'account.name',
-      header: 'Расход',
-      displayFn: (operation: Operation) => {
-        if (operation instanceof ContractorOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return operation.contractor?.name ?? '';
-          } else {
-            return operation.account?.name ?? '';
-          }
-        } else if (operation instanceof CorrectionOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return '';
-          } else {
-            return operation.account?.name ?? '';
-          }
-        } else if (operation instanceof TransferOperation) {
-          return operation.creditAccount?.name ?? '';
-        } else if (operation instanceof CashOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return '';
-          } else {
-            return operation.account?.name ?? '';
-          }
-        }
-
-        return '';
-      },
-    },
-    {
-      path: 'contractor.name',
-      header: 'Приход',
-      displayFn: (operation: Operation) => {
-        if (operation instanceof ContractorOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return operation.account?.name ?? '';
-          } else {
-            return operation.contractor?.name ?? '';
-          }
-        } else if (operation instanceof CorrectionOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return operation.account?.name ?? '';
-          } else {
-            return '';
-          }
-        } else if (operation instanceof TransferOperation) {
-          return operation.debitAccount?.name ?? '';
-        } else if (operation instanceof CashOperation) {
-          if (operation.operationType == OperationType.Debited) {
-            return operation.account?.name ?? '';
-          } else {
-            return '';
-          }
-        }
-        return '';
-      },
-    },
-    {
-      path: 'description',
-      header: 'Описание',
-    },
-    {
-      path: 'sum',
-      header: 'Сумма операции',
-      type: 'Currency',
-    },
-  ];
-
-  public dataSource: MatTableDataSource<Operation> =
-    new MatTableDataSource<Operation>([]);
+  public selected: OperationView | null = null;
 
   public balances: { account: string; sum: number }[] = [];
+
+  public items$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(
     private operationsDataSource: OperationsDataSource,
@@ -115,10 +39,12 @@ export class OperationListComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.load().subscribe((items) => (this.dataSource.data = items));
+    this.load().subscribe((items) => {
+      this.items$.next(items);
+    });
   }
 
-  private load(): Observable<Operation[]> {
+  private load(): Observable<OperationView[]> {
     return this.operationsDataSource.load();
   }
 
@@ -134,7 +60,9 @@ export class OperationListComponent implements OnInit {
       .pipe(
         filter((result) => result),
         switchMap(() => this.load()),
-        tap((data) => (this.dataSource.data = data))
+        tap((items) => {
+          this.items$.next(items);
+        })
       )
       .subscribe();
   }
@@ -144,18 +72,24 @@ export class OperationListComponent implements OnInit {
       return;
     }
 
-    this.dialog
-      .open(OperationEditorDialogComponent, {
-        width: '40em',
-        height: 'auto',
-        autoFocus: 'dialog',
-        data: this.selected,
-      })
-      .afterClosed()
+    this.operationsDataSource
+      .get(this.selected.id, this.selected.operationClass)
       .pipe(
+        switchMap((operation) => {
+          return this.dialog
+            .open(OperationEditorDialogComponent, {
+              width: '40em',
+              height: 'auto',
+              autoFocus: 'dialog',
+              data: operation,
+            })
+            .afterClosed();
+        }),
         filter((result) => result),
         switchMap(() => this.load()),
-        tap((data) => (this.dataSource.data = data))
+        tap((items) => {
+          this.items$.next(items);
+        })
       )
       .subscribe();
   }
@@ -165,12 +99,15 @@ export class OperationListComponent implements OnInit {
       return;
     }
 
-    const removed$ = this.operationsDataSource.remove(this.selected);
+    const removed$ = this.operationsDataSource.remove(
+      this.selected.id,
+      this.selected.operationClass
+    );
 
     removed$.pipe(switchMap(() => this.load())).subscribe({
-      next: (data) => {
+      next: (items) => {
         this.selected = null;
-        this.dataSource.data = data;
+        this.items$.next(items);
         this.notifyService.notify('Запись удалена.', 'success');
       },
       error: (err) => {

@@ -57,7 +57,7 @@ namespace Accounting.Controllers
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentNullException("Передан пустой ключ удаялемой записи");
+                throw new ArgumentNullException("Передан пустой ключ удаляемой записи");
             }
 
             ContractorOperation removed = await _operationManager.RemoveAsync(id);

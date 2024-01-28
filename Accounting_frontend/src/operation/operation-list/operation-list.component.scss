@@ -1,3 +1,5 @@
+$item-margin: 40px;
+
 .file-upload {
   display: none;
 }
@@ -24,5 +26,30 @@
       justify-content: flex-end;
       padding-right: 10px;
     }
+  }
+}
+
+.operation-item {
+  display: flex;
+  align-items: center;
+
+  .class_icon {
+    margin-right: $item-margin;
+  }
+
+  .credit {
+    margin-right: $item-margin;
+  }
+
+  .arrow {
+    margin-right: $item-margin;
+  }
+
+  .category {
+    margin-right: $item-margin;
+  }
+
+  .sum {
+    font-weight: bold;
   }
 }

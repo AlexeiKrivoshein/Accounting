@@ -1,0 +1,19 @@
+<div class="scroll">
+  <mat-list class="acc-list">
+    <mat-list-item
+      *ngFor="let item of items" 
+      class="item acc-header-3"
+      [ngClass]="{'acc-list__item-selected': item.id === (selected?.id ?? EMPTY_GUID)}"
+      (click)="onSelectionChanged(item)"
+    >
+      <ng-container *ngIf="template; else text">
+        <ng-container
+          *ngTemplateOutlet="template; context: { $implicit: item }"
+        ></ng-container>
+      </ng-container>
+      <ng-template #text>
+        <span class="text">{{ item }}</span>
+      </ng-template>
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -6,6 +6,12 @@ import { TransferOperationService } from 'src/operation/transfer-operation/servi
 import { forkJoin, map, Observable, of } from 'rxjs';
 import { Operation } from 'src/operation/model/operation';
 import { OperationClass } from 'src/operation/model/operation-class';
+import { ContractorOperation } from 'src/operation/contractor-operation/model/contractor-operation';
+import { TransferOperation } from 'src/operation/transfer-operation/model/transfer-operation';
+import { OperationView } from '../model/operation-view';
+import { OperationType } from 'src/operation/model/operation-type';
+import { CorrectionOperation } from 'src/operation/correction-operation/model/correction-operation';
+import { CashOperation } from 'src/operation/cash-operation/model/cash-operation';
 
 @Injectable()
 export class OperationsDataSource {
@@ -37,15 +43,55 @@ export class OperationsDataSource {
         data[3].forEach((item) => operations.push(item));
 
         return operations.sort(this.compareMovement);
-      })
+      }),
+      map((data) => data.map((item) => this.castToView(item)))
     );
   }
 
-  public remove(operation: Operation): Observable<Operation | null> {
-    const id = operation.id;
+  public get(
+    id: string,
+    operationClass: OperationClass
+  ): Observable<Operation | null> {
+    switch (operationClass) {
+      case OperationClass.ContractorOperation: {
+        return this.contractorOperationService
+          .get(id)
+          .pipe(
+            map((operations) => (operations?.length ? operations[0] : null))
+          );
+      }
+      case OperationClass.TransferOperation: {
+        return this.transferOperationService
+          .get(id)
+          .pipe(
+            map((operations) => (operations?.length ? operations[0] : null))
+          );
+      }
+      case OperationClass.CorrectionOperation: {
+        return this.correctionOperationService
+          .get(id)
+          .pipe(
+            map((operations) => (operations?.length ? operations[0] : null))
+          );
+      }
+      case OperationClass.CashOperation: {
+        return this.cashOperationService
+          .get(id)
+          .pipe(
+            map((operations) => (operations?.length ? operations[0] : null))
+          );
+      }
+      default:
+        return of(null);
+    }
+  }
 
+  public remove(
+    id: string,
+    operationClass: OperationClass
+  ): Observable<Operation | null> {
     let removed$: Observable<Operation | null>;
-    switch (operation.operationClass) {
+    switch (operationClass) {
       case OperationClass.ContractorOperation:
         removed$ = this.contractorOperationService.remove(id);
         break;
@@ -76,6 +122,82 @@ export class OperationsDataSource {
       }
     } else {
       return 1;
+    }
+  }
+
+  private castToView(operation: Operation): OperationView {
+    let from = '';
+    let to = '';
+
+    switch (operation.operationClass) {
+      case OperationClass.ContractorOperation:
+        const contractorOperation = operation as ContractorOperation;
+
+        if (contractorOperation.operationType === OperationType.Credited) {
+          from = contractorOperation.account?.name ?? '';
+          to = contractorOperation.contractor?.name ?? '';
+        } else {
+          from = contractorOperation.contractor?.name ?? '';
+          to = contractorOperation.account?.name ?? '';
+        }
+
+        return {
+          id: contractorOperation.id,
+          icon: 'shopping_cart',
+          from,
+          to,
+          description: contractorOperation.category?.name ?? '',
+          sum: contractorOperation.sum,
+          operationClass: OperationClass.ContractorOperation,
+        };
+      case OperationClass.TransferOperation:
+        const transferOperation = operation as TransferOperation;
+        from = transferOperation.creditAccount?.name ?? '';
+        to = transferOperation.debitAccount?.name ?? '';
+
+        return {
+          id: transferOperation.id,
+          icon: 'swap_horiz',
+          from,
+          to,
+          description: '',
+          sum: transferOperation.sum,
+          operationClass: OperationClass.TransferOperation,
+        };
+      case OperationClass.CorrectionOperation:
+        const correctionOperation = operation as CorrectionOperation;
+        from = correctionOperation.account?.name ?? '';
+        to = '';
+
+        return {
+          id: correctionOperation.id,
+          icon: 'exposure',
+          from,
+          to,
+          description:
+            correctionOperation.operationType === OperationType.Credited
+              ? 'Расход'
+              : 'Приход',
+          sum: correctionOperation.sum,
+          operationClass: OperationClass.CorrectionOperation,
+        };
+      case OperationClass.CashOperation:
+        const cashOperation = operation as CashOperation;
+        from = cashOperation.account?.name ?? '';
+        to = '';
+
+        return {
+          id: cashOperation.id,
+          icon: 'payments',
+          from,
+          to,
+          description:
+            cashOperation.operationType === OperationType.Credited
+              ? 'Снятие'
+              : 'Внесение',
+          sum: cashOperation.sum,
+          operationClass: OperationClass.CashOperation,
+        };
     }
   }
 }

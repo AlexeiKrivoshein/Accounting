@@ -19,6 +19,8 @@ import { TextAreaComponent } from './textarea/textarea.component';
 import { DropdownButtonComponent } from './dropdown-button/dropdown-button.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ListComponent } from './list/list-component.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     TextAreaComponent,
     DropdownButtonComponent,
     ToolbarComponent,
+    ListComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +46,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatMenuModule,
+    MatListModule,
     ReactiveFormsModule,
   ],
   exports: [
@@ -55,6 +59,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     TextAreaComponent,
     DropdownButtonComponent,
     ToolbarComponent,
+    ListComponent
   ],
 })
 export class ControlsModule {}

@@ -1,1 +1,1 @@
-export type ColumnType = 'String' | 'Number' | 'Currency' | 'Date';
+export type ColumnType = 'String' | 'Number' | 'Currency' | 'Date' | 'Icon';

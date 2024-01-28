@@ -1,0 +1,39 @@
+$list-radius: 4px;
+
+.scroll {
+  min-height: 0px;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  border-top: solid 5px lightgray;
+  border-bottom: solid 5px lightgray;
+
+  .acc-list {
+    min-height: 0px;
+    height: auto;
+    max-height: 100%;
+    background-color: transparent;
+    border-bottom-left-radius: $list-radius;
+    border-bottom-right-radius: $list-radius;
+
+    .item {
+      cursor: pointer;
+      height: 3.8em;
+  
+      &:hover {
+        background-color: antiquewhite !important;
+      }
+  
+      .text {
+        color: black;
+        opacity: 0.8;
+      }
+    }
+
+    &__item-selected {
+      background-color: antiquewhite !important;
+      opacity: 1;
+    }
+  }
+
+}
