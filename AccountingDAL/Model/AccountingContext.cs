@@ -36,7 +36,7 @@ namespace AccountingDAL.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=KRIVOSHEIN;Database=Accounting_dev;User=sa;Password=sa;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Server=AKRIVOSHEIN;Database=Accounting;User=sa;Password=sa;TrustServerCertificate=true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\Accounting\\AccountingDAL\\AccountingDAL.csproj": {}
+    "C:\\Projects\\accounting\\AccountingDAL\\AccountingDAL.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\Accounting\\AccountingDAL\\AccountingDAL.csproj": {
+    "C:\\Projects\\accounting\\AccountingDAL\\AccountingDAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Accounting\\AccountingDAL\\AccountingDAL.csproj",
+        "projectUniqueName": "C:\\Projects\\accounting\\AccountingDAL\\AccountingDAL.csproj",
         "projectName": "AccountingDAL",
-        "projectPath": "C:\\Projects\\Accounting\\AccountingDAL\\AccountingDAL.csproj",
-        "packagesPath": "C:\\Users\\akriv\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Accounting\\AccountingDAL\\obj\\",
+        "projectPath": "C:\\Projects\\accounting\\AccountingDAL\\AccountingDAL.csproj",
+        "packagesPath": "C:\\Users\\a.krivoshein\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\accounting\\AccountingDAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\akriv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\a.krivoshein\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -36,7 +36,9 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "default"
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -48,6 +50,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.DynamicLinq": {
+              "target": "Package",
+              "version": "[8.3.8, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -80,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,5 +7,5 @@ export interface OperationView {
   to: string;
   description: string;
   sum: number;
-  operationClass: OperationClass;
+  operationClass: OperationClass | null;
 }

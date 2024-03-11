@@ -25,10 +25,20 @@ export class AutocompliteComponent {
   @Input()
   public displayFn: (data: any) => string = (data: any) => data;
 
+  @Input()
+  public valueFn: (data: any) => any = (data: any) => data;
+
   @Output()
   public optionSelected: EventEmitter<any> = new EventEmitter<any>();
 
   public onOptionSelected(event: any) {
-    this.optionSelected.emit(event);
+    let value = event?.option?.value;
+    value = this.valueFn(value);
+
+    if (this.control) {
+      this.control.setValue(value);
+    }
+
+    this.optionSelected.emit(value);
   }
 }

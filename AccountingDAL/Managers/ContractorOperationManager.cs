@@ -1,7 +1,12 @@
 ﻿using AccountingDAL.Exceptions;
 using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
 using AccountingDAL.Model.Operations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Reflection;
+using System.Linq.Dynamic.Core;
+using System.Text;
 
 namespace AccountingDAL.Managers
 {
@@ -11,18 +16,28 @@ namespace AccountingDAL.Managers
         {
         }
 
-        public async Task<IReadOnlyCollection<ContractorOperation>> GetAllAsync()
+        public async Task<IReadOnlyCollection<ContractorOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            List<ContractorOperation> result = await context.ContractorOperations
+            IIncludableQueryable<ContractorOperation, Contractor> select = context.ContractorOperations
                 .Include(item => item.Account)
                 .Include(item => item.Category)
-                .Include(item => item.Contractor)
-                .OrderBy(item => item.Date)
-                .ThenBy(item => item.Index)
-                .ToListAsync();
+                .Include(item => item.Contractor);
 
-            return result.ToList();
+            string where = FilterFormater.FilterToQuery(filters);
+            if (where.Length > 0)
+            {
+                return await select.Where(where)
+                    .OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await select.OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
         }
 
         public async Task<ContractorOperation> GetAsync(Guid id)

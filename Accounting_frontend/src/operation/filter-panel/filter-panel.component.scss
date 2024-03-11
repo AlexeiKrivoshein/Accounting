@@ -1,0 +1,10 @@
+.filter-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .filter-item {
+    padding-bottom: 15px;
+  }
+}

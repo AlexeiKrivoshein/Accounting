@@ -6,12 +6,12 @@ import { TransferOperationService } from 'src/operation/transfer-operation/servi
 import { forkJoin, map, Observable, of } from 'rxjs';
 import { Operation } from 'src/operation/model/operation';
 import { OperationClass } from 'src/operation/model/operation-class';
-import { ContractorOperation } from 'src/operation/contractor-operation/model/contractor-operation';
-import { TransferOperation } from 'src/operation/transfer-operation/model/transfer-operation';
-import { OperationView } from '../model/operation-view';
-import { OperationType } from 'src/operation/model/operation-type';
-import { CorrectionOperation } from 'src/operation/correction-operation/model/correction-operation';
-import { CashOperation } from 'src/operation/cash-operation/model/cash-operation';
+import { FilterItemValue } from 'src/operation/filter-panel/model/filter-item-value';
+import {
+  FILTER_PREFIX,
+  OPERATION_CLASS_FILTER,
+} from 'src/operation/filter-panel/const';
+import { filterToParams } from 'src/operation/filter-panel/func/filter-to-param';
 
 @Injectable()
 export class OperationsDataSource {
@@ -22,30 +22,69 @@ export class OperationsDataSource {
     private cashOperationService: CashOperationService
   ) {}
 
-  public load() {
-    const contractorOperations$ = this.contractorOperationService.get();
-    const transferOperations$ = this.transferOperationService.get();
-    const correctionOperations$ = this.correctionOperationService.get();
-    const cashOperations$ = this.cashOperationService.get();
-
-    return forkJoin([
-      contractorOperations$,
-      transferOperations$,
-      correctionOperations$,
-      cashOperations$,
-    ]).pipe(
-      map((data) => {
-        const operations: Operation[] = [];
-
-        data[0].forEach((item) => operations.push(item));
-        data[1].forEach((item) => operations.push(item));
-        data[2].forEach((item) => operations.push(item));
-        data[3].forEach((item) => operations.push(item));
-
-        return operations.sort(this.compareMovement);
-      }),
-      map((data) => data.map((item) => this.castToView(item)))
+  public load(filterItems: FilterItemValue[] = []) {
+    const index = filterItems.findIndex(
+      (f) => f.path === `${FILTER_PREFIX}${OPERATION_CLASS_FILTER}`
     );
+    if (index >= 0) {
+      const operationClass = +filterItems[index].value;
+      filterItems.splice(index, 1);
+      let load$: Observable<Operation[]>;
+
+      const filter = filterToParams(filterItems);
+
+      switch (operationClass) {
+        case OperationClass.ContractorOperation:
+          load$ = this.contractorOperationService.get('', filter);
+          break;
+        case OperationClass.TransferOperation:
+          load$ = this.transferOperationService.get('', filter);
+          break;
+        case OperationClass.CorrectionOperation:
+          load$ = this.correctionOperationService.get('', filter);
+          break;
+        case OperationClass.CashOperation:
+          load$ = this.cashOperationService.get('', filter);
+          break;
+        default:
+          return of([]);
+      }
+
+      return load$.pipe(
+        map((operations) => operations.sort(this.compareMovement))
+      );
+    } else {
+      const filter = filterToParams(filterItems);
+
+      const contractorOperations$ = this.contractorOperationService.get(
+        '',
+        filter
+      );
+      const transferOperations$ = this.transferOperationService.get('', filter);
+      const correctionOperations$ = this.correctionOperationService.get(
+        '',
+        filter
+      );
+      const cashOperations$ = this.cashOperationService.get('', filter);
+
+      return forkJoin([
+        contractorOperations$,
+        transferOperations$,
+        correctionOperations$,
+        cashOperations$,
+      ]).pipe(
+        map((data) => {
+          const operations: Operation[] = [];
+
+          data[0].forEach((item) => operations.push(item));
+          data[1].forEach((item) => operations.push(item));
+          data[2].forEach((item) => operations.push(item));
+          data[3].forEach((item) => operations.push(item));
+
+          return operations.sort(this.compareMovement);
+        })
+      );
+    }
   }
 
   public get(
@@ -122,82 +161,6 @@ export class OperationsDataSource {
       }
     } else {
       return 1;
-    }
-  }
-
-  private castToView(operation: Operation): OperationView {
-    let from = '';
-    let to = '';
-
-    switch (operation.operationClass) {
-      case OperationClass.ContractorOperation:
-        const contractorOperation = operation as ContractorOperation;
-
-        if (contractorOperation.operationType === OperationType.Credited) {
-          from = contractorOperation.account?.name ?? '';
-          to = contractorOperation.contractor?.name ?? '';
-        } else {
-          from = contractorOperation.contractor?.name ?? '';
-          to = contractorOperation.account?.name ?? '';
-        }
-
-        return {
-          id: contractorOperation.id,
-          icon: 'shopping_cart',
-          from,
-          to,
-          description: contractorOperation.category?.name ?? '',
-          sum: contractorOperation.sum,
-          operationClass: OperationClass.ContractorOperation,
-        };
-      case OperationClass.TransferOperation:
-        const transferOperation = operation as TransferOperation;
-        from = transferOperation.creditAccount?.name ?? '';
-        to = transferOperation.debitAccount?.name ?? '';
-
-        return {
-          id: transferOperation.id,
-          icon: 'swap_horiz',
-          from,
-          to,
-          description: '',
-          sum: transferOperation.sum,
-          operationClass: OperationClass.TransferOperation,
-        };
-      case OperationClass.CorrectionOperation:
-        const correctionOperation = operation as CorrectionOperation;
-        from = correctionOperation.account?.name ?? '';
-        to = '';
-
-        return {
-          id: correctionOperation.id,
-          icon: 'exposure',
-          from,
-          to,
-          description:
-            correctionOperation.operationType === OperationType.Credited
-              ? 'Расход'
-              : 'Приход',
-          sum: correctionOperation.sum,
-          operationClass: OperationClass.CorrectionOperation,
-        };
-      case OperationClass.CashOperation:
-        const cashOperation = operation as CashOperation;
-        from = cashOperation.account?.name ?? '';
-        to = '';
-
-        return {
-          id: cashOperation.id,
-          icon: 'payments',
-          from,
-          to,
-          description:
-            cashOperation.operationType === OperationType.Credited
-              ? 'Снятие'
-              : 'Внесение',
-          sum: cashOperation.sum,
-          operationClass: OperationClass.CashOperation,
-        };
     }
   }
 }

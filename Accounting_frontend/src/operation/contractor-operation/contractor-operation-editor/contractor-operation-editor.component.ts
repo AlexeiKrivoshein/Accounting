@@ -72,8 +72,8 @@ export class ContractorOperationEditorComponent implements OnInit {
     });
   }
 
-  public onContractorSelected(event: any) {
-    const category = event?.option?.value?.category;
+  public onContractorSelected(value: any) {
+    const category = value?.category;
     const categoryControl = this._formGroup.get('category');
 
     if (
@@ -85,7 +85,7 @@ export class ContractorOperationEditorComponent implements OnInit {
       categoryControl.setValue(category);
     }
 
-    const operationType = event?.option?.value?.operationType;
+    const operationType = value?.operationType;
     const operationTypeControl = this._formGroup.get('operationType');
 
     if (

@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AccountingDAL.Model.DTO.Operation;
 using AccountingDAL.Model.Operations;
+using Accounting.Constant;
 
 namespace Accounting.Controllers
 {
@@ -21,6 +22,8 @@ namespace Accounting.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Guid? id)
         {
+            Dictionary<string, string> filters = HttpContext.Request.Query.Where(x => x.Key.StartsWith(Constants.FILTER_PREFIX)).ToDictionary(x => x.Key.Substring(2), x => x.Value.ToString());
+
             if (id is not null && id != Guid.Empty)
             {
                 TransferOperation operation = await _transferManager.GetAsync(id.Value);
@@ -30,7 +33,7 @@ namespace Accounting.Controllers
             }
             else
             {
-                IReadOnlyCollection<TransferOperation> result = await _transferManager.GetAllAsync();
+                IReadOnlyCollection<TransferOperation> result = await _transferManager.GetAllAsync(filters);
                 List<TransferOperationDTO> dto = _mapper.Map<List<TransferOperationDTO>>(result);
 
                 return Ok(dto);

@@ -1,4 +1,5 @@
-﻿using AccountingDAL.Managers;
+﻿using Accounting.Constant;
+using AccountingDAL.Managers;
 using AccountingDAL.Model.DTO.Operations;
 using AccountingDAL.Model.Operations;
 using AutoMapper;
@@ -21,6 +22,8 @@ namespace Accounting.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Guid? id)
         {
+            Dictionary<string, string> filters = HttpContext.Request.Query.Where(x => x.Key.StartsWith(Constants.FILTER_PREFIX)).ToDictionary(x => x.Key.Substring(2), x => x.Value.ToString());
+
             if (id is not null && id != Guid.Empty)
             {
                 CashOperation cash = await _cashOperationManager.GetAsync(id.Value);
@@ -30,7 +33,7 @@ namespace Accounting.Controllers
             }
             else
             {
-                IReadOnlyCollection<CashOperation> result = await _cashOperationManager.GetAllAsync();
+                IReadOnlyCollection<CashOperation> result = await _cashOperationManager.GetAllAsync(filters);
                 List<CashOperationDTO> dto = _mapper.Map<List<CashOperationDTO>>(result);
 
                 return Ok(dto);

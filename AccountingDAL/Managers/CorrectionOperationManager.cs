@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using AccountingDAL.Exceptions;
 using AccountingDAL.Model.Operations;
+using Microsoft.EntityFrameworkCore.Query;
+using AccountingDAL.Model.Dictionaries;
+using System.Linq.Dynamic.Core;
 
 namespace AccountingDAL.Managers
 {
@@ -11,16 +14,26 @@ namespace AccountingDAL.Managers
         {
         }
 
-        public async Task<IReadOnlyCollection<CorrectionOperation>> GetAllAsync()
+        public async Task<IReadOnlyCollection<CorrectionOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            List<CorrectionOperation> result = await context.CorrectionOperations
-                .Include(item => item.Account)
-                .OrderBy(item => item.Date)
-                .ThenBy(item => item.Index)
-                .ToListAsync();
+            IIncludableQueryable<CorrectionOperation, Account> select = context.CorrectionOperations
+                .Include(item => item.Account);
 
-            return result.ToList();
+            string where = FilterFormater.FilterToQuery(filters);
+            if (where.Length > 0)
+            {
+                return await select.Where(where)
+                    .OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await select.OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
         }
 
         public async Task<CorrectionOperation> GetAsync(Guid id)

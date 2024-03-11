@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AccountingDAL.Model.DTO.Operation;
 using AccountingDAL.Model.Operations;
+using Accounting.Constant;
 
 namespace Accounting.Controllers
 {
@@ -21,6 +22,8 @@ namespace Accounting.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Guid? id)
         {
+            Dictionary<string, string> filters = HttpContext.Request.Query.Where(x => x.Key.StartsWith(Constants.FILTER_PREFIX)).ToDictionary(x => x.Key.Substring(2), x => x.Value.ToString());
+
             if (id is not null && id != Guid.Empty)
             {
                 CorrectionOperation correction = await _correctionManager.GetAsync(id.Value);
@@ -30,7 +33,7 @@ namespace Accounting.Controllers
             }
             else
             {
-                IReadOnlyCollection<CorrectionOperation> result = await _correctionManager.GetAllAsync();
+                IReadOnlyCollection<CorrectionOperation> result = await _correctionManager.GetAllAsync(filters);
                 List<CorrectionOperationDTO> dto = _mapper.Map<List<CorrectionOperationDTO>>(result);
 
                 return Ok(dto);

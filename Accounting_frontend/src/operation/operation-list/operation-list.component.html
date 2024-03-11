@@ -1,58 +1,87 @@
 <div class="d-flex flex-column h-100">
-  <div class="button-container mb-2">
-    <app-button text="Добавить" (buttonClick)="onCreate()"></app-button>
+  <div class="d-flex flex-row min-height-0">
+    <div class="d-flex flex-column flex-1">
+      <div class="button-container mb-2">
+        <app-button text="Добавить" (buttonClick)="onCreate()"></app-button>
 
-    <app-button
-      text="Изменить"
-      [enabled]="!!selected"
-      (buttonClick)="onModify()"
-    ></app-button>
+        <app-button
+          text="Изменить"
+          [enabled]="!!selected"
+          (buttonClick)="onModify()"
+        ></app-button>
 
-    <app-button
-      text="Удалить"
-      [enabled]="!!selected"
-      (buttonClick)="onDelete()"
-    ></app-button>
-  </div>
+        <app-button
+          text="Удалить"
+          [enabled]="!!selected"
+          (buttonClick)="onDelete()"
+        ></app-button>
 
-  <app-list-component
-    class="min-height-0"
-    [(selected)]="selected"
-    [items]="items$ | async"
-    [template]="item"
-    (doubleClick)="onModify()"
-  ></app-list-component>
+        <app-button
+          text="Фильтр"
+          (buttonClick)="showFilter = !showFilter"
+        ></app-button>
+      </div>
 
-  <ng-template #item let-data>
-    <div class="text operation-item">
-      <mat-icon
-        class="class_icon"
-        aria-hidden="true"
-        [fontIcon]="data.icon"
-      ></mat-icon>
+      <app-list-component
+        class="min-height-0"
+        [(selected)]="selected"
+        [items]="items$ | async"
+        [template]="item"
+        (doubleClick)="onModify()"
+        (selectedChange)="onSelectedChange($event)"
+      ></app-list-component>
 
-      <div class="d-flex flex-column flex-1">
-        <div class="d-flex flex-row align-items-center justify-content-between">
-          <div class="d-flex flex-1 align-items-center justify-content-start">
-            <span class="credit">{{ data.from ?? "" }}</span>
+      <ng-template #item let-data>
+        <ng-container *ngIf="data.operationClass === null; else operationTmp">
+          <div class="group">{{ data.from }}</div>
+        </ng-container>
 
+        <ng-template #operationTmp>
+          <div class="text operation-item">
             <mat-icon
-              *ngIf="data.to"
-              class="arrow"
+              class="class_icon"
               aria-hidden="true"
-              fontIcon="arrow_right_alt"
+              [fontIcon]="data.icon"
             ></mat-icon>
 
-            <span class="debit">{{ data.to ?? "" }}</span>
+            <div class="d-flex flex-column flex-1">
+              <div
+                class="d-flex flex-row align-items-center justify-content-between"
+              >
+                <div
+                  class="d-flex flex-1 align-items-center justify-content-start"
+                >
+                  <span class="credit">{{ data.from ?? "" }}</span>
+
+                  <mat-icon
+                    *ngIf="data.to"
+                    class="arrow"
+                    aria-hidden="true"
+                    fontIcon="arrow_right_alt"
+                  ></mat-icon>
+
+                  <span class="debit">{{ data.to ?? "" }}</span>
+                </div>
+
+                <span class="sum"
+                  >{{ data.sum ?? 0 | number : "0.2-2" }} ₽</span
+                >
+              </div>
+
+              <span>{{ data.description ?? "" }}</span>
+            </div>
           </div>
-
-          <span class="sum">{{ data.sum ?? 0 | number : "0.2-2" }} ₽</span>
-        </div>
-
-        <span>{{ data.description ?? "" }}</span>
-      </div>
+        </ng-template>
+      </ng-template>
     </div>
-  </ng-template>
+
+    <app-filter-panel
+      *ngIf="showFilter"
+      class="filter"
+      [items]="filterItems"
+      (apply)="onFilterApply($event)"
+    ></app-filter-panel>
+  </div>
 
   <div *ngIf="balances?.length" class="balances">
     <div *ngFor="let balance of balances" class="balance">

@@ -1,0 +1,40 @@
+<div class="filter-panel">
+  <div class="button-container mb-2">
+    <app-button text="Сбросить" (buttonClick)="onClear()"></app-button>
+
+    <app-button text="Применить" (buttonClick)="onApply()"></app-button>
+  </div>
+
+  <ng-container *ngFor="let item of items">
+    <ng-container [ngSwitch]="item.type">
+      <div class="filter-item">
+        <app-label class="acc-header-3" [text]="item.text"></app-label>
+
+        <app-input
+          *ngSwitchCase="'string'"
+          type="text"
+          [control]="getControl(item.path)"
+        ></app-input>
+
+        <app-input
+          *ngSwitchCase="'number'"
+          type="number"
+          [control]="getControl(item.path)"
+        ></app-input>
+
+        <app-date-picker
+          *ngSwitchCase="'date'"
+          [control]="getControl(item.path)"
+        ></app-date-picker>
+
+        <app-autocomplete
+          *ngSwitchCase="'autocomplete'"
+          [displayFn]="autocompleteDisplayFn(item)"
+          [valueFn]="autocompleteValueFn(item)"
+          [control]="getControl(item.path)"
+          [items]="(autocompleteItems$(item) | async) ?? []"
+        ></app-autocomplete>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

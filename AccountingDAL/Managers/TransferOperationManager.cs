@@ -1,7 +1,10 @@
 ﻿using AccountingDAL.Exceptions;
 using AccountingDAL.Model;
+using AccountingDAL.Model.Dictionaries;
 using AccountingDAL.Model.Operations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Dynamic.Core;
 
 namespace AccountingDAL.Managers
 {
@@ -11,17 +14,27 @@ namespace AccountingDAL.Managers
         {
         }
 
-        public async Task<IReadOnlyCollection<TransferOperation>> GetAllAsync()
+        public async Task<IReadOnlyCollection<TransferOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            List<TransferOperation> result = await context.TransferOperations
+            IIncludableQueryable<TransferOperation, Account> select = context.TransferOperations
                 .Include(item => item.CreditAccount)
-                .Include(item => item.DebitAccount)
-                .OrderBy(item => item.Date)
-                .ThenBy(item => item.Index)
-                .ToListAsync();
+                .Include(item => item.DebitAccount);
 
-            return result.ToList();
+            string where = FilterFormater.FilterToQuery(filters);
+            if (where.Length > 0)
+            {
+                return await select.Where(where)
+                    .OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await select.OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
         }
 
         public async Task<TransferOperation> GetAsync(Guid id)

@@ -10,11 +10,13 @@ import { ContractorOperationModule } from 'src/operation/contractor-operation/co
 import { OperationEditorDialogComponent } from './operation-editor-dialog/operation-editor-dialog.component';
 import { OperationListComponent } from './operation-list/operation-list.component';
 import { CashOperationModule } from './cash-operation/cash-operation.module';
+import { FilterPanelComponent } from './filter-panel/filter-panel.component';
 
 @NgModule({
   declarations: [
     OperationListComponent,
     OperationEditorDialogComponent,
+    FilterPanelComponent,
   ],
   imports: [
     CommonModule,

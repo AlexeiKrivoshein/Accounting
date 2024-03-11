@@ -2,6 +2,9 @@
 using AccountingDAL.Model;
 using Microsoft.EntityFrameworkCore;
 using AccountingDAL.Exceptions;
+using Microsoft.EntityFrameworkCore.Query;
+using AccountingDAL.Model.Dictionaries;
+using System.Linq.Dynamic.Core;
 
 namespace AccountingDAL.Managers
 {
@@ -11,14 +14,26 @@ namespace AccountingDAL.Managers
         {
         }
 
-        public async Task<IReadOnlyCollection<CashOperation>> GetAllAsync()
+        public async Task<IReadOnlyCollection<CashOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            List<CashOperation> result = await context.CashOperations
-                .Include(x => x.Account)
-                .ToListAsync();
+            IIncludableQueryable<CashOperation, Account> select = context.CashOperations
+                .Include(x => x.Account);
 
-            return result.ToList();
+            string where = FilterFormater.FilterToQuery(filters);
+            if (where.Length > 0)
+            {
+                return await select.Where(where)
+                    .OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await select.OrderBy(item => item.Date)
+                    .ThenBy(item => item.Index)
+                    .ToListAsync();
+            }
         }
 
         public async Task<CashOperation> GetAsync(Guid id)
