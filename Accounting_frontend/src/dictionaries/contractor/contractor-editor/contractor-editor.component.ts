@@ -1,7 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Category } from 'src/dictionaries/category/model/category';
 import { CategoryService } from 'src/dictionaries/category/services/category.service';
 import { NotifyService } from 'src/notify/service/notify-service';
@@ -14,7 +14,7 @@ import { ContractorService } from '../services/contractor.service';
   templateUrl: './contractor-editor.component.html',
   styleUrls: ['./contractor-editor.component.scss'],
 })
-export class ContractorEditorComponent {
+export class ContractorEditorComponent implements OnInit {
   public operationTypes = Object.values(OperationType).filter(
     (value) => !isNaN(Number(value))
   );
@@ -32,10 +32,6 @@ export class ContractorEditorComponent {
   public getControl(fieldName: string): FormControl<any> {
     const control = this.formGroup.get(fieldName);
     return control as FormControl<any>;
-  }
-
-  public get items$(): Observable<Category[]> {
-    return this.categoryService.get();
   }
 
   constructor(

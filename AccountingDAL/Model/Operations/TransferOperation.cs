@@ -9,25 +9,47 @@ namespace AccountingDAL.Model.Operations
     public class TransferOperation : Operation
     {
         /// <summary>
-        /// Идентификатор счета кредита
+        /// Идентификатор депозитного счета кредита
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid CreditAccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DepositAccount))]
+        public Guid? CreditDepositAccountID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет кредит
+        /// Депозитный счет кредит
         /// </summary>
-        public Account CreditAccount { get; set; }
+        public DepositAccount? CreditDepositAccount { get; set; }
 
         /// <summary>
-        /// Идентификатор счета дебета
+        /// Идентификатор депозитного счета дебета
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid DebitAccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DepositAccount))]
+        public Guid? DebitDepositAccountID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет дебета
+        /// Депозитный счет дебета
         /// </summary>
-        public Account DebitAccount { get; set; }
+        public DepositAccount? DebitDepositAccount { get; set; }
+
+        /// <summary>
+        /// Идентификатор карты кредита
+        /// </summary>
+        [ForeignKey(nameof(Card))]
+        public Guid? CreditCardID { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Карта кредита
+        /// </summary>
+        public Card? CreditCard { get; set; }
+
+        /// <summary>
+        /// Идентификатор карты дебета
+        /// </summary>
+        [ForeignKey(nameof(Card))]
+        public Guid? DebitCardID { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Карта дебета
+        /// </summary>
+        public Card? DebitCard { get; set; }
     }
 }

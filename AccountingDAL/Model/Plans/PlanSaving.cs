@@ -11,13 +11,13 @@ namespace AccountingDAL.Model.Plans
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid AccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DepositAccount))]
+        public Guid DepositAccountID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Счет
         /// </summary>
-        public Account Account { get; set; }
+        public DepositAccount DepositAccount { get; set; }
 
         /// <summary>
         /// Сумма

@@ -17,8 +17,8 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<CashOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            IIncludableQueryable<CashOperation, Account> select = context.CashOperations
-                .Include(x => x.Account);
+            IIncludableQueryable<CashOperation, AccountBase> select = context.CashOperations
+                .Include(x => x.Card);
 
             string where = FilterFormater.FilterToQuery(filters);
             if (where.Length > 0)
@@ -40,7 +40,7 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             CashOperation? stored = await context.CashOperations
-                .Include(item => item.Account)
+                .Include(item => item.Card)
                 .FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)

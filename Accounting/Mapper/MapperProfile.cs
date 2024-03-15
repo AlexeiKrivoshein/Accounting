@@ -18,7 +18,8 @@ namespace Accounting.Mapper
             AllowNullCollections = true;
             // справочники
             CreateMap<CategoryDTO, Category>().ReverseMap();
-            CreateMap<AccountDTO, Account>().ReverseMap();
+            CreateMap<CardDTO, Card>().ReverseMap();
+            CreateMap<DepositAccountDTO, DepositAccount>().ReverseMap();
             CreateMap<ContractorDTO, Contractor>().ReverseMap();
             // операции
             CreateMap<ContractorOperationDTO, ContractorOperation>().ReverseMap();

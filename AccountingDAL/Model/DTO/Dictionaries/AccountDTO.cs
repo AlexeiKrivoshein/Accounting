@@ -9,7 +9,7 @@ namespace AccountingDAL.Model.DTO.Dictionaries
     /// <summary>
     /// Счет
     /// </summary>
-    public class AccountDTO : DictionaryElementBaseDTO
+    public abstract class AccountDTO : DictionaryElementBaseDTO
     {
         /// <summary>
         /// Наименование

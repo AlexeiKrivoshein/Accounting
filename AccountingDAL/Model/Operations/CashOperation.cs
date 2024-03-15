@@ -11,13 +11,13 @@ namespace AccountingDAL.Model.Operations
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid AccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(Card))]
+        public Guid CardID { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Счет
         /// </summary>
-        public Account Account { get; set; }
+        public Card Card { get; set; }
 
         /// <summary>
         /// Тип операции дебет/кредит

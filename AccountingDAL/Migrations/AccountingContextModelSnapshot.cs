@@ -45,7 +45,7 @@ namespace AccountingDAL.Migrations
                     b.ToTable("Balances");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Account", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.AccountBase", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,6 +55,11 @@ namespace AccountingDAL.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -68,7 +73,11 @@ namespace AccountingDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("AccountBase");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AccountBase");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Category", b =>
@@ -243,13 +252,19 @@ namespace AccountingDAL.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CreditAccountID")
+                    b.Property<Guid?>("CreditCardID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreditDepositAccountID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DebitAccountID")
+                    b.Property<Guid?>("DebitCardID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DebitDepositAccountID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -264,9 +279,13 @@ namespace AccountingDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreditAccountID");
+                    b.HasIndex("CreditCardID");
 
-                    b.HasIndex("DebitAccountID");
+                    b.HasIndex("CreditDepositAccountID");
+
+                    b.HasIndex("DebitCardID");
+
+                    b.HasIndex("DebitDepositAccountID");
 
                     b.ToTable("TransferOperations");
                 });
@@ -355,9 +374,28 @@ namespace AccountingDAL.Migrations
                     b.ToTable("PlanSpendings");
                 });
 
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Card", b =>
+                {
+                    b.HasBaseType("AccountingDAL.Model.Dictionaries.AccountBase");
+
+                    b.HasDiscriminator().HasValue("Card");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.DepositAccount", b =>
+                {
+                    b.HasBaseType("AccountingDAL.Model.Dictionaries.AccountBase");
+
+                    b.Property<Guid?>("CategoryID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasDiscriminator().HasValue("DepositAccount");
+                });
+
             modelBuilder.Entity("AccountingDAL.Model.Balance", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.AccountBase", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -379,7 +417,7 @@ namespace AccountingDAL.Migrations
 
             modelBuilder.Entity("AccountingDAL.Model.Operations.CashOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.AccountBase", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -390,7 +428,7 @@ namespace AccountingDAL.Migrations
 
             modelBuilder.Entity("AccountingDAL.Model.Operations.ContractorOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.AccountBase", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -417,7 +455,7 @@ namespace AccountingDAL.Migrations
 
             modelBuilder.Entity("AccountingDAL.Model.Operations.CorrectionOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.AccountBase", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,26 +466,36 @@ namespace AccountingDAL.Migrations
 
             modelBuilder.Entity("AccountingDAL.Model.Operations.TransferOperation", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "CreditAccount")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Card", "CreditCard")
                         .WithMany("CreditTransfers")
-                        .HasForeignKey("CreditAccountID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CreditCardID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "DebitAccount")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.DepositAccount", "CreditDepositAccount")
+                        .WithMany("CreditTransfers")
+                        .HasForeignKey("CreditDepositAccountID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Card", "DebitCard")
                         .WithMany("DeditTransfers")
-                        .HasForeignKey("DebitAccountID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DebitCardID");
 
-                    b.Navigation("CreditAccount");
+                    b.HasOne("AccountingDAL.Model.Dictionaries.DepositAccount", "DebitDepositAccount")
+                        .WithMany("DeditTransfers")
+                        .HasForeignKey("DebitDepositAccountID");
 
-                    b.Navigation("DebitAccount");
+                    b.Navigation("CreditCard");
+
+                    b.Navigation("CreditDepositAccount");
+
+                    b.Navigation("DebitCard");
+
+                    b.Navigation("DebitDepositAccount");
                 });
 
             modelBuilder.Entity("AccountingDAL.Model.Plans.PlanSaving", b =>
                 {
-                    b.HasOne("AccountingDAL.Model.Dictionaries.Account", "Account")
+                    b.HasOne("AccountingDAL.Model.Dictionaries.AccountBase", "Account")
                         .WithMany()
                         .HasForeignKey("AccountID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,16 +531,20 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Plan");
                 });
 
-            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Account", b =>
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.DepositAccount", b =>
                 {
-                    b.Navigation("CreditTransfers");
+                    b.HasOne("AccountingDAL.Model.Dictionaries.Category", "Category")
+                        .WithMany("DepositAccounts")
+                        .HasForeignKey("CategoryID");
 
-                    b.Navigation("DeditTransfers");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Category", b =>
                 {
                     b.Navigation("Contractors");
+
+                    b.Navigation("DepositAccounts");
 
                     b.Navigation("Operations");
                 });
@@ -502,6 +554,20 @@ namespace AccountingDAL.Migrations
                     b.Navigation("Savings");
 
                     b.Navigation("Spendings");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.Card", b =>
+                {
+                    b.Navigation("CreditTransfers");
+
+                    b.Navigation("DeditTransfers");
+                });
+
+            modelBuilder.Entity("AccountingDAL.Model.Dictionaries.DepositAccount", b =>
+                {
+                    b.Navigation("CreditTransfers");
+
+                    b.Navigation("DeditTransfers");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,5 +21,10 @@ namespace AccountingDAL.Model.Dictionaries
         /// Коллекция контрагентов находящихся в данной категории
         /// </summary>
         public ICollection<Contractor> Contractors { get; set; }
+
+        /// <summary>
+        /// Коллекция депоситных счетов находящихся в данной категории
+        /// </summary>
+        public ICollection<DepositAccount> DepositAccounts { get; set; }
     }
 }

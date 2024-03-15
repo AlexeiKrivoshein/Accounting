@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddSingleton<CategoryManager>()
-    .AddSingleton<AccountManager>()
+    .AddSingleton<CardManager>()
+    .AddSingleton<DepositAccountManager>()
     .AddSingleton<ContractorManager>()
     .AddSingleton<ContractorOperationManager>()
     .AddSingleton<TransferOperationManager>()
@@ -55,7 +56,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// устанавливаем сопоставление маршрутов с контроллерами
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

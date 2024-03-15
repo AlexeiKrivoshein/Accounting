@@ -30,25 +30,29 @@ namespace AccountingDAL.Managers
         /// <param name="date">Дата баланса(всегда конец дня)</param>
         public async Task CalculateAsync(DateTime date)
         {
-            List<Account>? accounts = null;
+            List<AccountBase> accounts = new List<AccountBase>();
             List<Balance>? recalculate = null;
             using (var context = new AccountingContext())
             {
-                accounts = await context.Accounts.ToListAsync();
+                accounts.AddRange(await context.Cards.ToListAsync());
+                accounts.AddRange(await context.DepositAccounts.ToListAsync());
 
                 // балансы нуждающиеся в пересчете, после составления текущих
-                recalculate = await context.Balances.Where(balance => balance.Date > new DateTime(date.Year, date.Month, date.Day, 23, 59, 59)).ToListAsync();
+                recalculate = await context.Balances
+                    .Include(balance => balance.DepositAccount)
+                    .Include(balance => balance.Card)
+                    .Where(balance => balance.Date > new DateTime(date.Year, date.Month, date.Day, 23, 59, 59)).ToListAsync();
             }
 
-            if (accounts is null || !accounts.Any())
+            if (!accounts.Any())
             {
                 return;
             }
 
             // пересчет текущего баланса
-            foreach (Account account in accounts)
+            foreach (AccountBase account in accounts)
             {
-                await CalculateAndStoreBalanceAsync(date, account.Id);
+                await CalculateAndStoreBalanceAsync(date, account);
             }
 
             if (recalculate is null || !recalculate.Any())
@@ -56,10 +60,27 @@ namespace AccountingDAL.Managers
                 return;
             }
 
-            // пересчет балансов позже даты текущего
+            // пересчет балансов позже даты текущего баланса
             foreach (var balance in recalculate)
             {
-                await CalculateAndStoreBalanceAsync(balance.Date, balance.AccountID);
+                AccountBase? account = null;
+
+                if (balance.Card is not null)
+                {
+                    account = balance.Card;
+                }
+
+                if (balance.DepositAccount is not null)
+                {
+                    account = balance.DepositAccount;
+                }
+
+                if (account is null)
+                {
+                    return;
+                }
+
+                await CalculateAndStoreBalanceAsync(balance.Date, account);
             }
         }
 
@@ -94,7 +115,9 @@ namespace AccountingDAL.Managers
             }
 
             List<Balance> balances = new List<Balance>();
-            foreach (Account account in await context.Accounts.ToListAsync())
+            List<AccountBase> accounts = [.. await context.Cards.ToListAsync(), .. await context.DepositAccounts.ToListAsync()];
+
+            foreach (AccountBase account in accounts)
             {
                 Balance balance = await CalculateBalanceAsync(context, (operation.Date, operation.Index), account);
                 balances.Add(balance);
@@ -113,7 +136,13 @@ namespace AccountingDAL.Managers
         /// <exception cref="Exception"></exception>
         private async Task<Balance> CalculateBalanceAsync(AccountingContext context, (DateTime Date, int Index) moment, Guid accountId)
         {
-            Account? account = await context.Accounts.FirstOrDefaultAsync(x => x.Id == accountId);
+            AccountBase? account = await context.Cards.FirstOrDefaultAsync(x => x.Id == accountId);
+            if (account is null)
+            {
+                account = await context.DepositAccounts.FirstOrDefaultAsync(x => x.Id == accountId);
+            }
+
+            List<AccountBase> accounts = [.. await context.Cards.ToListAsync(), .. await context.DepositAccounts.ToListAsync()];
 
             if (account is null)
             {
@@ -130,14 +159,14 @@ namespace AccountingDAL.Managers
         /// <param name="moment">Момент(дата и индекс операции)</param>
         /// <param name="account">Счет</param>
         /// <returns></returns>
-        private async Task<Balance> CalculateBalanceAsync(AccountingContext context, (DateTime Date, int Index) moment, Account account)
+        private async Task<Balance> CalculateBalanceAsync(AccountingContext context, (DateTime Date, int Index) moment, AccountBase account)
         {
             int index = moment.Index < 0 ? int.MaxValue : moment.Index;
             DateTime date = moment.Date;
 
             // последний баланс для счета и даты операции
             Balance? balance = await context.Balances.
-                Where(x => x.Date < new DateTime(date.Year, date.Month, date.Day, 0, 0, 0) && x.AccountID == account.Id).
+                Where(x => x.Date < new DateTime(date.Year, date.Month, date.Day, 0, 0, 0) && (x.CardId == account.Id || x.DepositAccountId == account.Id)).
                 OrderByDescending(x => x.Date).
                 FirstOrDefaultAsync();
 
@@ -153,22 +182,22 @@ namespace AccountingDAL.Managers
             {
                 // все предыдущие операции с контрагентами по счету
                 contractorOperations = await context.ContractorOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие внутренние переводы по счету
                 transfersOperations = await context.TransferOperations
-                    .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => (x.CreditDepositAccountID == account.Id || x.DebitDepositAccountID == account.Id) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие корректировки по счету
                 correctionOperations = await context.CorrectionOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // все предыдущие операции с наличными по счету
                 cashOperations = await context.CashOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
             else
@@ -178,22 +207,22 @@ namespace AccountingDAL.Managers
 
                 // операции с контрагентом от последнего баланса и до движения
                 contractorOperations = await context.ContractorOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // переводы от последнего баланса и до движения
                 transfersOperations = await context.TransferOperations
-                    .Where(x => (x.CreditAccountID == account.Id || x.DebitAccountID == account.Id) && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => (x.CreditDepositAccountID == account.Id || x.DebitDepositAccountID == account.Id) && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // корректировки от последнего баланса и до движения
                 correctionOperations = await context.CorrectionOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
 
                 // операцции с наличными от последнего баланса и до движения
                 cashOperations = await context.CashOperations
-                    .Where(x => x.AccountID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
+                    .Where(x => x.CardID == account.Id && (x.Date > balance.Date) && (x.Date < date || (x.Date == date && x.Index <= index)))
                     .ToListAsync();
             }
 
@@ -221,7 +250,7 @@ namespace AccountingDAL.Managers
                 }
                 else if (operation is TransferOperation transferOperation)
                 {
-                    if (transferOperation.CreditAccountID == account.Id)
+                    if (transferOperation.CreditDepositAccountID == account.Id)
                     {
                         sum -= operation.Sum;
                     }
@@ -257,8 +286,8 @@ namespace AccountingDAL.Managers
             balance = new Balance
             {
                 Sum = sum,
-                AccountID = account.Id,
-                Account = account,
+                DepositAccountId = account is DepositAccount ? account.Id : null,
+                CardId = account is Card ? account.Id : null,
                 Date = date
             };
 
@@ -276,7 +305,7 @@ namespace AccountingDAL.Managers
             CorrectionOperation? correctionOperation = null;
             CashOperation? cashOperation = null;
 
-            List<Account> accounts = new List<Account>();
+            List<AccountBase> accounts = new List<AccountBase>();
 
             using (var context = new AccountingContext())
             {
@@ -296,7 +325,7 @@ namespace AccountingDAL.Managers
                     .OrderBy(x => x.Date)
                     .FirstOrDefaultAsync();
 
-                accounts = await context.Accounts.ToListAsync();
+                accounts = [.. await context.Cards.ToListAsync(), .. await context.DepositAccounts.ToListAsync()];
             }
 
             if ((contractorOperation is null && transferOperation is null && correctionOperation is null && cashOperation is null) || !accounts.Any())
@@ -316,9 +345,9 @@ namespace AccountingDAL.Managers
             DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             while (current < end)
             {
-                foreach (Account account in accounts)
+                foreach (AccountBase account in accounts)
                 {
-                    await CalculateAndStoreBalanceAsync(current, account.Id);
+                    await CalculateAndStoreBalanceAsync(current, account);
                 }
 
                 current = current.AddDays(1);
@@ -331,8 +360,10 @@ namespace AccountingDAL.Managers
         /// <param name="date">Дата расчета</param>
         /// <param name="accountId">Счет</param>
         /// <returns></returns>
-        private async Task CalculateAndStoreBalanceAsync(DateTime date, Guid accountId)
+        private async Task CalculateAndStoreBalanceAsync(DateTime date, AccountBase account)
         {
+            Guid accountId = account.Id;
+
             using var context = new AccountingContext();
 
             // пересчет баланса на дату date для счета account
@@ -340,7 +371,7 @@ namespace AccountingDAL.Managers
 
             // перезаписать существующий баланс
             Balance? exists = await context.Balances.
-                FirstOrDefaultAsync(x => x.Date == new DateTime(date.Year, date.Month, date.Day, 23, 59, 59) && x.AccountID == accountId);
+                FirstOrDefaultAsync(x => x.Date == new DateTime(date.Year, date.Month, date.Day, 23, 59, 59) && (x.DepositAccountId == accountId || x.CardId == accountId));
 
             if (exists is not null)
             {
@@ -366,9 +397,11 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             List<Balance> result = await context.Balances
-                .Include(item => item.Account)
+                .Include(item => item.Card)
+                .Include(item => item.DepositAccount)
                 .OrderBy(item => item.Date)
-                .ThenBy(item => item.Account.Name)
+                .ThenBy(item => item.Card.Name)
+                .ThenBy(item => item.DepositAccount.Name)
                 .ToListAsync();
 
             return result.ToList();

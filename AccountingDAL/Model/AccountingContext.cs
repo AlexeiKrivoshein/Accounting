@@ -7,7 +7,9 @@ namespace AccountingDAL.Model
 {
     public class AccountingContext : DbContext
     {
-        public DbSet<Account> Accounts => Set<Account>();
+        public DbSet<Card> Cards => Set<Card>();
+
+        public DbSet<DepositAccount> DepositAccounts => Set<DepositAccount>();
 
         public DbSet<Category> Categories => Set<Category>();
 
@@ -36,7 +38,7 @@ namespace AccountingDAL.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=AKRIVOSHEIN;Database=Accounting;User=sa;Password=sa;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Server=AKRIVOSHEIN;Database=Accounting_new;User=sa;Password=sa;TrustServerCertificate=true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,15 +56,26 @@ namespace AccountingDAL.Model
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TransferOperation>()
-                        .HasOne(m => m.CreditAccount)
+                        .HasOne(m => m.CreditDepositAccount)
                         .WithMany(t => t.CreditTransfers)
-                        .HasForeignKey(m => m.CreditAccountID)
+                        .HasForeignKey(m => m.CreditDepositAccountID)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TransferOperation>()
-                        .HasOne(m => m.DebitAccount)
+                        .HasOne(m => m.DebitDepositAccount)
                         .WithMany(t => t.DeditTransfers)
-                        .HasForeignKey(m => m.DebitAccountID);
+                        .HasForeignKey(m => m.DebitDepositAccountID);
+
+            modelBuilder.Entity<TransferOperation>()
+                        .HasOne(m => m.CreditCard)
+                        .WithMany(t => t.CreditTransfers)
+                        .HasForeignKey(m => m.CreditCardID)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TransferOperation>()
+                        .HasOne(m => m.DebitCard)
+                        .WithMany(t => t.DeditTransfers)
+                        .HasForeignKey(m => m.DebitCardID);
 
             modelBuilder.Entity<PlanSaving>()
                         .HasOne(m => m.Plan)

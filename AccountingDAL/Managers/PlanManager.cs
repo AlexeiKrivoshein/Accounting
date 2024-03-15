@@ -25,7 +25,7 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             Plan? stored = await context.Plans.
-                Include(x => x.Savings).ThenInclude(x => x.Account).
+                Include(x => x.Savings).ThenInclude(x => x.DepositAccount).
                 Include(x => x.Spendings).ThenInclude(x => x.Category).
                 FirstOrDefaultAsync(item => item.Id == id);
 

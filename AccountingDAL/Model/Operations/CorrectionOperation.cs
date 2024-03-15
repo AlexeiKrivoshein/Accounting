@@ -9,15 +9,26 @@ namespace AccountingDAL.Model.Operations
     public class CorrectionOperation : Operation
     {
         /// <summary>
-        /// Идентификатор счета
+        /// Идентификатор депозитного счета
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid AccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DepositAccount))]
+        public Guid? DepositAccountID { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет
+        /// Депозитный счет
         /// </summary>
-        public Account Account { get; set; }
+        public DepositAccount? DepositAccount { get; set; }
+
+        /// <summary>
+        /// Идентификатор дебетовой карты
+        /// </summary>
+        [ForeignKey(nameof(Card))]
+        public Guid? CardID { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Дебетовая карта
+        /// </summary>
+        public Card? Card { get; set; }
 
         /// <summary>
         /// Тип операции дебет/кредит

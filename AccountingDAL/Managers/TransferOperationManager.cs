@@ -17,9 +17,11 @@ namespace AccountingDAL.Managers
         public async Task<IReadOnlyCollection<TransferOperation>> GetAllAsync(Dictionary<string, string> filters)
         {
             using var context = new AccountingContext();
-            IIncludableQueryable<TransferOperation, Account> select = context.TransferOperations
-                .Include(item => item.CreditAccount)
-                .Include(item => item.DebitAccount);
+            IIncludableQueryable<TransferOperation, AccountBase?> select = context.TransferOperations
+                .Include(item => item.CreditDepositAccount as AccountBase)
+                .Include(item => item.CreditCard as AccountBase)
+                .Include(item => item.DebitDepositAccount as AccountBase)
+                .Include(item => item.DebitCard as AccountBase);
 
             string where = FilterFormater.FilterToQuery(filters);
             if (where.Length > 0)
@@ -41,8 +43,10 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             TransferOperation? stored = await context.TransferOperations
-                .Include(item => item.CreditAccount)
-                .Include(item => item.DebitAccount)
+                .Include(item => item.CreditDepositAccount)
+                .Include(item => item.CreditCard)
+                .Include(item => item.DebitDepositAccount)
+                .Include(item => item.DebitCard)
                 .FirstOrDefaultAsync(item => item.Id == id);
 
             if (stored is null)

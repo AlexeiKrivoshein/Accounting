@@ -19,14 +19,25 @@ namespace AccountingDAL.Model
         public float Sum { get; set; } = 0F;
 
         /// <summary>
-        /// Идентификатор счета
+        /// Идентификатор депозитного счета
         /// </summary>
-        [ForeignKey(nameof(Account))]
-        public Guid AccountID { get; set; } = Guid.Empty;
+        [ForeignKey(nameof(DepositAccount))]
+        public Guid? DepositAccountId { get; set; } = Guid.Empty;
 
         /// <summary>
-        /// Счет кредит
+        /// Депозитный счет
         /// </summary>
-        public Account Account { get; set; }
+        public DepositAccount? DepositAccount { get; set; }
+
+        /// <summary>
+        /// Идентификатор дебетовой карты
+        /// </summary>
+        [ForeignKey(nameof(Card))]
+        public Guid? CardId { get; set; } = Guid.Empty;
+
+        /// <summary>
+        /// Дебетовая карта
+        /// </summary>
+        public Card? Card { get; set; }
     }
 }

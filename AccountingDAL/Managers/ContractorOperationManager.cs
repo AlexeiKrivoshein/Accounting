@@ -20,7 +20,7 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             IIncludableQueryable<ContractorOperation, Contractor> select = context.ContractorOperations
-                .Include(item => item.Account)
+                .Include(item => item.Card)
                 .Include(item => item.Category)
                 .Include(item => item.Contractor);
 
@@ -44,7 +44,7 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             ContractorOperation? stored = await context.ContractorOperations
-                .Include(item => item.Account)
+                .Include(item => item.Card)
                 .Include(item => item.Category)
                 .Include(item => item.Contractor)
                 .FirstOrDefaultAsync(item => item.Id == id);
