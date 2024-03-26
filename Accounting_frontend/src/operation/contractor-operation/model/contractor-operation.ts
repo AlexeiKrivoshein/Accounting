@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { Category } from 'src/dictionaries/category/model/category';
 import { Contractor } from 'src/dictionaries/contractor/model/contractor';
 import { Operation, operationDefault } from 'src/operation/model/operation';
@@ -19,7 +19,7 @@ export class ContractorOperation extends Operation {
   /**
    * Счет
    */
-  public account: Account | null = null;
+  public account: AccountBase | null = null;
 
   /**
    * Идентификатор контрагента
@@ -70,7 +70,7 @@ export function contractorOperationFormGroup(): FormGroup {
     index: new FormControl<number>(-1),
 
     accountID: new FormControl<string>(EMPTY_GUID),
-    account: new FormControl<Account | null>(null, [Validators.required]),
+    account: new FormControl<AccountBase | null>(null, [Validators.required]),
     contractorID: new FormControl<string>(EMPTY_GUID),
     contractor: new FormControl<Contractor | null>(null, [Validators.required]),
     categoryID: new FormControl<string>(EMPTY_GUID),

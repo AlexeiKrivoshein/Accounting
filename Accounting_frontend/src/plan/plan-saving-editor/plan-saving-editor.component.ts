@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { AccountService } from 'src/dictionaries/account/services/account.service';
 import { PlanSaving, planSavingFormGroup } from '../model/plan-savings';
 
@@ -14,7 +14,7 @@ import { PlanSaving, planSavingFormGroup } from '../model/plan-savings';
 export class PlanSavingEditorComponent {
   public formGroup: FormGroup = planSavingFormGroup();
 
-  public accounts$: BehaviorSubject<Account[]> = new BehaviorSubject<Account[]>(
+  public accounts$: BehaviorSubject<AccountBase[]> = new BehaviorSubject<AccountBase[]>(
     []
   );
 

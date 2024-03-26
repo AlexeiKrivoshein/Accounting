@@ -31,6 +31,6 @@ namespace AccountingDAL.Model.DTO
         /// <summary>
         /// Счет кредит
         /// </summary>
-        public AccountDTO Account { get; set; }
+        public AccountBaseDTO Account { get; set; }
     }
 }

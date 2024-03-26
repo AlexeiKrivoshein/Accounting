@@ -11,7 +11,7 @@ namespace AccountingDAL.Model.DTO.Dictionaries
     /// <summary>
     /// Депозитный счет
     /// </summary>
-    public class DepositAccountDTO
+    public class DepositAccountDTO: AccountBaseDTO
     {
         /// <summary>
         /// Идентификатор категории

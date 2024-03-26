@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { Column } from 'src/controls/table/model/column';
 import { NotifyService } from 'src/notify/service/notify-service';
 import { AccountEditorComponent } from '../account-editor/account-editor.component';
-import { Account, accountDefault } from '../model/account';
+import { AccountBase, accountDefault } from '../model/account-base';
 import { AccountService } from '../services/account.service';
 
 const ACCOUNT_COLUMNS: Column[] = [
@@ -21,12 +21,12 @@ const ACCOUNT_COLUMNS: Column[] = [
   styleUrls: ['./account-list.component.scss'],
 })
 export class AccountListComponent implements OnInit {
-  public selected: Account | null = null;
+  public selected: AccountBase | null = null;
 
   public columns = ACCOUNT_COLUMNS;
 
-  public dataSource: MatTableDataSource<Account> =
-    new MatTableDataSource<Account>([]);
+  public dataSource: MatTableDataSource<AccountBase> =
+    new MatTableDataSource<AccountBase>([]);
 
   constructor(
     private accoutnService: AccountService,
@@ -50,7 +50,7 @@ export class AccountListComponent implements OnInit {
     }
   }
 
-  private modify(account: Account) {
+  private modify(account: AccountBase) {
     if (!account) {
       return;
     }

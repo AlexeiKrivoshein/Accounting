@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import * as uuid from 'uuid';
 
 /**
@@ -20,7 +20,7 @@ export interface PlanSaving {
   /**
    * Счет
    */
-  account: Account | null;
+  account: AccountBase | null;
 
   /**
    * Сумма
@@ -53,7 +53,7 @@ export function planSavingFormGroup(): FormGroup {
   return new FormGroup({
     id: new FormControl<string>(EMPTY_GUID),
     accountID: new FormControl<string>(''),
-    account: new FormControl<Account | null>(null, [Validators.required]),
+    account: new FormControl<AccountBase | null>(null, [Validators.required]),
     sum: new FormControl<number>(0),
     description: new FormControl<string>(''),
     planID: new FormControl<string>(''),

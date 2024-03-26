@@ -3,14 +3,14 @@ import { ModelElementBase } from 'src/model/model-element-base';
 /**
  * Базовый класс элементов-справочников модели данных
  */
-export interface DictionaryElementBase extends ModelElementBase {
+export class DictionaryElementBase extends ModelElementBase {
   /**
    * Признак удаления
    */
-  removed: boolean;
+  public removed: boolean = false;
 
   /**
    * Дата удаления
    */
-  removedDate: Date;
+  public removedDate: Date = new Date();
 }

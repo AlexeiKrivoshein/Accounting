@@ -15,7 +15,7 @@ namespace AccountingDAL.Model.DTO.Operation
         /// <summary>
         /// Счет кредит
         /// </summary>
-        public AccountDTO CreditAccount { get; set; }
+        public AccountBaseDTO CreditAccount { get; set; }
 
         /// <summary>
         /// Идентификатор счета дебета
@@ -25,6 +25,6 @@ namespace AccountingDAL.Model.DTO.Operation
         /// <summary>
         /// Счет дебета
         /// </summary>
-        public AccountDTO DebitAccount { get; set; }
+        public AccountBaseDTO DebitAccount { get; set; }
     }
 }

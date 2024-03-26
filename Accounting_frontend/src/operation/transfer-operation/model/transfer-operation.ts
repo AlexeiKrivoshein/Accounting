@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { Operation, operationDefault } from 'src/operation/model/operation';
 import { OperationClass } from 'src/operation/model/operation-class';
 
@@ -16,7 +16,7 @@ export class TransferOperation extends Operation {
   /**
    * Счет кредит
    */
-  public creditAccount: Account | null = null;
+  public creditAccount: AccountBase | null = null;
 
   /**
    * Идентификатор счета дебета
@@ -26,7 +26,7 @@ export class TransferOperation extends Operation {
   /**
    * Счет дебета
    */
-  public debitAccount: Account | null = null;
+  public debitAccount: AccountBase | null = null;
 }
 
 export function transferOperationDefault(): TransferOperation {
@@ -49,9 +49,9 @@ export function transferOperationFormGroup(): FormGroup {
     index: new FormControl<number>(-1),
 
     creditAccountID: new FormControl<string>(EMPTY_GUID),
-    creditAccount: new FormControl<Account | null>(null, [Validators.required]),
+    creditAccount: new FormControl<AccountBase | null>(null, [Validators.required]),
     debitAccountID: new FormControl<string>(EMPTY_GUID),
-    debitAccount: new FormControl<Account | null>(null, [Validators.required]),
+    debitAccount: new FormControl<AccountBase | null>(null, [Validators.required]),
     operationClass: new FormControl<OperationClass>(
       OperationClass.TransferOperation
     ),

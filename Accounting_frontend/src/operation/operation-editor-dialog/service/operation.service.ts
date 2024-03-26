@@ -6,7 +6,7 @@ import { CorrectionOperationDataManager } from 'src/operation/correction-operati
 import { OperationClass } from 'src/operation/model/operation-class';
 import { TransferOperationDataManager } from 'src/operation/transfer-operation/data-manager/transfer-operation-data-manager';
 import { Operation } from '../../model/operation';
-import { OperationDataManager } from '../model/operation-data-manager';
+import { OperationDataManager } from '../data-manager/operation-data-manager';
 
 @Injectable()
 export class OperationService {

@@ -16,7 +16,7 @@ namespace AccountingDAL.Model.DTO.Operation
         /// <summary>
         /// Счет
         /// </summary>
-        public AccountDTO Account { get; set; }
+        public AccountBaseDTO Account { get; set; }
 
         /// <summary>
         /// Тип операции дебет/кредит

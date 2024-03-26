@@ -10,7 +10,7 @@ namespace AccountingDAL.Model.Dictionaries
     /// <summary>
     /// Депозитный счет
     /// </summary>
-    public class DepositAccount : AccountBase
+    public class DepositAccount: AccountBase
     {
         /// <summary>
         /// Идентификатор категории

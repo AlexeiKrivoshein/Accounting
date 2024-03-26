@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotifyService } from 'src/notify/service/notify-service';
-import { Account, accountFormGroup } from '../model/account';
+import { AccountBase, accountFormGroup } from '../model/account-base';
 import { AccountService } from '../services/account.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class AccountEditorComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AccountEditorComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Account,
+    @Inject(MAT_DIALOG_DATA) data: AccountBase,
     private accountService: AccountService,
     private notifyService: NotifyService
   ) {

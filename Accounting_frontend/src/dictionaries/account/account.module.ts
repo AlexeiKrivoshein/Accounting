@@ -4,9 +4,10 @@ import { AccountListComponent } from './account-list/account-list.component';
 import { AccountEditorComponent } from './account-editor/account-editor.component';
 import { ControlsModule } from 'src/controls/controls.module';
 import { DialogModule } from 'src/dialog/dialog.module';
+import {DepositAccountModule} from "../deposit-account/deposit-account.module";
 
 @NgModule({
   declarations: [AccountListComponent, AccountEditorComponent],
-  imports: [CommonModule, ControlsModule, DialogModule],
+  imports: [CommonModule, ControlsModule, DialogModule, DepositAccountModule],
 })
 export class AccountModule {}

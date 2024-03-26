@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { AccountService } from 'src/dictionaries/account/services/account.service';
 import { OperationService } from 'src/operation/operation-editor-dialog/service/operation.service';
 
@@ -11,7 +11,7 @@ import { OperationService } from 'src/operation/operation-editor-dialog/service/
   styleUrls: ['./transfer-operation-editor.component.scss'],
 })
 export class TransferOperationEditorComponent {
-  public accounts$: BehaviorSubject<Account[]> = new BehaviorSubject<Account[]>(
+  public accounts$: BehaviorSubject<AccountBase[]> = new BehaviorSubject<AccountBase[]>(
     []
   );
 

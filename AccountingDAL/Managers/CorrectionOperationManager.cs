@@ -18,8 +18,8 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             IIncludableQueryable<CorrectionOperation, AccountBase?> select = context.CorrectionOperations
-                .Include(item => item.DepositAccount as AccountBase)
-                .Include(item => item.Card as AccountBase);
+                .Include(item => item.DepositAccount)
+                .Include(item => item.Card);
 
             string where = FilterFormater.FilterToQuery(filters);
             if (where.Length > 0)

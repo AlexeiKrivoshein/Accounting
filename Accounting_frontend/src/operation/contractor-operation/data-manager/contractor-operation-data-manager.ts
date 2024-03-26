@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { OperationClass } from 'src/operation/model/operation-class';
-import { OperationDataManager } from 'src/operation/operation-editor-dialog/model/operation-data-manager';
+import { OperationDataManager } from 'src/operation/operation-editor-dialog/data-manager/operation-data-manager';
 import {
   ContractorOperation,
   contractorOperationFormGroup,

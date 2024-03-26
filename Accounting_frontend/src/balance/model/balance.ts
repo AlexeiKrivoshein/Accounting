@@ -1,4 +1,4 @@
-import { Account } from "src/dictionaries/account/model/account";
+import { AccountBase } from "src/dictionaries/account/model/account-base";
 
 /**
  * Баланс счета на конец дня
@@ -27,5 +27,5 @@ export interface Balance {
   /**
    * Счет кредит
    */
-  account: Account | null;
+  account: AccountBase | null;
 }

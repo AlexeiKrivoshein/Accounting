@@ -18,10 +18,10 @@ namespace AccountingDAL.Managers
         {
             using var context = new AccountingContext();
             IIncludableQueryable<TransferOperation, AccountBase?> select = context.TransferOperations
-                .Include(item => item.CreditDepositAccount as AccountBase)
-                .Include(item => item.CreditCard as AccountBase)
-                .Include(item => item.DebitDepositAccount as AccountBase)
-                .Include(item => item.DebitCard as AccountBase);
+                .Include(item => item.CreditDepositAccount)
+                .Include(item => item.CreditCard)
+                .Include(item => item.DebitDepositAccount)
+                .Include(item => item.DebitCard);
 
             string where = FilterFormater.FilterToQuery(filters);
             if (where.Length > 0)

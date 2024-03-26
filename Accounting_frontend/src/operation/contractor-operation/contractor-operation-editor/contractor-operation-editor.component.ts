@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { AccountService } from 'src/dictionaries/account/services/account.service';
 import { Category } from 'src/dictionaries/category/model/category';
 import { CategoryService } from 'src/dictionaries/category/services/category.service';
@@ -30,7 +30,7 @@ export class ContractorOperationEditorComponent implements OnInit {
 
   public categoryDisplayFn = (data: any) => (data ? data['name'] : '');
 
-  public accounts$: BehaviorSubject<Account[]> = new BehaviorSubject<Account[]>(
+  public accounts$: BehaviorSubject<AccountBase[]> = new BehaviorSubject<AccountBase[]>(
     []
   );
 

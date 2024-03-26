@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY_GUID } from 'src/const';
-import { Account } from 'src/dictionaries/account/model/account';
+import { AccountBase } from 'src/dictionaries/account/model/account-base';
 import { operationDefault, Operation } from 'src/operation/model/operation';
 import { OperationClass } from 'src/operation/model/operation-class';
 import { OperationType } from 'src/operation/model/operation-type';
@@ -17,7 +17,7 @@ export class CashOperation extends Operation {
   /**
    * Счет
    */
-  public account: Account | null = null;
+  public account: AccountBase | null = null;
 
   /**
    * Тип операции дебет/кредит
@@ -44,7 +44,7 @@ export function cashOperationFormGroup(): FormGroup {
     index: new FormControl<number>(-1),
 
     accountID: new FormControl<string>(EMPTY_GUID),
-    account: new FormControl<Account | null>(null, [Validators.required]),
+    account: new FormControl<AccountBase | null>(null, [Validators.required]),
     operationType: new FormControl<OperationType>(OperationType.Credited),
     operationClass: new FormControl<OperationClass>(
       OperationClass.CashOperation

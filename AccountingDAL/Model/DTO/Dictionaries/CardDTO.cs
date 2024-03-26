@@ -9,7 +9,7 @@ namespace AccountingDAL.Model.DTO.Dictionaries
     /// <summary>
     /// Дебетовая карта
     /// </summary>
-    public class CardDTO: AccountDTO
+    public class CardDTO: AccountBaseDTO
     {
     }
 }

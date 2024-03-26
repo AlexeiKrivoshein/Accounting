@@ -20,7 +20,7 @@ namespace AccountingDAL.Model.DTO.Plans
         /// <summary>
         /// Счет
         /// </summary>
-        public AccountDTO Account { get; set; }
+        public AccountBaseDTO Account { get; set; }
 
         /// <summary>
         /// Сумма
